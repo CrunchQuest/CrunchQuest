@@ -19,10 +19,14 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +36,7 @@ import com.example.crunchquest.data.components.CardState
 import com.example.crunchquest.data.components.CardValues
 import com.example.crunchquest.data.components.CarouselLayout
 import com.example.crunchquest.data.components.QuestCard
+import com.example.crunchquest.data.components.QuestSheet
 import com.example.crunchquest.data.components.StatusIndicator
 import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIcons
@@ -42,6 +47,10 @@ import com.guru.fontawesomecomposelib.FaIcons
 fun HomeScreen() {
     val cardValues = CardValues(0, 0, 0, "Novice", 0)
     val cardState = remember { mutableStateOf(CardState.Collapsed) }
+
+    var openBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+
     Scaffold (
         topBar = {
             TopAppBar(
@@ -85,7 +94,7 @@ fun HomeScreen() {
                         tint = androidx.compose.material3.LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                     )
                 },
-                onClick = { /* Handle create click */ },
+                onClick = { openBottomSheet = true },
                 containerColor = MaterialTheme.colors.surface
             )
         },
@@ -114,13 +123,22 @@ fun HomeScreen() {
 
         }
     )
+    if (openBottomSheet) {
+        ModalBottomSheet(
+            sheetState = sheetState,
+            onDismissRequest = { openBottomSheet = false }
+        ) {
+            //sheetContent
+            QuestSheet()
+
+        }
+    }
 }
 
 data class CardItem(
     val imageResource: Int,
     val profile: String,
     val title: String,
-    val description: String,
     val rewards: String,
     val onAccept: () -> Unit
 )
@@ -158,7 +176,6 @@ fun LazyListScope.QuestList() {
                 imageResource = com.example.crunchquest.R.drawable.food1,
                 profile = "John Doe",
                 title = "Benerin AC",
-                description = "Ini ac rumah rusak, tolong benerin dong, nanti aku kasih duit",
                 rewards = "Rewards: 1000 CrunchCoins",
                 onAccept = { /* Handle accept click */ }
             )

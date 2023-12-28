@@ -72,8 +72,6 @@ fun QuestCard(cardItem: CardItem) {
             Column {
                 Text(text = cardItem.title, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = cardItem.description)
-                Spacer(modifier = Modifier.height(8.dp))
                 Text(text = cardItem.rewards, fontWeight = FontWeight.Bold)
             }
 
