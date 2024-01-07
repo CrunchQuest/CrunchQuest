@@ -19,12 +19,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.crunchquest.data.components.BottomNavType
 import com.example.crunchquest.theme.AppThemeState
 import com.example.crunchquest.theme.ColorPallet
 import com.example.crunchquest.ui.DiscoverScreen
@@ -36,10 +38,15 @@ import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIcons
 
 @Composable
-fun CrunchQuestApp() {
+fun CrunchQuestApp(
+    modifier: Modifier = Modifier,
+    navController: NavController = rememberNavController()
+) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     //Default home screen state is always HOME
     val homeScreenState = rememberSaveable { mutableStateOf(BottomNavType.HOME) }
-    val bottomNavBarContentDescription = stringResource(id = R.string.a11y_bottom_navigation_bar)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -49,8 +56,6 @@ fun CrunchQuestApp() {
             modifier = Modifier.weight(1f)
         )
         BottomNavigationContent(
-            modifier = Modifier
-                .semantics { contentDescription = bottomNavBarContentDescription },
             homeScreenState = homeScreenState
         )
     }

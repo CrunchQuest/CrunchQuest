@@ -27,8 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.crunchquest.ui.CardItem
+import com.example.crunchquest.data.CardItem
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -102,4 +103,18 @@ fun QuestCard(cardItem: CardItem) {
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CardPreview() {
+    QuestCard(
+        cardItem = CardItem(
+            imageResource = 0,
+            profile = "CQ",
+            title = "Quest",
+            rewards = "Rewards",
+            onAccept = {}
+        )
+    )
 }

@@ -1,4 +1,4 @@
-package com.example.crunchquest.data.model
+package com.example.crunchquest.ui.navigation
 
 sealed class Screen(val route: String) {
     object HomeScreen : Screen("home_screen")

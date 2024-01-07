@@ -2,7 +2,6 @@
     <string name="app_name">CrunchQuest</string>
 
     <!-- Accessibility strings -->
-    <string name="a11y_bottom_navigation_bar">Bottom navigation bar with Having actions </string>
     <string name="navigation_item_home">Home</string>
     <string name="navigation_item_discover">Discover</string>
     <string name="navigation_item_social">Social</string>

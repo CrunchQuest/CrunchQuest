@@ -1,4 +1,4 @@
-package com.example.crunchquest.ui.utils
+package com.example.crunchquest.utils
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

@@ -1,4 +1,4 @@
-package com.example.crunchquest.ui.utils
+package com.example.crunchquest.utils
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.crunchquest.data.model.Screen
+import com.example.crunchquest.ui.navigation.Screen
 
 @Composable
 fun Navigation() {

@@ -32,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.crunchquest.R
+import com.example.crunchquest.data.CardItem
 import com.example.crunchquest.data.components.CardState
 import com.example.crunchquest.data.components.CardValues
 import com.example.crunchquest.data.components.CarouselLayout
@@ -135,14 +137,6 @@ fun HomeScreen() {
     }
 }
 
-data class CardItem(
-    val imageResource: Int,
-    val profile: String,
-    val title: String,
-    val rewards: String,
-    val onAccept: () -> Unit
-)
-
 fun LazyListScope.QuestList() {
     item {
         Row(
@@ -173,7 +167,7 @@ fun LazyListScope.QuestList() {
     items(10) {
         QuestCard(
             cardItem = CardItem(
-                imageResource = com.example.crunchquest.R.drawable.food1,
+                imageResource = R.drawable.food1,
                 profile = "John Doe",
                 title = "Benerin AC",
                 rewards = "Rewards: 1000 CrunchCoins",
