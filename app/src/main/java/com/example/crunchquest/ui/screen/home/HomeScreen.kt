@@ -1,4 +1,4 @@
-package com.example.crunchquest.ui
+package com.example.crunchquest.ui.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
