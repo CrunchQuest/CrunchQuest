@@ -1,4 +1,4 @@
-package com.example.crunchquest.data.components
+package com.example.crunchquest.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -104,5 +104,7 @@ fun StatusIndicator(cardValues: CardValues, cardState: MutableState<CardState>) 
 @Preview(showBackground = true)
 fun CardLayoutPreview() {
         // You can customize the cardValues and cardState for previewing
-        StatusIndicator(cardValues = CardValues(10, 5, 3, "Expert", 2), cardState = remember { mutableStateOf(CardState.Expanded) })
+        StatusIndicator(cardValues = CardValues(10, 5, 3, "Expert", 2), cardState = remember { mutableStateOf(
+            CardState.Expanded
+        ) })
 }

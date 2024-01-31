@@ -82,4 +82,10 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:4.2.0")
     implementation("com.airbnb.android:lottie:5.2.0")
 
+    implementation("com.google.firebase:firebase-analytics:20.0.2")
+    implementation("com.google.firebase:firebase-crashlytics:18.2.4")
+    implementation("com.google.firebase:firebase-messaging:23.0.0")
+    implementation("com.google.firebase:firebase-auth:21.0.1")
+    implementation("com.google.firebase:firebase-firestore:23.0.3")
+
 }

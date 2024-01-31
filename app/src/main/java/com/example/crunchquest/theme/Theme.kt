@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
@@ -51,18 +50,18 @@ private val DarkGreenColorPalette = darkColors(
     error = Color.Red,
 )
 
-private val DarkPurpleColorPalette = darkColors(
-    primary = purple200,
-    primaryVariant = purple700,
-    secondary = teal200,
-    background = Color.Black,
-    surface = Color.Black,
-    onPrimary = Color.Black,
-    onSecondary = Color.White,
-    onBackground = Color.White,
-    onSurface = Color.White,
-    error = Color.Red,
-)
+//private val DarkPurpleColorPalette = darkColors(
+//    primary = purple200,
+//    primaryVariant = purple700,
+//    secondary = teal200,
+//    background = Color.Black,
+//    surface = Color.Black,
+//    onPrimary = Color.Black,
+//    onSecondary = Color.White,
+//    onBackground = Color.White,
+//    onSurface = Color.White,
+//    error = Color.Red,
+//)
 
 private val DarkBlueColorPalette = darkColors(
     primary = blue200,
@@ -103,17 +102,17 @@ private val LightGreenColorPalette = lightColors(
     onSurface = Color.Black
 )
 
-private val LightPurpleColorPalette = lightColors(
-    primary = purple,
-    primaryVariant = purple700,
-    secondary = teal200,
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black
-)
+//private val LightPurpleColorPalette = lightColors(
+//    primary = purple,
+//    primaryVariant = purple700,
+//    secondary = teal200,
+//    background = Color.White,
+//    surface = Color.White,
+//    onPrimary = Color.White,
+//    onSecondary = Color.Black,
+//    onBackground = Color.Black,
+//    onSurface = Color.Black
+//)
 
 private val LightBlueColorPalette = lightColors(
     primary = blue500,
@@ -146,17 +145,26 @@ enum class ColorPallet {
 fun CrunchQuestTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
+    colorPallet: ColorPallet = ColorPallet.ORANGE,
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    val colors = when (colorPallet) {
+        ColorPallet.GREEN -> if (darkTheme) DarkGreenColorPalette else LightGreenColorPalette
+//        ColorPallet.PURPLE -> if (darkTheme) DarkPurpleColorPalette else LightPurpleColorPalette
+        ColorPallet.ORANGE -> if (darkTheme) DarkOrangeColorPalette else LightOrangeColorPalette
+        ColorPallet.BLUE -> if (darkTheme) DarkBlueColorPalette else LightBlueColorPalette
+        else ->  if (darkTheme) DarkBlueColorPalette else LightBlueColorPalette
+    }
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) DarkPurpleColorPalette else LightPurpleColorPalette
+            if (darkTheme) DarkOrangeColorPalette else LightOrangeColorPalette
         }
 
         darkTheme -> darkColors(primary = green200)
-        else -> LightPurpleColorPalette
+        else -> LightOrangeColorPalette
     }
     val view = LocalView.current
     if (!view.isInEditMode) {

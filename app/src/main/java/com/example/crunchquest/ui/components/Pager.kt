@@ -1,4 +1,4 @@
-package com.example.crunchquest.data.components
+package com.example.crunchquest.ui.components
 
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable

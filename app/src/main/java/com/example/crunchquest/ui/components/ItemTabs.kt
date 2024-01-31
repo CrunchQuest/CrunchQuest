@@ -1,7 +1,8 @@
-package com.example.crunchquest.data.components
+package com.example.crunchquest.ui.components
 
 enum class Tabs(val value: String) {
-    NUTRITION("Nutrition"),
-    DEVELOPMENT("Development"),
-    ALLIANCE("ALLIANCE")
+    PENDING("Pending"),
+    ONGOING("Ongoing"),
+    COMPLETE("Complete"),
+    CANCELED("Canceled")
 }

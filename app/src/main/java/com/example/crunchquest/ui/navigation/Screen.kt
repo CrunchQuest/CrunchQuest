@@ -1,8 +1,10 @@
 package com.example.crunchquest.ui.navigation
 
 sealed class Screen(val route: String) {
-    object HomeScreen : Screen("home_screen")
-    object DetailScreen : Screen("detail_screen")
+    object Home : Screen("home")
+    object Detail : Screen("detail")
+    object Track : Screen("track")
+    object Profile : Screen("profile")
 
     fun withArgs(vararg args: String): String {
         return buildString {

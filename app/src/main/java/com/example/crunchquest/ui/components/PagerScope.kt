@@ -1,4 +1,4 @@
-package com.example.crunchquest.data.components
+package com.example.crunchquest.ui.components
 
 /**
  * Scope for [Pager] content.

@@ -32,6 +32,7 @@ fun BaseView(
     systemUiController: SystemUiController?,
     content: @Composable () -> Unit
 ) {
+
     Material3Theme(
         darkTheme = appThemeState.darkTheme,
         colorPallet = appThemeState.pallet

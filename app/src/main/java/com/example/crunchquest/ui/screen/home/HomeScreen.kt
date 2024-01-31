@@ -1,4 +1,4 @@
-package com.example.crunchquest.ui.screen
+package com.example.crunchquest.ui.screen.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -34,12 +34,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.crunchquest.R
 import com.example.crunchquest.data.CardItem
-import com.example.crunchquest.data.components.CardState
-import com.example.crunchquest.data.components.CardValues
-import com.example.crunchquest.data.components.CarouselLayout
-import com.example.crunchquest.data.components.QuestCard
-import com.example.crunchquest.data.components.QuestSheet
-import com.example.crunchquest.data.components.StatusIndicator
+import com.example.crunchquest.ui.components.CardState
+import com.example.crunchquest.ui.components.CardValues
+import com.example.crunchquest.ui.components.CarouselLayout
+import com.example.crunchquest.ui.components.QuestCard
+import com.example.crunchquest.ui.components.QuestSheet
+import com.example.crunchquest.ui.components.StatusIndicator
 import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIcons
 
@@ -69,16 +69,6 @@ fun HomeScreen() {
                         )
                     }
 
-                    // Profile Icon
-                    IconButton(onClick = { /* Handle profile icon click */ }) {
-                        FaIcon(
-                            faIcon = FaIcons.UserCircle, tint = LocalContentColor
-                                .current.copy(
-                                    alpha =
-                                    LocalContentAlpha.current
-                                )
-                        )
-                    }
                 },
                 backgroundColor = MaterialTheme.colors.background,
             )
@@ -89,7 +79,7 @@ fun HomeScreen() {
 
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                text = { androidx.compose.material3.Text(text = "Create") },
+                text = { Text(text = "Create") },
                 icon = {
                     FaIcon(
                         faIcon = FaIcons.Plus,
@@ -167,7 +157,7 @@ fun LazyListScope.QuestList() {
     items(10) {
         QuestCard(
             cardItem = CardItem(
-                imageResource = R.drawable.food1,
+                imageProfile = R.drawable.food1,
                 profile = "John Doe",
                 title = "Benerin AC",
                 rewards = "Rewards: 1000 CrunchCoins",

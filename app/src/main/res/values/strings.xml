@@ -7,4 +7,8 @@
     <string name="navigation_item_social">Social</string>
     <string name="navigation_item_shop">Shop</string>
     <string name="navigation_item_rank">Rank</string>
+    <string name="profile">Profile</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_track">Track</string>
+    <string name="menu_profile">Profile</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.crunchquest.data.components
+package com.example.crunchquest.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -54,7 +54,7 @@ fun QuestCard(cardItem: CardItem) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = cardItem.imageResource),
+                    painter = painterResource(id = cardItem.imageProfile),
                     contentDescription = null,
                     modifier = Modifier
                         .size(48.dp)
@@ -110,7 +110,7 @@ fun QuestCard(cardItem: CardItem) {
 fun CardPreview() {
     QuestCard(
         cardItem = CardItem(
-            imageResource = 0,
+            imageProfile = 0,
             profile = "CQ",
             title = "Quest",
             rewards = "Rewards",
