@@ -4,31 +4,30 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Assignment
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.crunchquest.theme.AppThemeState
-import com.example.crunchquest.theme.ColorPallet
+import androidx.navigation.navArgument
+import com.example.crunchquest.theme.orange
 import com.example.crunchquest.ui.navigation.NavigationItem
 import com.example.crunchquest.ui.navigation.Screen
+import com.example.crunchquest.ui.screen.detail.DetailScreen
 import com.example.crunchquest.ui.screen.home.HomeScreen
 import com.example.crunchquest.ui.screen.profile.ProfileScreen
 import com.example.crunchquest.ui.screen.track.TrackScreen
@@ -55,10 +54,19 @@ fun CrunchQuestApp(
             modifier = modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen()
+                HomeScreen(navigateToDetail = { id ->
+                        navController.navigate(Screen.Detail.createRoute(id))
+                    })
+            }
+            composable(route = Screen.Detail.route, arguments = listOf(navArgument("id") { type = NavType.LongType })) {
+                val id = it.arguments?.getLong("id") ?: -1L
+                DetailScreen(
+                    id = id,
+                    navigateUp = {
+                        navController.navigateUp()
+                    })
             }
             composable(Screen.Track.route) {
-                val context = LocalContext.current
                 TrackScreen()
             }
             composable(Screen.Profile.route) {
@@ -97,7 +105,10 @@ fun BottomBar(
                 screen = Screen.Profile
             ),
         )
-        BottomNavigation() {
+        BottomNavigation(
+            modifier = modifier,
+            backgroundColor = orange,
+        ) {
             navigationItems.map { item ->
                 BottomNavigationItem(
                     icon = {
@@ -128,8 +139,5 @@ fun BottomBar(
 @Preview(showBackground = true, device = Devices.PIXEL_4_XL)
 @Composable
 fun Preview() {
-    val appThemeState = remember { mutableStateOf(AppThemeState(false, ColorPallet.ORANGE)) }
-    BaseView(appThemeState.value, null) {
-        CrunchQuestApp()
-    }
+    CrunchQuestApp()
 }
