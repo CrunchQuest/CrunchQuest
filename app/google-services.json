@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "549371382667",
+    "project_id": "crunchquest",
+    "storage_bucket": "crunchquest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549371382667:android:952443bfd2107425723d8e",
+        "android_client_info": {
+          "package_name": "com.example.crunchquest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeVz08DjnPNl64hdUGO37D98-Ipjb4viY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

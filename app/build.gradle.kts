@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -21,6 +24,12 @@ android {
         }
     }
 
+    java {
+        toolchain {
+//            languageVersion.set(JavaLanguageVersion.of(8))
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -38,6 +47,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        dataBinding = true
         compose = true
     }
     composeOptions {
@@ -74,6 +84,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("io.coil-kt:coil-compose:2.2.0")
 
+    implementation("androidx.annotation:annotation:1.1.0")
+
     implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation("com.github.Gurupreet:FontAwesomeCompose:1.0.0")
 
@@ -88,5 +100,39 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging:23.0.0")
     implementation("com.google.firebase:firebase-auth:21.0.1")
     implementation("com.google.firebase:firebase-firestore:23.0.3")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
 
+    //notification builder
+    implementation("io.karn:notify:1.3.0")
+
+    //Work manager
+    implementation("androidx.work:work-runtime-ktx:2.7.0")
+
+    //groupie and picasso
+    implementation("com.github.lisawray.groupie:groupie:2.1.0")
+    implementation("com.squareup.picasso:picasso:2.8")
+
+    //Google pay api
+    implementation("com.google.android.gms:play-services-wallet:19.2.1")
+
+    //Circle image view
+    implementation("de.hdodenhof:circleimageview:2.2.0")
+
+    //image cropper
+//    implementation("com.theartofdev.edmodo:android-image-cropper:2.8.0")
+    implementation("com.theartofdev.edmodo:android-image-cropper:2.8.0")
+
+    //image slider
+    implementation("com.github.denzcoskun:ImageSlideshow:0.1.0")
+
+    //Simple image popup. Used together with the slider
+    implementation("com.github.chathuralakmal:AndroidImagePopup:1.2.2")
+
+    //justify
+    implementation("com.codesgood:justifiedtextview:1.1.0")
+
+    //Dependencies for Image View. If an image view is clicked, it will show the image
+    implementation("com.github.hsmnzaydn:imagezoom:1.3.0")
 }

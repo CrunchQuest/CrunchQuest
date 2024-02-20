@@ -2,6 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <meta-data
+        android:name="com.google.android.gms.wallet.api.enabled"
+        android:value="true" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,19 +26,59 @@
         android:theme="@style/Theme.CrunchQuest"
         tools:targetApi="31">
         <activity
-            android:name=".ui.home.dialogs.DialogsActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
-            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.CrunchQuest">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name=".ui.messages.MessagesRequestForSP"></activity>
+        <activity android:name=".ui.messages.RequestChatLogActivity" />
+        <activity android:name=".ui.messages.RequestMessagesActivity" />
+        <activity android:name=".ui.general.ChooseActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".ui.general.SendRequirementActivity" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name=".ui.general.SplashScreenActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.messages.ChatLogActivity" />
+        <activity android:name=".ui.messages.CreateNewMessageActivity" />
+        <activity android:name=".ui.messages.MessagesActivity" />
+        <activity android:name=".ui.general.DisplayReviewsActivity" />
+        <activity android:name=".ui.buyer.buyer_activities.DisplaySpecificServiceActivity" />
+        <activity android:name=".ui.serviceprovider.seller_activities.AboutMeAsSellerActivity" />
+        <activity
+            android:name=".ui.buyer.buyer_activities.ServiceCategoryActivity"
+            android:parentActivityName=".ui.buyer.BuyerActivity" />
+        <activity android:name=".ui.serviceprovider.seller_activities.BuyersRequestActivity" />
+        <activity android:name=".ui.buyer.buyer_activities.ManageRequestActivity" />
+        <activity android:name=".ui.buyer.buyer_activities.RequestActivity" />
+        <activity android:name=".ui.serviceprovider.seller_activities.CreateServicesActivity" />
+        <activity android:name=".ui.general.ProfileSettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.crunchquest.ui.serviceprovider.SellerActivity" />
+        </activity>
+        <activity android:name=".ui.serviceprovider.SellerActivity" />
+        <activity android:name=".ui.buyer.BuyerActivity" />
+        <activity android:name=".ui.general.SignUpActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name=".ui.general.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>
