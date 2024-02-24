@@ -1,10 +1,12 @@
 package com.example.crunchquest.ui.general
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -27,12 +29,16 @@ class ChooseActivity : AppCompatActivity() {
     private lateinit var spBtn: Button
     private lateinit var logoutBtn: ImageButton
 
+    private lateinit var checkboxVerifyClient: CheckBox
+    private lateinit var checkboxVerifyServiceProvider: CheckBox
+
     companion object {
         const val CLIENT_VERIFICATION = "CLIENTMODECODE"
         const val SP_VERIFICATION = "NONONONONONO"
         const val TAG = "ThisIsTheTag"
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose)
@@ -40,6 +46,27 @@ class ChooseActivity : AppCompatActivity() {
         clientBtn = findViewById(R.id.clientButton)
         spBtn = findViewById(R.id.spButton)
         logoutBtn = findViewById(R.id.logoutAgad)
+
+        checkboxVerifyClient = findViewById(R.id.checkboxVerifyClient)
+        checkboxVerifyServiceProvider = findViewById(R.id.checkboxVerifyServiceProvider)
+
+        checkboxVerifyClient.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Update the user's status in Firebase to verified client
+                val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+                val ref = FirebaseDatabase.getInstance().getReference("users/$currentUserUid")
+                ref.child("verifiedClient").setValue("VERIFIED")
+            }
+        }
+
+        checkboxVerifyServiceProvider.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Update the user's status in Firebase to verified service provider
+                val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+                val ref = FirebaseDatabase.getInstance().getReference("users/$currentUserUid")
+                ref.child("verifiedServiceProvider").setValue("VERIFIED")
+            }
+        }
 
         logoutBtn.setOnClickListener {
             showLogoutDialog()
@@ -55,6 +82,8 @@ class ChooseActivity : AppCompatActivity() {
 
         }
         fetchCurrentUser()
+
+
 
     }
 

@@ -61,7 +61,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.7.2")
@@ -95,7 +94,7 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:4.2.0")
     implementation("com.airbnb.android:lottie:5.2.0")
 
-    implementation("com.google.firebase:firebase-analytics:20.0.2")
+    implementation("com.google.firebase:firebase-analytics:21.5.1")
     implementation("com.google.firebase:firebase-crashlytics:18.2.4")
     implementation("com.google.firebase:firebase-messaging:23.0.0")
     implementation("com.google.firebase:firebase-auth:21.0.1")
