@@ -39,7 +39,7 @@
           android:layout_height="wrap_content"
           android:drawableLeft="@drawable/ic_money"
           android:gravity="center|left"
-          android:text="Price: ₱"
+          android:text="Price: Rp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/address_fragmentBottomBookingDetails" />

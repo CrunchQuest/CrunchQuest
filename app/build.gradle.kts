@@ -113,6 +113,9 @@ dependencies {
     implementation("com.github.lisawray.groupie:groupie:2.1.0")
     implementation("com.squareup.picasso:picasso:2.8")
 
+    // Maps SDK for Android
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
     //Google pay api
     implementation("com.google.android.gms:play-services-wallet:19.2.1")
 

@@ -166,7 +166,7 @@ class RequestActivity : AppCompatActivity() {
 //            priceEditText.requestFocus()
 //            return
 //        }
-        if (priceEditText.text.toString().toInt() <= 300) {
+        if (priceEditText.text.toString().toInt() <= 10000) {
             priceEditText.error = "Price is below minimum."
             priceEditText.requestFocus()
             return
@@ -260,7 +260,7 @@ class RequestActivity : AppCompatActivity() {
             descriptionEditText.requestFocus()
             return
         }
-        if (priceEditText.text.toString().toInt() <= 300) {
+        if (priceEditText.text.toString().toInt() <= 10000) {
             priceEditText.error = "Price is below minimum."
             priceEditText.requestFocus()
             return

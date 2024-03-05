@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/backGroundShadow"
     android:id="@+id/view_activityCreateServices"
-    tools:context=".UserInterface.ServiceProvider.SellerActivities.CreateServicesActivity">
+    tools:context=".ui.serviceprovider.seller_activities.CreateServicesActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -129,7 +129,7 @@
                     android:layout_marginStart="50dp"
                     android:layout_marginEnd="50dp"
                     android:background="@drawable/rounded_edit_text"
-                    android:hint="₱ Price"
+                    android:hint="Rp Price"
                     android:inputType="number"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"

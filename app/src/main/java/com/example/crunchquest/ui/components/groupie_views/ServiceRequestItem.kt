@@ -18,7 +18,7 @@ class ServiceRequestItem(val serviceRequest: ServiceRequest) : Item<ViewHolder>(
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.title_serviceRowRequest).text = serviceRequest.title!!.toUpperCase()
         viewHolder.itemView.findViewById<TextView>(R.id.descriptionTextView_serviceRowRequest).text = serviceRequest.description
-        viewHolder.itemView.findViewById<TextView>(R.id.priceTextView_serviceRowRequest).text = "₱${serviceRequest.price.toString()}"
+        viewHolder.itemView.findViewById<TextView>(R.id.priceTextView_serviceRowRequest).text = "Rp ${serviceRequest.price.toString()}"
 
         viewHolder.itemView.findViewById<TextView>(R.id.categoryTextView_serviceRowRequests).text = serviceRequest.category
 

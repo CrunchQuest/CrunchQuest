@@ -17,7 +17,7 @@ class ManageRequestItem(val request: ServiceRequest) : Item<ViewHolder>() {
 
         category.text = request.category
         title.text = request.title!!.toUpperCase()
-        price.text = "₱${request.price}"
+        price.text = "Rp ${request.price}"
 
 
     }

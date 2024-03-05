@@ -70,7 +70,7 @@ class BottomFragmentSellerOrderDetails(order: Order) : BottomSheetDialogFragment
 
         time.text = "Time: ${orderClicked.time}"
         address.text = "Address: ${orderClicked.address}"
-        price.text = "Price: ₱${orderClicked.price}"
+        price.text = "Price: Rp ${orderClicked.price}"
         category.text = "Category: ${orderClicked.category}"
         title.text = "Title: ${orderClicked.title}"
         description.text = "Description: ${orderClicked.description}"

@@ -13,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Order
 import com.example.crunchquest.ui.components.groupie_views.OrderItem
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
+import com.google.firebase.analytics.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,6 +26,8 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 
 class FinishedFragment : Fragment() {
+
+    private val firebaseAnalytics = Firebase.analytics
 
     lateinit var v: View
 
@@ -64,6 +70,7 @@ class FinishedFragment : Fragment() {
                     val order = order.getValue(Order::class.java)!!
                     if (order.status == "COMPLETED") {
                         adapter.add(OrderItem(order, v.context))
+                        logAnalyticsEvent(order.uid.toString())
                     }
                     adapter.setOnItemClickListener { item, view ->
                         val orderItem = item as OrderItem
@@ -80,6 +87,16 @@ class FinishedFragment : Fragment() {
 
             }
         })
+    }
+
+    /**
+     * Logs an event in Firebase Analytics that is used in aggregate to train the recommendations
+     * model.
+     */
+    private fun logAnalyticsEvent(id: String) {
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+            param(FirebaseAnalytics.Param.ITEM_ID, id)
+        }
     }
 
     override fun onResume() {

@@ -16,7 +16,7 @@ class ServiceCreatedItem(val service: Service, val c: Context) : Item<ViewHolder
         viewHolder.itemView.findViewById<TextView>(R.id.categoryTextView_serviceCreatedRow).text = "Category: ${service.category}"
         viewHolder.itemView.findViewById<TextView>(R.id.titleTextView_serviceCreatedRow).text = "Title: ${service.title.toString().toUpperCase()}"
         viewHolder.itemView.findViewById<TextView>(R.id.descriptionTextView_serviceCreatedRow).text = "Description: ${service.description}"
-        viewHolder.itemView.findViewById<TextView>(R.id.priceTextView_serviceCreatedRow).text = "Price: Php${service.price}"
+        viewHolder.itemView.findViewById<TextView>(R.id.priceTextView_serviceCreatedRow).text = "Price: Rp ${service.price}"
         val status = viewHolder.itemView.findViewById<TextView>(R.id.statusTextView_serviceCreatedRow)
         status.text = "${service.status}"
         val cardView = viewHolder.itemView.findViewById<CardView>(R.id.cardView_serviceCreatedRow)

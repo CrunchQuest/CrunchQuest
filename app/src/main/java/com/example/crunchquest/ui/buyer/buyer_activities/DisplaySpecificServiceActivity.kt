@@ -225,8 +225,8 @@ class DisplaySpecificServiceActivity : AppCompatActivity() {
                     serviceTitleTextView.text = "${service.title?.toUpperCase()}"
                     serviceDescriptionTextView.text = "${service.description}"
                     serviceCategoryTextView.text = "Category: ${service.category}"
-                    priceTextView.text = "₱${service.price}"
-                    createOrderButton.text = createOrderButton.text.toString() + " (PHP${service.price})"
+                    priceTextView.text = "Rp ${service.price}"
+                    createOrderButton.text = createOrderButton.text.toString() + " (Rp ${service.price})"
                 }
 
             }

@@ -60,7 +60,7 @@ class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
         timePicker = v.findViewById(R.id.timePicker_fragmentBottomSheet)
         addressEditText = v.findViewById(R.id.addressEditText_fragmentBottomSheet)
         button = v.findViewById(R.id.button_FragmentBottomCreateOrder)
-        button.text = "Book Now (₱${DisplaySpecificServiceActivity.serviceToBeOrdered!!.price})"
+        button.text = "Book Now (Rp ${DisplaySpecificServiceActivity.serviceToBeOrdered!!.price})"
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
@@ -153,7 +153,7 @@ class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
         val dialogBuilder = AlertDialog.Builder(v.context)
         dialogBuilder.setMessage("Do you want to continue?")
                 .setCancelable(true)
-                .setPositiveButton("Continue(₱${DisplaySpecificServiceActivity.serviceToBeOrdered!!.price})") { _, _ ->
+                .setPositiveButton("Continue(Rp ${DisplaySpecificServiceActivity.serviceToBeOrdered!!.price})") { _, _ ->
                     //For now, just create the order.
                     val dialogBuilder2 = AlertDialog.Builder(v.context)
                     dialogBuilder2.setMessage(

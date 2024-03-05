@@ -18,7 +18,7 @@ class ServiceItem(val service: Service) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.title_serviceRow).text = service.title!!.toUpperCase()
         viewHolder.itemView.findViewById<TextView>(R.id.descriptionTextView_serviceRow).text = service.description
-        viewHolder.itemView.findViewById<TextView>(R.id.priceTextView_serviceRow).text = "₱${service.price.toString()}"
+        viewHolder.itemView.findViewById<TextView>(R.id.priceTextView_serviceRow).text = "Rp ${service.price.toString()}"
 
 
         val ref = FirebaseDatabase.getInstance().getReference("users/${service.userUid}")

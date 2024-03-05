@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserInterface.Buyer.BuyerActivities.RequestActivity">
+    tools:context=".ui.buyer.buyer_activities.RequestActivity">
 
     <TextView
         android:layout_width="10dp"
@@ -88,7 +88,7 @@
                     android:layout_marginStart="50dp"
                     android:layout_marginEnd="50dp"
                     android:background="@drawable/rounded_edit_text"
-                    android:hint="Min. ₱300.00"
+                    android:hint="Min. Rp 10000"
                     android:inputType="number"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
