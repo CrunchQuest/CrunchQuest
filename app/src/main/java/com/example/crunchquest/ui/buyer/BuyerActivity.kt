@@ -98,9 +98,9 @@ class BuyerActivity : AppCompatActivity() {
                 R.id.homePage -> {
                     makeCurrentFragment(homeFragment)
                 }
-                R.id.search -> {
-                    makeCurrentFragment(searchFragment)
-                }
+//                R.id.search -> {
+//                    makeCurrentFragment(searchFragment)
+//                }
                 R.id.notifications -> {
                     makeCurrentFragment(buyerManageFragment)
                 }
@@ -144,8 +144,6 @@ class BuyerActivity : AppCompatActivity() {
 
 
 
-
-
     //Options Menu on the upper right side
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
@@ -179,6 +177,15 @@ class BuyerActivity : AppCompatActivity() {
 
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        val searchFragment = supportFragmentManager.findFragmentByTag("SearchFragment")
+        if (searchFragment != null && searchFragment.isVisible) {
+            makeCurrentFragment(homeFragment)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     private fun showDialogFun() {

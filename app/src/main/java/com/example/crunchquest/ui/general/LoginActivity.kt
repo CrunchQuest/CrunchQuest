@@ -13,13 +13,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.User
+import com.example.crunchquest.databinding.ActivityLoginBinding
 import com.example.crunchquest.ui.dialogs.ResetPassword
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 
 class LoginActivity : AppCompatActivity() {
+    private var _binding: ActivityLoginBinding? = null
+    private val binding get() = _binding!!
 
+
+    lateinit var tvLoginHeading: TextView
+    lateinit var tvLoginSubHeading: TextView
     lateinit var emailEditText: EditText
     lateinit var passwordEditText: EditText
     lateinit var logInBtn: Button
@@ -33,15 +40,22 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        _binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
         //Map the views from the layout file
-        logInBtn = findViewById<Button>(R.id.logInBtn)
-        val signUpTextView = findViewById<TextView>(R.id.signUpTextView)
-        val forgotPass = findViewById<TextView>(R.id.forgotPass)
-        emailEditText = findViewById(R.id.firstNameEditText_profileSettings)
-        passwordEditText = findViewById(R.id.passwordEditText)
+        tvLoginHeading = findViewById<TextView>(R.id.tvLoginHeading)
+        tvLoginSubHeading = findViewById<TextView>(R.id.tvLoginSubHeading)
+        logInBtn = findViewById<Button>(R.id.btnLogin)
+        val signUpTextView = findViewById<TextView>(R.id.tvSignup)
+        val forgotPass = findViewById<TextView>(R.id.tvForgotPassword)
+        val emailTextInputLayout = findViewById<TextInputLayout>(R.id.etEmailContainer)
+        val passwordTextInputLayout = findViewById<TextInputLayout>(R.id.etPasswordContainer)
+
+        emailEditText = emailTextInputLayout.editText!!
+        passwordEditText = passwordTextInputLayout.editText!!
+
         //Log in button
         logInBtn.setOnClickListener {
             doLogin()
@@ -171,5 +185,10 @@ class LoginActivity : AppCompatActivity() {
                         updateUI(null)
                     }
                 }
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

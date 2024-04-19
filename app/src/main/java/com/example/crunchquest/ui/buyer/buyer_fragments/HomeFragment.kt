@@ -10,14 +10,13 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.crunchquest.ui.components.groupie_views.ServiceCategoryItem
 import com.example.crunchquest.R
 import com.example.crunchquest.ui.buyer.BuyerActivity
 import com.example.crunchquest.ui.buyer.bottomNavigationBuyer
 import com.example.crunchquest.ui.buyer.buyer_activities.ServiceCategoryActivity
+import com.example.crunchquest.ui.components.groupie_views.ServiceCategoryItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
-import java.util.*
 
 
 class HomeFragment : Fragment() {
@@ -53,7 +52,6 @@ class HomeFragment : Fragment() {
         btn.setOnClickListener {
             val transaction = activity?.supportFragmentManager?.beginTransaction()
             transaction?.replace(R.id.wrapper, searchFragment)
-            transaction?.disallowAddToBackStack()
             transaction?.commit()
         }
         fetchServiceCategory()

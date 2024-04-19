@@ -114,7 +114,10 @@ class SearchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
-        bottomNavigationBuyer.menu.findItem(R.id.search).isChecked = true
+        val menuItem = bottomNavigationBuyer.menu.findItem(R.id.search)
+            menuItem?.let {
+                it.isChecked = true
+            }
     }
 
     //Whenever the fragment is not fragment_search, the action bar will appear

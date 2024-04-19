@@ -8,17 +8,10 @@
         > </item>
 
     <item
-        android:id="@+id/search"
-        android:title=""
-        android:icon="@drawable/ic_search"
-        ></item>
-
-    <item
         android:id="@+id/notifications"
         android:title=""
         android:icon="@drawable/ic_manage_orders"
         />
-
 
     <item
         android:id="@+id/profilePage"

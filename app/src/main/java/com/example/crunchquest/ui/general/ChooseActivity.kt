@@ -118,6 +118,7 @@ class ChooseActivity : AppCompatActivity() {
                             } else if (user?.verifiedClient == "VERIFIED") {
                                 //Go to the Service Provider Activity.
                                 val intent = Intent(this@ChooseActivity, BuyerActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 startActivity(intent)
                             } else if (user?.verifiedClient == "PENDING") {
                                 val snackbar = Snackbar.make(clientBtn, "Replace requirements sent.", Snackbar.LENGTH_LONG)
