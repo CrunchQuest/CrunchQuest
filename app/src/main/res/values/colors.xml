@@ -90,5 +90,7 @@
     <color name="job_chip_background_color">@color/baby_blue</color>
 
     <color name="correct_ans_border">@color/blue</color>
+    <color name="cqPurpleMain">#7E0792</color>
+    <color name="coolBlack">#2B2B2B</color>
 
 </resources>
