@@ -7,22 +7,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.User
 import com.example.crunchquest.data.model.UserSellerInfo
+import com.example.crunchquest.databinding.ActivitySignUpPageBinding
 import com.example.crunchquest.ui.dialogs.LoadingDialog
 import com.example.crunchquest.utility.handlers.UserHandler
 import com.google.android.gms.tasks.RuntimeExecutionException
@@ -34,17 +29,21 @@ import java.util.UUID
 
 
 class SignUpActivity : AppCompatActivity() {
+    private var _binding: ActivitySignUpPageBinding? = null
+    private val binding get() = _binding!!
 
-    lateinit var profileImageView: ImageView
-    lateinit var uploadImageView: ImageButton
+//    lateinit var profileImageView: ImageView
+//    lateinit var uploadImageView: ImageButton
 
+    lateinit var tvSignupHeading: TextView
+    lateinit var tvSignupSubHeading: TextView
     lateinit var fname: EditText
     lateinit var lname: EditText
     lateinit var email: EditText
     lateinit var mobileNum: EditText
     lateinit var password: EditText
-    lateinit var retypePass: EditText
-    lateinit var age: TextView
+    lateinit var confirmPass: EditText
+//    lateinit var age: TextView
     private lateinit var auth: FirebaseAuth
     lateinit var userHandler: UserHandler
     var user: FirebaseUser? = null
@@ -74,55 +73,68 @@ class SignUpActivity : AppCompatActivity() {
 
 
         //Map the layout file views to the Kotlin file
-        fname = findViewById(R.id.firstNameEditText)
-        lname = findViewById(R.id.lastNameEditText)
-        email = findViewById(R.id.emailAddEditText)
-        mobileNum = findViewById(R.id.mobileNumberEditText)
-        password = findViewById(R.id.passWordEditText)
-        retypePass = findViewById(R.id.retypePasswordEditText)
-        age = findViewById(R.id.ageTextView)
-        val seekBar: SeekBar = findViewById(R.id.ageSeekBar)
-        val signUpBtn = findViewById<Button>(R.id.signUpBtn)
-        profileImageView = findViewById(R.id.profileImageView) //Image Views within the layout file
-        uploadImageView = findViewById(R.id.uploadImageView) //Image Views within the layout file
+        tvSignupHeading = findViewById<TextView>(R.id.tvSignupHeading)
+        tvSignupSubHeading = findViewById<TextView>(R.id.tvSignupSubHeading)
+        fname = findViewById(R.id.etFirstName)
+        lname = findViewById(R.id.etLastName)
+        email = findViewById(R.id.etEmail)
+//        mobileNum = findViewById(R.id.mobileNumberEditText)
+        password = findViewById(R.id.etPassword)
+        confirmPass = findViewById(R.id.etConfirmPassword)
+//        age = findViewById(R.id.ageTextView)
+//        val seekBar: SeekBar = findViewById(R.id.ageSeekBar)
+        val signUpBtn = findViewById<Button>(R.id.btnSignup)
+        val loginTextView = findViewById<TextView>(R.id.tvLogin)
+//        profileImageView = findViewById(R.id.profileImageView) //Image Views within the layout file
+//        uploadImageView = findViewById(R.id.uploadImageView) //Image Views within the layout file
 
         //popup menu for the upload image view listener
-        uploadImageView.setOnClickListener {
-            chooseImage()
-            if (selectedPhotoUri != null) {
-                profileImageView.isVisible = true
-                uploadImageView.isGone = true
-            }
-            Log.d("TAGASFDASD", selectedPhotoUri.toString())
-        }
-        profileImageView.setOnClickListener {
-            chooseImage()
-        }
+//        uploadImageView.setOnClickListener {
+//            chooseImage()
+//            if (selectedPhotoUri != null) {
+//                profileImageView.isVisible = true
+//                uploadImageView.isGone = true
+//            }
+//            Log.d("TAGASFDASD", selectedPhotoUri.toString())
+//        }
+//        profileImageView.setOnClickListener {
+//            chooseImage()
+//        }
+
         //seek bar
         //age seek bar 18-60
-        val step = 1 // 1 step per scroll
-        val max = 60 //Maximum age
-        val min = 18 //Minimum age
-        seekBar.max = (max - min) / step
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, i: Int, fromUser: Boolean) {
-                age.text = (min + (i * step)).toString()
-
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-            }
-        })
+//        val step = 1 // 1 step per scroll
+//        val max = 60 //Maximum age
+//        val min = 18 //Minimum age
+//        seekBar.max = (max - min) / step
+//        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+//            override fun onProgressChanged(seekBar: SeekBar?, i: Int, fromUser: Boolean) {
+//                age.text = (min + (i * step)).toString()
+//
+//            }
+//
+//            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+//
+//            }
+//
+//            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+//
+//            }
+//        })
 
         //signUpBtn onclick listener
         signUpBtn.setOnClickListener {
             authenticate()
         }
+        //Login text view that is clickable
+        loginTextView.setOnClickListener {
+            btnLoginAlready()
+        }
+    }
+
+    private fun btnLoginAlready() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     private fun chooseImage() {
@@ -196,7 +208,7 @@ class SignUpActivity : AppCompatActivity() {
             return
         }
         if (mobileNum.text.toString().length != 12) {
-            mobileNum.error = "Invalid. Please use this format, 639999999999"
+            mobileNum.error = "Invalid. Please use this format, 080000000000"
             mobileNum.requestFocus()
             return
         }
@@ -205,9 +217,9 @@ class SignUpActivity : AppCompatActivity() {
             password.requestFocus()
             return
         }
-        if ((password.text.toString().isNotEmpty()) && (password.text.toString() != retypePass.text.toString())) {
-            retypePass.error = "Please retype password"
-            retypePass.requestFocus()
+        if ((password.text.toString().isNotEmpty()) && (password.text.toString() != confirmPass.text.toString())) {
+            confirmPass.error = "Please retype password"
+            confirmPass.requestFocus()
             return
         }
         //If there are no problems, create the user.
@@ -269,9 +281,9 @@ class SignUpActivity : AppCompatActivity() {
                 emailAddress = email.text.toString(),
                 firstName = fname.text.toString(),
                 lastName = lname.text.toString(),
-                age = age.text.toString().toInt(),
-                profileImageUrl = profileImageUrl,
-                mobileNumber = mobileNum.text.toString()
+//                age = age.text.toString().toInt(),
+//                profileImageUrl = profileImageUrl,
+//                mobileNumber = mobileNum.text.toString()
         )
         ref.setValue(user)
         //Create the seller info
