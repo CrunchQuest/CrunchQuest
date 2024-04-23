@@ -11,32 +11,35 @@
         android:id="@+id/tvLoginHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/large_margin"
+        android:layout_marginTop="64dp"
         android:fontFamily="@font/dm_sans_bold"
         android:text="@string/login_heading"
-        android:textColor="@color/text_color"
+        android:textColor="#2B2B2B"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvLoginSubHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small_margin"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/dm_sans_regular"
         android:text="@string/login_sub_heading"
+        android:textAlignment="center"
         android:textColor="@color/subheading_color"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/tvLoginHeading"
         app:layout_constraintRight_toRightOf="@id/tvLoginHeading"
-        app:layout_constraintTop_toBottomOf="@id/tvLoginHeading"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
     <LinearLayout
         android:id="@+id/loginContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/extra_large_margin"
+        android:layout_marginTop="32dp"
         android:orientation="vertical"
         android:padding="@dimen/medium_margin"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -91,38 +94,72 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="@string/field_forgot_password"
             android:fontFamily="@font/dm_sans_regular"
-            android:textColor="@color/text_color"
-            android:textSize="14sp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/medium_margin"
-            android:layout_marginVertical="@dimen/medium_margin"
-            android:backgroundTint="@color/button_color"
-            android:fontFamily="@font/dm_sans_medium"
-            android:padding="@dimen/button_padding"
-            android:text="@string/field_login"
-            android:textColor="@color/button_text_color"
-            android:textSize="16sp"
-            app:cornerRadius="6dp" />
-
-        <TextView
-            android:id="@+id/tvSignup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/sign_up_prompt"
-            android:textColor="@color/text_color"
+            android:text="@string/field_forgot_password"
+            android:textColor="@color/cqPurpleMain"
             android:textSize="14sp" />
 
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvSignup_alt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
+        android:text="@string/sign_up_prompt_alt"
+        android:textColor="@color/coolBlack"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/tvSignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
+        android:text="@string/sign_up_prompt"
+        android:textColor="@color/cqPurpleMain"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@+id/tvSignup_alt" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        android:layout_marginVertical="@dimen/medium_margin"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/cqPurpleMain"
+        android:fontFamily="@font/dm_sans_medium"
+        android:padding="@dimen/button_padding"
+        android:text="@string/field_login"
+        android:textColor="@color/button_text_color"
+        android:textSize="16sp"
+        app:cornerRadius="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvSignup_alt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="0dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLoginHeading"
+        app:srcCompat="@drawable/logo_text" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
