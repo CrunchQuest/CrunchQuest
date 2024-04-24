@@ -89,9 +89,9 @@ class BuyerActivity : AppCompatActivity() {
 
 
         //Initialize home fragment
-        makeCurrentFragment(ProfileFragment())
+        makeCurrentFragment(HomeFragment())
         //Map the bottom navigation view
-        bottomNavigationBuyer.menu.findItem(R.id.profilePage).isChecked = true
+        bottomNavigationBuyer.menu.findItem(R.id.homePage).isChecked = true
         //Onclick listener for the bottom nav, bottom navigation menu have a corresponding id.
         bottomNavigationBuyer.setOnNavigationItemSelectedListener {
             when (it.itemId) {

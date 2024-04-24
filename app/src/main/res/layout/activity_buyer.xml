@@ -33,10 +33,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/gradient"
+        android:background="@color/design_default_color_surface"
         app:itemIconSize="24dp"
-        app:itemIconTint="#fff"
-        app:itemTextColor="#fff"
+        app:itemIconTint="?attr/colorPrimaryVariant"
+        app:itemTextColor="?attr/colorPrimaryVariant"
         app:menu="@menu/menu_nav_buyer" />
 
 

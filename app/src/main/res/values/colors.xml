@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="ic_launcher_background">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="backGroundShadow">#f2f2f2</color>
@@ -83,7 +84,6 @@
     <color name="job_applied_card_background">@color/light_orange</color>
 
     <color name="card_background">@color/off_white</color>
-
 
     <color name="chip_text_color">@color/dark_purple</color>
     <color name="chip_background_color">@color/baby_blue</color>
