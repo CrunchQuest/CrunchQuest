@@ -35,7 +35,6 @@ class BuyerManageFragment : Fragment() {
         super.onAttach(activity)
     }
 
-
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -45,7 +44,6 @@ class BuyerManageFragment : Fragment() {
         tabLayout = v.findViewById(R.id.tabLayout_fragmentBuyerManage)
         viewPager = v.findViewById(R.id.viewPager_fragmentBuyerManage)
         tabLayout.setupWithViewPager(viewPager)
-
 
         val fragManager = myContext!!.supportFragmentManager
         val viewPagerAdapter: ViewPagerAdapter = ViewPagerAdapter(fragManager, 0)

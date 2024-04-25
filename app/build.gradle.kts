@@ -125,6 +125,9 @@ dependencies {
     //Circle image view
     implementation("de.hdodenhof:circleimageview:2.2.0")
 
+    //Glide
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+
     //image cropper
 //    implementation("com.theartofdev.edmodo:android-image-cropper:2.8.0")
     implementation("com.theartofdev.edmodo:android-image-cropper:2.8.0")

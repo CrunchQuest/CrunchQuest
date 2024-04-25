@@ -60,9 +60,7 @@ class BuyerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_buyer)
 
 
-
         verifyUserIsLoggedIn()
-
 
         bottomNavigationBuyer = findViewById(R.id.bottomNavigation)
         setSupportActionBar(findViewById(R.id.toolBar))
@@ -179,14 +177,7 @@ class BuyerActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        val searchFragment = supportFragmentManager.findFragmentByTag("SearchFragment")
-        if (searchFragment != null && searchFragment.isVisible) {
-            makeCurrentFragment(homeFragment)
-        } else {
-            super.onBackPressed()
-        }
-    }
+
 
     private fun showDialogFun() {
         //Dialog before sign out
