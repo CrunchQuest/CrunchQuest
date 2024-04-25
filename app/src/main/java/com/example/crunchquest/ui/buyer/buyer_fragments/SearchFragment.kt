@@ -12,18 +12,17 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Service
-import com.example.crunchquest.ui.buyer.bottomNavigationBuyer
 import com.example.crunchquest.ui.buyer.buyer_activities.DisplaySpecificServiceActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-
 
 class SearchFragment : Fragment() {
     lateinit var v: View
@@ -32,18 +31,42 @@ class SearchFragment : Fragment() {
     lateinit var adapter: ArrayAdapter<Service>
     var arrayList: ArrayList<Service> = ArrayList()
 
-
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_search, container, false)
+
+        // Handle back press
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Check if the current fragment is SearchFragment
+                val currentFragment = parentFragmentManager.findFragmentById(R.id.wrapper)
+                if (currentFragment is SearchFragment) {
+                    // Replace with HomeFragment
+                    parentFragmentManager.beginTransaction().replace(R.id.wrapper, HomeFragment()).commit()
+                } else {
+                    // If not, perform the default back button action
+                    isEnabled = false
+                    activity?.onBackPressed()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         //Map the Search View
         searchView = v.findViewById(R.id.searchView)
         listView = v.findViewById(R.id.listView_fragmentSearch)
         //automatically opens the search view. As soon as this fragment is used, the search view is already clicked.
         searchView.isIconified = false
+
+
+        // Set an OnClickListener to request focus when the SearchView is clicked
+        searchView.setOnClickListener {
+            searchView.requestFocus()
+            adapter.filter.filter(searchView.query)
+        }
 
         //Implement search view
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -58,10 +81,12 @@ class SearchFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText.isNullOrEmpty()) {
+                    searchView.requestFocus()
+                }
                 adapter.filter.filter(newText)
                 return false
             }
-
         })
         listView.setOnItemClickListener { _, _, position, _ ->
             Log.i("ASDASDASDASD", "$position")
@@ -114,10 +139,7 @@ class SearchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
-        val menuItem = bottomNavigationBuyer.menu.findItem(R.id.search)
-            menuItem?.let {
-                it.isChecked = true
-            }
+
     }
 
     //Whenever the fragment is not fragment_search, the action bar will appear

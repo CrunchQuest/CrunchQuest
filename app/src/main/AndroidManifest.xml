@@ -26,9 +26,6 @@
         android:theme="@style/Theme.CrunchQuest"
         tools:targetApi="31">
         <activity
-            android:name=".ui.auth.AuthActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.CrunchQuest">

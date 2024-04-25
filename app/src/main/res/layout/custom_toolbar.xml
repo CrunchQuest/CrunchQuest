@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@drawable/toolbar_background"
+    android:elevation="16dp"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/searchBtn"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/rounded_button"
+            android:drawableLeft="@drawable/ic_black_search"
+            android:gravity="center|fill"
+            android:paddingLeft="10dp"
+            android:text="What are you looking for?"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circleImageView"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:scaleType="centerCrop"
+            app:civ_border_color="@color/backGroundShadow"
+            app:civ_border_width="2dp"
+            app:civ_circle_background_color="@color/white"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </LinearLayout>
+
+</androidx.appcompat.widget.Toolbar>
