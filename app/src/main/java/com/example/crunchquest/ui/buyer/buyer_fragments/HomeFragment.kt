@@ -19,23 +19,36 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.example.crunchquest.R
+import com.example.crunchquest.data.model.ServiceRequest
+import com.example.crunchquest.ui.adapter.SliderAdapter
 import com.example.crunchquest.ui.buyer.BuyerActivity
 import com.example.crunchquest.ui.buyer.bottomNavigationBuyer
 import com.example.crunchquest.ui.buyer.buyer_activities.RequestActivity
 import com.example.crunchquest.ui.buyer.buyer_activities.ServiceCategoryActivity
 import com.example.crunchquest.ui.components.groupie_views.ServiceCategoryItem
+import com.example.crunchquest.ui.components.groupie_views.ServiceRequestItem
 import com.example.crunchquest.ui.general.ChooseActivity
 import com.example.crunchquest.ui.general.LoginActivity
 import com.example.crunchquest.ui.general.ProfileSettingsActivity
+import com.example.crunchquest.ui.serviceprovider.seller_activities.BottomShowRequestFragment
+import com.example.crunchquest.ui.serviceprovider.seller_activities.BuyersRequestActivity
+import com.example.crunchquest.utility.handlers.ServiceRequestHandler
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -51,13 +64,23 @@ class HomeFragment : Fragment() {
     private lateinit var longClickRunnable: Runnable
     private var isExpanded = false
 
+    // Service Request
+    lateinit var serviceRequestRecyclerView: RecyclerView
+    private lateinit var serviceRequestArrayList: ArrayList<ServiceRequest>
+    private var serviceRequestHandler = ServiceRequestHandler()
+    var currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+
 
     private lateinit var v: View
     private lateinit var recyclerView: RecyclerView
-    val adapter = GroupAdapter<ViewHolder>().apply {
+    val adapterCategory = GroupAdapter<ViewHolder>().apply {
         spanCount = 2
     }
-    private val i = adapter.spanSizeLookup
+    private val i = adapterCategory.spanSizeLookup
+
+    val adapterRequest = GroupAdapter<ViewHolder>().apply {
+        spanCount = 1
+    }
 
 
     val searchFragment = SearchFragment()
@@ -104,6 +127,13 @@ class HomeFragment : Fragment() {
             }
             popupMenu.show()
         }
+
+        val images = listOf(R.drawable.food1, R.drawable.food2, R.drawable.food3, R.drawable.food4, R.drawable.food5)
+        val viewPager = v.findViewById<ViewPager2>(R.id.viewPager)
+        viewPager.adapter = SliderAdapter(images)
+
+        val tabLayout = v.findViewById<TabLayout>(R.id.tab_layout)
+        TabLayoutMediator(tabLayout, viewPager) { _, _ -> }.attach()
 
         // Get the user ID
         val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -161,8 +191,9 @@ class HomeFragment : Fragment() {
         recyclerView = v.findViewById(R.id.recyclerView_fragmentHome)
         recyclerView.apply {
             layoutManager = GridLayoutManager(v.context, 5).apply {
-                spanSizeLookup = i
+                spanSizeLookup = adapterCategory.spanSizeLookup
             }
+            adapter = adapterCategory
         }
 
         recyclerView.addItemDecoration(CustomItemDecoration(-50)) // replace 10 with your desired space
@@ -174,6 +205,11 @@ class HomeFragment : Fragment() {
             transaction?.replace(R.id.wrapper, searchFragment)
             transaction?.commit()
         }
+
+        // Quest RecycleView
+        serviceRequestRecyclerView = v.findViewById(R.id.serviceRequestRecyclerView_activityBuyersRequest)
+        serviceRequestArrayList = ArrayList()
+        serviceRequestRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
         //Floating action button
         mainFab = v.findViewById(R.id.mainFab)
@@ -218,8 +254,44 @@ class HomeFragment : Fragment() {
 
         fetchServiceCategory()
 
+        //Gets all the Service Requests available
+        serviceRequestRecyclerView.adapter = adapterRequest
+        fetchServiceRequests()
+
         return v
     }
+
+    private fun fetchServiceRequests() {
+        serviceRequestHandler.serviceRequestRef.addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                adapterRequest.clear()
+                p0.children.forEach {
+                    val serviceRequest = it.getValue(ServiceRequest::class.java)
+                    if (serviceRequest!!.userUid != currentUserUid) {
+                        adapterRequest.add(ServiceRequestItem(serviceRequest))
+                    }
+                }
+                serviceRequestRecyclerView.adapter = adapterRequest
+
+                adapterRequest.setOnItemClickListener { item, view ->
+                    val serviceRequestItem = item as ServiceRequestItem
+                    BuyersRequestActivity.serviceRequestToBeViewed = serviceRequestItem.serviceRequest
+                    var showRequestFragment = BottomShowRequestFragment()
+                    showRequestFragment.show(parentFragmentManager, "TAG")
+
+
+                }
+
+//                hideOrShowViews()
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+        })
+    }
+
 
     private fun showDialogFun() {
         //Dialog before sign out
@@ -252,23 +324,23 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchServiceCategory() {
-        adapter.clear()
+        adapterCategory.clear()
         //Get the array of service category
         val arrayList = ArrayList(listOf(*resources.getStringArray(R.array.services_category)))
         //Add the different categories to the adapter
-        adapter.add(ServiceCategoryItem(arrayList[0], R.drawable.services_computer))
-        adapter.add(ServiceCategoryItem(arrayList[1], R.drawable.services_homecleaning))
-        adapter.add(ServiceCategoryItem(arrayList[2], R.drawable.services_plumbing))
-        adapter.add(ServiceCategoryItem(arrayList[3], R.drawable.services_electrical))
-        adapter.add(ServiceCategoryItem(arrayList[4], R.drawable.services_moving))
-        adapter.add(ServiceCategoryItem(arrayList[5], R.drawable.services_delivery))
-        adapter.add(ServiceCategoryItem(arrayList[6], R.drawable.services_aircon))
-        adapter.add(ServiceCategoryItem(arrayList[7], R.drawable.services_homerepair))
-        adapter.add(ServiceCategoryItem(arrayList[8], R.drawable.services_auto))
+        adapterCategory.add(ServiceCategoryItem(arrayList[0], R.drawable.services_computer))
+        adapterCategory.add(ServiceCategoryItem(arrayList[1], R.drawable.services_homecleaning))
+        adapterCategory.add(ServiceCategoryItem(arrayList[2], R.drawable.services_plumbing))
+        adapterCategory.add(ServiceCategoryItem(arrayList[3], R.drawable.services_electrical))
+        adapterCategory.add(ServiceCategoryItem(arrayList[4], R.drawable.services_moving))
+        adapterCategory.add(ServiceCategoryItem(arrayList[5], R.drawable.services_delivery))
+        adapterCategory.add(ServiceCategoryItem(arrayList[6], R.drawable.services_aircon))
+        adapterCategory.add(ServiceCategoryItem(arrayList[7], R.drawable.services_homerepair))
+        adapterCategory.add(ServiceCategoryItem(arrayList[8], R.drawable.services_auto))
         //Attach the adapter to the recycler view
-        recyclerView.adapter = adapter
+        recyclerView.adapter = adapterCategory
 
-        adapter.setOnItemClickListener { item, _ ->
+        adapterCategory.setOnItemClickListener { item, _ ->
             val intent = Intent(v.context, ServiceCategoryActivity::class.java)
             val category = item as ServiceCategoryItem
             Log.d("ServiceCategoryTitle", category.serviceTitle)
