@@ -2,6 +2,7 @@ package com.example.crunchquest.ui.serviceprovider.seller_activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.ServiceRequest
+import com.example.crunchquest.ui.buyer.buyer_activities.DisplaySpecificRequestActivity
 import com.example.crunchquest.ui.components.groupie_views.ServiceRequestItem
 import com.example.crunchquest.ui.messages.MessagesRequestForSP
 import com.example.crunchquest.utility.handlers.ServiceRequestHandler
@@ -78,17 +80,18 @@ class BuyersRequestActivity : AppCompatActivity() {
 
                 adapter.setOnItemClickListener { item, view ->
                     val serviceRequestItem = item as ServiceRequestItem
-                    serviceRequestToBeViewed = serviceRequestItem.serviceRequest
-                    var showRequestFragment = BottomShowRequestFragment()
-                    showRequestFragment.show(supportFragmentManager, "TAG")
+                    val intent = Intent(this@BuyersRequestActivity, DisplaySpecificRequestActivity::class.java)
+                    intent.putExtra("ServiceRequest", serviceRequestItem.serviceRequest)
+                    startActivity(intent)
 
 
                 }
 
-                hideOrShowViews()
+//                hideOrShowViews()
             }
 
             override fun onCancelled(p0: DatabaseError) {
+                Log.e("TAG", "Failed to fetch Service Requests" , p0.toException())
 
             }
         })

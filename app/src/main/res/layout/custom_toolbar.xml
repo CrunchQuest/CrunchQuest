@@ -18,17 +18,17 @@
             android:id="@+id/searchBtn"
             android:layout_width="0dp"
             android:layout_height="42dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="30dp"
             android:layout_weight="1"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="30dp"
             android:background="@drawable/rounded_button"
             android:drawableLeft="@drawable/ic_black_search"
             android:gravity="center|fill"
             android:paddingLeft="10dp"
             android:text="What are you looking for?"
             android:textAllCaps="false"
-            android:textColor="@color/black_alpha_40"
+            android:textColor="@color/black"
             android:textSize="14sp" />
 
         <de.hdodenhof.circleimageview.CircleImageView

@@ -19,6 +19,7 @@ import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Service
+import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.User
 import com.example.crunchquest.data.model.UserSellerInfo
 import com.example.crunchquest.ui.general.DisplayReviewsActivity
@@ -55,16 +56,16 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
     //floating action button
     private lateinit var floatingActionButton: FloatingActionButton
 
-    //showProfileFrafment
+    //showProfileFragment
     private lateinit var showProfileImageBtn: ImageButton
-    private lateinit var service: Service
+    private lateinit var service: ServiceRequest
 
     //
     private lateinit var userRating: TextView
     private lateinit var totalJobs: TextView
 
     companion object {
-        var serviceToBeOrdered: Service? = null
+        var serviceToBeOrdered: ServiceRequest? = null
         var userUidForFragment: String? = null
         var viewOnlyMode: Boolean = false
     }
@@ -73,25 +74,43 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_specific_request)
+
+        service = intent.getSerializableExtra("ServiceRequest") as ServiceRequest
+        Log.d("DisplaySpecificRequest", "ServiceRequest is not null")
+
+        // Log the ServiceRequest object
+        Log.d("DisplaySpecificRequest", "ServiceRequest: $service")
+
+        // Use the ServiceRequest object to populate your views
+        serviceTitleTextView = findViewById(R.id.tvServiceTitle)
+        serviceDescriptionTextView = findViewById(R.id.tvServiceDescription)
+        serviceCategoryTextView = findViewById(R.id.tvServiceCategory)
+        priceTextView = findViewById(R.id.tvPriceService)
+
+        // Set the text of your TextViews
+        serviceTitleTextView.text = service.title
+        serviceDescriptionTextView.text = service.description
+        serviceCategoryTextView.text = service.category
+        priceTextView.text = service.price.toString()
+
         //intents
-        service = intent.getParcelableExtra<Service>("service")!!
         serviceToBeOrdered = service
         userUid = service.userUid!!
         serviceUid = service.uid!!
         //Map everything here
-        userReviewButton = findViewById(R.id.viewReviewButton_activityDisplaySpecificService)
-        toolBar = findViewById(R.id.toolBar_displaySpecificService)
-        showProfileImageBtn = findViewById(R.id.showFragment_activityDIsplaySpecificService)
-        serviceTitleTextView = findViewById(R.id.serviceTitle_activityDisplaySpecificService)
-        serviceDescriptionTextView = findViewById(R.id.serviceDescription_activityDisplaySpecificService)
-        serviceCategoryTextView = findViewById(R.id.serviceCategory_dispalySpecificService)
-        priceTextView = findViewById(R.id.price_activityDisplaySpecificService)
-        createOrderButton = findViewById(R.id.createOrderButton_activityDisplaySpecificService)
-        profileImageView = findViewById(R.id.profileImageView_acitivityDisplaySpecificActivity)
-        nameTextView = findViewById(R.id.name_activityDisplaySpecificService)
-        floatingActionButton = findViewById(R.id.messageSellerFloatingActionButton_activityDisplaySpecificService)
-        userRating = findViewById(R.id.userRating_acitivityDisplaySpecificService)
-        totalJobs = findViewById(R.id.jobsAccomplished_activityDisplaySpecificService)
+        userReviewButton = findViewById(R.id.btnViewReviews)
+        toolBar = findViewById(R.id.tbService)
+        showProfileImageBtn = findViewById(R.id.ibProfileDropdown)
+        serviceTitleTextView = findViewById(R.id.tvServiceTitle)
+        serviceDescriptionTextView = findViewById(R.id.tvServiceDescription)
+        serviceCategoryTextView = findViewById(R.id.tvServiceCategory)
+        priceTextView = findViewById(R.id.tvPriceService)
+        createOrderButton = findViewById(R.id.btnCreateOrderService)
+        profileImageView = findViewById(R.id.ivProfileImage)
+        nameTextView = findViewById(R.id.tvNameService)
+        floatingActionButton = findViewById(R.id.fabMessageSeller)
+        userRating = findViewById(R.id.tvRatingService)
+        totalJobs = findViewById(R.id.tvJobsAccomplishedService)
 
 
         userReviewButton.setOnClickListener {
@@ -166,7 +185,7 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
 
     private fun imageSlider() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        val imageSlider: ImageSlider = findViewById(R.id.imageSlider_activityDisplaySpecificService)
+        val imageSlider: ImageSlider = findViewById(R.id.isService)
         val remoteImages: ArrayList<SlideModel> = ArrayList()
         val ref = FirebaseDatabase.getInstance().getReference("/Sliders/$serviceUid")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -251,4 +270,5 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
             }
         })
     }
+
 }

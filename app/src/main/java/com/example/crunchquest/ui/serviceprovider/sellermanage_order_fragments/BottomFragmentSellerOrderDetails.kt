@@ -269,23 +269,25 @@ class BottomFragmentSellerOrderDetails(order: Order) : BottomSheetDialogFragment
     }
 
     private fun fetchNameAndNumber() {
-        try {
-            val ref = FirebaseDatabase.getInstance().getReference("users/${orderClicked.userUid}")
-            ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val user = snapshot.getValue(User::class.java)!!
+        val ref = FirebaseDatabase.getInstance().getReference("users/${orderClicked.userUid}")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(User::class.java)
+                if (user != null) {
                     name.text = "Name: ${user.firstName} ${user.lastName}"
                     contactNumber.text = "Contact Number: ${user.mobileNumber}"
+                } else {
+                    name.text = "Name: Account Deleted"
+                    contactNumber.text = "Contact Number: Account Deleted"
                 }
+            }
 
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-            })
-        } catch (e: Exception) {
-            name.text = "Name: Account Deleted"
-            contactNumber.text = "Contact Number: Account Deleted"
-        }
-
+            override fun onCancelled(error: DatabaseError) {
+                // Log the error
+                Log.e("DatabaseError", error.message)
+                // Show a toast message to the user
+                Toast.makeText(context, "Failed to fetch user data: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
