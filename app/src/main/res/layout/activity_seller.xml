@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserInterface.Buyer.BuyerActivity"
-    android:background="@color/backGroundShadow"
+    tools:context=".ui.serviceprovider.SellerActivity"
+    android:background="@color/background_color"
     >
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -13,10 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/gradient_seller"
+        android:background="@color/design_default_color_surface"
         app:itemIconSize="24dp"
-        app:itemIconTint="#fff"
-        app:itemTextColor="#fff"
+        app:itemIconTint="?attr/colorPrimaryVariant"
+        app:itemTextColor="?attr/colorPrimaryVariant"
         app:menu="@menu/menu_nav_seller" />
 
     <FrameLayout

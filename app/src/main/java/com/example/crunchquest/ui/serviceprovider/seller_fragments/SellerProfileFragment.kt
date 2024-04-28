@@ -41,11 +41,11 @@ class SellerProfileFragment : Fragment() {
         v = inflater.inflate(R.layout.fragment_seller_profile, container, false)
 
         //map the views of the layout file
-        aboutMeAsASellerCardView = v.findViewById(R.id.seller_aboutMeCardView)
-        services = v.findViewById<CardView>(R.id.seller_myServicesCardView)
-        profileImage = v.findViewById(R.id.profileImage_fragmentSellerProfile)
-        nameTextView = v.findViewById(R.id.userName_fragmentSellerProfile)
-        buyersRequestCardView = v.findViewById(R.id.buyersRequestCardView_fragmentSellerProfile)
+        aboutMeAsASellerCardView = v.findViewById(R.id.cvAboutMe)
+        services = v.findViewById<CardView>(R.id.cvMyServices)
+        profileImage = v.findViewById(R.id.sellerProfileImage)
+        nameTextView = v.findViewById(R.id.tvSellerUsername)
+        buyersRequestCardView = v.findViewById(R.id.cvClientRequest)
 
         //Fetch user data
         fetchUserData()

@@ -202,13 +202,13 @@ class SellerServicesFragment : Fragment() {
         // Set title bar
         (activity as SellerActivity?)?.setActionBarTitle("Services")
         bottomNavigationSeller.menu.findItem(R.id.Seller_servicesPage).isChecked = true
-        (activity as SellerActivity).menuToHide.isVisible = true
+        (activity as SellerActivity).menuToHide?.isVisible = true
         serviceGettingEdited = null
     }
 
     override fun onStop() {
         super.onStop()
-        (activity as SellerActivity).menuToHide.isVisible = false
+        (activity as SellerActivity).menuToHide?.isVisible = false
 
 
     }

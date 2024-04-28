@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.crunchquest.ui.buyer
 
 import android.content.DialogInterface

@@ -78,6 +78,7 @@
                     app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
+                    android:id="@+id/tvManageRequest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/medium_margin"
@@ -89,6 +90,7 @@
                     app:layout_constraintTop_toTopOf="parent"/>
 
                 <ImageView
+                    android:id="@+id/ivArrowManageRequest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@null"
@@ -131,6 +133,7 @@
                     app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
+                    android:id="@+id/tvPostRequest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/medium_margin"
@@ -142,6 +145,7 @@
                     app:layout_constraintTop_toTopOf="parent"/>
 
                 <ImageView
+                    android:id="@+id/ivArrowPostRequest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@null"
