@@ -55,11 +55,11 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_profile, container, false)
         //map the views of the layout file
-        profileImage = v.findViewById(R.id.profileImage_fragmentBuyerProfile)
-        name = v.findViewById(R.id.userName_fragmentBuyerProfile)
+        profileImage = v.findViewById(R.id.profileImage)
+        name = v.findViewById(R.id.tvUsername)
 
-        postRequestCardView = v.findViewById(R.id.postARequest_cardView_fragmentProfile)
-        manageRequestCardView = v.findViewById(R.id.manageRequestCardView_fragmentProfile)
+        postRequestCardView = v.findViewById(R.id.cvPostRequest)
+        manageRequestCardView = v.findViewById(R.id.cvManageRequest)
         //Apply listeners
         //Post Request
         postRequestCardView.setOnClickListener {
