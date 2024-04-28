@@ -32,6 +32,7 @@ import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.ui.adapter.SliderAdapter
 import com.example.crunchquest.ui.buyer.BuyerActivity
 import com.example.crunchquest.ui.buyer.bottomNavigationBuyer
+import com.example.crunchquest.ui.buyer.buyer_activities.DisplaySpecificRequestActivity
 import com.example.crunchquest.ui.buyer.buyer_activities.RequestActivity
 import com.example.crunchquest.ui.buyer.buyer_activities.ServiceCategoryActivity
 import com.example.crunchquest.ui.components.groupie_views.ServiceCategoryItem
@@ -39,8 +40,6 @@ import com.example.crunchquest.ui.components.groupie_views.ServiceRequestItem
 import com.example.crunchquest.ui.general.ChooseActivity
 import com.example.crunchquest.ui.general.LoginActivity
 import com.example.crunchquest.ui.general.ProfileSettingsActivity
-import com.example.crunchquest.ui.serviceprovider.seller_activities.BottomShowRequestFragment
-import com.example.crunchquest.ui.serviceprovider.seller_activities.BuyersRequestActivity
 import com.example.crunchquest.utility.handlers.ServiceRequestHandler
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
@@ -276,9 +275,9 @@ class HomeFragment : Fragment() {
 
                 adapterRequest.setOnItemClickListener { item, view ->
                     val serviceRequestItem = item as ServiceRequestItem
-                    BuyersRequestActivity.serviceRequestToBeViewed = serviceRequestItem.serviceRequest
-                    var showRequestFragment = BottomShowRequestFragment()
-                    showRequestFragment.show(parentFragmentManager, "TAG")
+                    val intent = Intent(view.context, DisplaySpecificRequestActivity::class.java)
+                    intent.putExtra("ServiceRequest", serviceRequestItem.serviceRequest)
+                    startActivity(intent)
 
 
                 }

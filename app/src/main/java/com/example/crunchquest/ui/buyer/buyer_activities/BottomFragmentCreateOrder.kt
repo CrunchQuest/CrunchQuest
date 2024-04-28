@@ -9,7 +9,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.TimePicker
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.example.crunchquest.R
@@ -24,7 +31,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Calendar
 
 class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
 
@@ -53,14 +60,14 @@ class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
         v = inflater.inflate(R.layout.fragment_bottom_create_booking, container, false)
 
 
-        spinner = v.findViewById(R.id.spinnerModeOfPayment)
-        modeEditText = v.findViewById(R.id.modeEditText_fragmentBottomSheet)
-        dateButton = v.findViewById(R.id.dateButton_fragmentBottomSheet)
-        dateTextView = v.findViewById(R.id.dateTextView_fragmentBottomSheet)
-        timePicker = v.findViewById(R.id.timePicker_fragmentBottomSheet)
-        addressEditText = v.findViewById(R.id.addressEditText_fragmentBottomSheet)
-        button = v.findViewById(R.id.button_FragmentBottomCreateOrder)
-        button.text = "Book Now (Rp ${DisplaySpecificServiceActivity.serviceToBeOrdered!!.price})"
+        spinner = v.findViewById<Spinner>(R.id.spinnerModeOfPayment)
+        modeEditText = v.findViewById<EditText>(R.id.modeEditText_fragmentBottomSheet)
+        dateButton = v.findViewById<Button>(R.id.dateButton_fragmentBottomSheet)
+        dateTextView = v.findViewById<TextView>(R.id.dateTextView_fragmentBottomSheet)
+        timePicker = v.findViewById<TimePicker>(R.id.timePicker_fragmentBottomSheet)
+        addressEditText = v.findViewById<EditText>(R.id.addressEditText_fragmentBottomSheet)
+        button = v.findViewById<Button>(R.id.button_FragmentBottomCreateOrder)
+        button.text = "Assist Now (Rp ${DisplaySpecificServiceActivity.serviceToBeOrdered?.price ?: "N/A"})"
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
@@ -153,7 +160,7 @@ class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
         val dialogBuilder = AlertDialog.Builder(v.context)
         dialogBuilder.setMessage("Do you want to continue?")
                 .setCancelable(true)
-                .setPositiveButton("Continue(Rp ${DisplaySpecificServiceActivity.serviceToBeOrdered!!.price})") { _, _ ->
+                .setPositiveButton("Continue(Rp ${DisplaySpecificServiceActivity.serviceToBeOrdered?.price ?: "N/A"})") { _, _ ->
                     //For now, just create the order.
                     val dialogBuilder2 = AlertDialog.Builder(v.context)
                     dialogBuilder2.setMessage(

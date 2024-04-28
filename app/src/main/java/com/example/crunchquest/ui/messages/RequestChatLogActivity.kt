@@ -1,12 +1,14 @@
 package com.example.crunchquest.ui.messages
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
+import com.example.crunchquest.R
+import com.example.crunchquest.data.model.Message
 import com.example.crunchquest.data.model.RequestMessage
 import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.User
@@ -14,9 +16,11 @@ import com.example.crunchquest.ui.buyer.BuyerActivity
 import com.example.crunchquest.ui.components.groupie_views.ChatFromItem
 import com.example.crunchquest.ui.components.groupie_views.ChatToItem
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import com.example.crunchquest.R
-import com.example.crunchquest.data.model.Message
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 
@@ -39,7 +43,7 @@ class RequestChatLogActivity : AppCompatActivity() {
         setContentView(R.layout.activity_request_chat_log)
 
         toUser = intent.getParcelableExtra(USER_EXTRA_TAG)
-        request = intent.getParcelableExtra(REQUEST_EXTRA_TAG)
+        request = intent.getSerializableExtra(REQUEST_EXTRA_TAG) as? ServiceRequest
         //Map everything here
         toolbar = findViewById(R.id.toolbar_request)
         recyclerView = findViewById(R.id.recyclerView_request)

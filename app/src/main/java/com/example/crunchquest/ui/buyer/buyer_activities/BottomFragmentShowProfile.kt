@@ -2,12 +2,14 @@ package com.example.crunchquest.ui.buyer.buyer_activities
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.User
 import com.example.crunchquest.data.model.UserSellerInfo
@@ -93,15 +95,23 @@ class BottomFragmentShowProfile : BottomSheetDialogFragment() {
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userSellerInfo = snapshot.getValue(UserSellerInfo::class.java)
-                sellingDescriptionTextView.text = "${userSellerInfo!!.description}"
-                previousSchoolTextView.text = "${userSellerInfo.previousSchool}"
-                educationalAttainmentTextView.text = userSellerInfo.educationalAttainment
+                if (userSellerInfo != null) {
+                    sellingDescriptionTextView.text = "${userSellerInfo.description}"
+                    previousSchoolTextView.text = "${userSellerInfo.previousSchool}"
+                    educationalAttainmentTextView.text = userSellerInfo.educationalAttainment
+                } else {
+                    sellingDescriptionTextView.text = "No description available"
+                    previousSchoolTextView.text = "No previous school information available"
+                    educationalAttainmentTextView.text = "No educational attainment information available"
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                // Log the error
+                Log.e("DatabaseError", error.message)
+                // Show a toast message to the user
+                Toast.makeText(context, "Failed to fetch user seller info: ${error.message}", Toast.LENGTH_SHORT).show()
             }
-
         })
     }
 
@@ -110,11 +120,20 @@ class BottomFragmentShowProfile : BottomSheetDialogFragment() {
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val user = p0.getValue(User::class.java)
-                bio.text = user!!.bio
-                number.text = user.mobileNumber
+                if (user != null) {
+                    bio.text = user.bio
+                    number.text = user.mobileNumber
+                } else {
+                    bio.text = "No bio available"
+                    number.text = "No number available"
+                }
             }
 
             override fun onCancelled(p0: DatabaseError) {
+                // Log the error
+                Log.e("DatabaseError", p0.message)
+                // Show a toast message to the user
+                Toast.makeText(context, "Failed to fetch user data: ${p0.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
