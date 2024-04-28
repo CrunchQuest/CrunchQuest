@@ -2,6 +2,7 @@ package com.example.crunchquest.ui.serviceprovider
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -36,7 +37,7 @@ class SellerActivity : AppCompatActivity() {
     private val sellerProfile = SellerProfileFragment()
     private val sellerServices = SellerServicesFragment()
     lateinit var menuItem: MenuItem
-    lateinit var menuToHide: MenuItem
+    var menuToHide: MenuItem? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +53,7 @@ class SellerActivity : AppCompatActivity() {
         //supportActionBar!!.setDisplayShowTitleEnabled(false) //Removes the title
 
         //Initialize Profile page of the seller fragment
-        makeCurrentFragment(SellerProfileFragment())
+        makeCurrentFragment(SellerServicesFragment())
 
         //Map the bottom navigation view
         bottomNavigationSeller = findViewById(R.id.bottomNavigation)
@@ -108,7 +109,7 @@ class SellerActivity : AppCompatActivity() {
         menuItem = menu!!.findItem(R.id.search)
         menuToHide = menu.findItem(R.id.addService)
         menuItem.isVisible = false
-        menuToHide.isVisible = false
+        menuToHide?.isVisible = false
 
 
         return super.onCreateOptionsMenu(menu)
@@ -180,5 +181,17 @@ class SellerActivity : AppCompatActivity() {
         supportActionBar!!.title = title
     }
 
+    override fun onResume() {
+        super.onResume()
+        menuToHide?.let {
+            // Set title bar
+            setActionBarTitle("Profile Page")
+            menuItem = bottomNavigationSeller.menu.findItem(R.id.Seller_profilePage)
+            menuItem.isChecked = true
+        } ?: run {
+            // Handle the case where menuToHide is not initialized
+            Log.e("SellerActivity", "menuToHide is not initialized")
+        }
+    }
 
 }
