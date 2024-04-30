@@ -4,7 +4,10 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.PopupMenu
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -66,7 +69,7 @@ class ManageRequestActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        //register a listener to teverytime the database updates
+        //register a listener to everytime the database updates
         serviceRequestHandler.serviceRequestRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 adapter.clear()

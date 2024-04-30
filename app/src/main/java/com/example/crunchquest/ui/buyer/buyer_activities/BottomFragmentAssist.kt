@@ -33,7 +33,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
-class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
+class BottomFragmentAssist : BottomSheetDialogFragment() {
 
     override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
     private lateinit var v: View
@@ -47,6 +47,14 @@ class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "JustSomeRandomTag"
+
+        fun newInstance(price: Int): BottomFragmentAssist {
+            val fragment = BottomFragmentAssist()
+            val args = Bundle()
+            args.putInt("price", price)
+            fragment.arguments = args
+            return fragment
+        }
     }
 
 
@@ -57,17 +65,19 @@ class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        v = inflater.inflate(R.layout.fragment_bottom_create_booking, container, false)
+        v = inflater.inflate(R.layout.fragment_bottom_assist, container, false)
 
+        // Retrieve the price from the arguments
+        val price = arguments?.getInt("price")
 
-        spinner = v.findViewById<Spinner>(R.id.spinnerModeOfPayment)
-        modeEditText = v.findViewById<EditText>(R.id.modeEditText_fragmentBottomSheet)
-        dateButton = v.findViewById<Button>(R.id.dateButton_fragmentBottomSheet)
-        dateTextView = v.findViewById<TextView>(R.id.dateTextView_fragmentBottomSheet)
-        timePicker = v.findViewById<TimePicker>(R.id.timePicker_fragmentBottomSheet)
-        addressEditText = v.findViewById<EditText>(R.id.addressEditText_fragmentBottomSheet)
-        button = v.findViewById<Button>(R.id.button_FragmentBottomCreateOrder)
-        button.text = "Create Order (Rp ${DisplaySpecificServiceActivity.serviceToBeOrdered?.price ?: "N/A"})"
+        spinner = v.findViewById<Spinner>(R.id.spinnerModePayment)
+        modeEditText = v.findViewById<EditText>(R.id.etModePayment)
+        dateButton = v.findViewById<Button>(R.id.btnDate)
+        dateTextView = v.findViewById<TextView>(R.id.tvDate)
+        timePicker = v.findViewById<TimePicker>(R.id.timePicker)
+        addressEditText = v.findViewById<EditText>(R.id.etAddress)
+        button = v.findViewById<Button>(R.id.btnAssist)
+        button.text = "Create Assist (Rp ${DisplaySpecificRequestActivity.serviceToBeOrdered?.price ?: "N/A"})"
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
@@ -160,7 +170,7 @@ class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
         val dialogBuilder = AlertDialog.Builder(v.context)
         dialogBuilder.setMessage("Do you want to continue?")
                 .setCancelable(true)
-                .setPositiveButton("Continue(Rp ${DisplaySpecificServiceActivity.serviceToBeOrdered?.price ?: "N/A"})") { _, _ ->
+                .setPositiveButton("Continue(Rp ${DisplaySpecificRequestActivity.serviceToBeOrdered?.price ?: "N/A"})") { _, _ ->
                     //For now, just create the order.
                     val dialogBuilder2 = AlertDialog.Builder(v.context)
                     dialogBuilder2.setMessage(
@@ -182,7 +192,7 @@ class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
                     dialog.cancel()
                 }
         val alert = dialogBuilder.create()
-        alert.setTitle("Create Order")
+        alert.setTitle("Create Assist")
         alert.show()
     }
 
@@ -191,7 +201,7 @@ class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
         //current user uid
         val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
         // uid of the service provider
-        val serviceProviderUid = DisplaySpecificServiceActivity.serviceToBeOrdered!!.userUid!!
+        val serviceProviderUid = DisplaySpecificRequestActivity.serviceToBeOrdered!!.userUid!!
         //reference
         val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
         val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$serviceProviderUid")
@@ -202,19 +212,19 @@ class BottomFragmentCreateOrder : BottomSheetDialogFragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)!!
                 val order = Order(
-                        uid = bookingUid,
-                        service_booked_uid = DisplaySpecificServiceActivity.serviceToBeOrdered!!.uid,
-                        address = addressEditText.text.toString(),
-                        date = dateTextView.text.toString(),
-                        name = "${user.firstName} ${user.lastName}",
-                        price = DisplaySpecificServiceActivity.serviceToBeOrdered!!.price,
-                        time = getTheTime(),
-                        title = DisplaySpecificServiceActivity.serviceToBeOrdered!!.title,
-                        category = DisplaySpecificServiceActivity.serviceToBeOrdered!!.category,
-                        description = DisplaySpecificServiceActivity.serviceToBeOrdered!!.description,
-                        service_provider_uid = serviceProviderUid,
-                        userUid = currentUserUid,
-                        modeOfPayment = modeEditText.text.toString()
+                    uid = bookingUid,
+                    service_booked_uid = DisplaySpecificRequestActivity.serviceToBeOrdered!!.uid,
+                    address = addressEditText.text.toString(),
+                    date = dateTextView.text.toString(),
+                    name = "${user.firstName} ${user.lastName}",
+                    price = DisplaySpecificRequestActivity.serviceToBeOrdered!!.price,
+                    time = getTheTime(),
+                    title = DisplaySpecificRequestActivity.serviceToBeOrdered!!.title,
+                    category = DisplaySpecificRequestActivity.serviceToBeOrdered!!.category,
+                    description = DisplaySpecificRequestActivity.serviceToBeOrdered!!.description,
+                    service_provider_uid = serviceProviderUid,
+                    userUid = currentUserUid,
+                    modeOfPayment = modeEditText.text.toString()
                 )
                 bookedByRef.child(bookingUid).setValue(order)
                 bookedToRef.child(bookingUid).setValue(order)

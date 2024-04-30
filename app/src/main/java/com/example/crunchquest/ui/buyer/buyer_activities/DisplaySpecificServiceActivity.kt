@@ -19,6 +19,7 @@ import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Service
+import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.User
 import com.example.crunchquest.data.model.UserSellerInfo
 import com.example.crunchquest.ui.general.DisplayReviewsActivity
@@ -57,14 +58,14 @@ class DisplaySpecificServiceActivity : AppCompatActivity() {
 
     //showProfileFrafment
     private lateinit var showProfileImageBtn: ImageButton
-    private lateinit var service: Service
+    private lateinit var service: ServiceRequest
 
     //
     private lateinit var userRating: TextView
     private lateinit var totalJobs: TextView
 
     companion object {
-        var serviceToBeOrdered: Service? = null
+        var serviceToBeOrdered: ServiceRequest? = null
         var userUidForFragment: String? = null
         var viewOnlyMode: Boolean = false
     }
@@ -74,7 +75,7 @@ class DisplaySpecificServiceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_specific_service)
         //intents
-        service = intent.getParcelableExtra<Service>("service")!!
+        service = intent.getParcelableExtra<ServiceRequest>("service")!!
         serviceToBeOrdered = service
         userUid = service.userUid!!
         serviceUid = service.uid!!

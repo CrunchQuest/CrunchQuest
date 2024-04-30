@@ -75,11 +75,14 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_specific_request)
 
-        service = intent.getSerializableExtra("ServiceRequest") as ServiceRequest
+
+        service = (intent.getParcelableExtra("ServiceRequest") as? ServiceRequest)!!
         Log.d("DisplaySpecificRequest", "ServiceRequest is not null")
 
+        serviceToBeOrdered = service
+
         // Log the ServiceRequest object
-        Log.d("DisplaySpecificRequest", "ServiceRequest: $service")
+        Log.d("DisplaySpecificRequest", "ServiceRequest: $serviceToBeOrdered")
 
         // Use the ServiceRequest object to populate your views
         serviceTitleTextView = findViewById(R.id.tvServiceTitle)
@@ -125,7 +128,8 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
             goToChatLogActivity()
         }
         createOrderButton.setOnClickListener {
-            var bottomFragment = BottomFragmentCreateOrder()
+            val price = service.price ?: 0
+            val bottomFragment = BottomFragmentAssist.newInstance(price)
             bottomFragment.show(supportFragmentManager, "TAG")
         }
         //show Profile infos
