@@ -21,7 +21,7 @@
             android:textColor="@color/text_color"
             android:background="@drawable/rounded_buttons"
             android:backgroundTint="@color/cqPurpleMain"
-            app:layout_constraintStart_toStartOf="@+id/timePicker_fragmentBottomSheet"
+            app:layout_constraintStart_toStartOf="@+id/timePicker"
             app:layout_constraintTop_toBottomOf="@+id/textView32" />
 
         <TimePicker

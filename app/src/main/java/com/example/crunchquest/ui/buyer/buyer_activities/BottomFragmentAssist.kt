@@ -67,9 +67,6 @@ class BottomFragmentAssist : BottomSheetDialogFragment() {
     ): View? {
         v = inflater.inflate(R.layout.fragment_bottom_assist, container, false)
 
-        // Retrieve the price from the arguments
-        val price = arguments?.getInt("price")
-
         spinner = v.findViewById<Spinner>(R.id.spinnerModePayment)
         modeEditText = v.findViewById<EditText>(R.id.etModePayment)
         dateButton = v.findViewById<Button>(R.id.btnDate)

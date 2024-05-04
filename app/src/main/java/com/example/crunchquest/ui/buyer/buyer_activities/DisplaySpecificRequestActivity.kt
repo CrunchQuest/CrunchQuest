@@ -18,6 +18,7 @@ import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.crunchquest.R
+import com.example.crunchquest.data.model.Order
 import com.example.crunchquest.data.model.Service
 import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.User
@@ -31,6 +32,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
+import java.util.Date
 
 
 class DisplaySpecificRequestActivity : AppCompatActivity() {
@@ -43,12 +45,21 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
     private lateinit var profileImageView: ImageView
     private lateinit var nameTextView: TextView
 
+    // for the order details
+    private lateinit var dateButton: Button
+    private lateinit var dateTextView: TextView
+    private lateinit var timePicker: TextView
+    private lateinit var addressTextView: TextView
+    private lateinit var dateAndTimeTextView: TextView
+    private lateinit var contactNumber: TextView
+    private lateinit var modeOfPayment: TextView
+
     //for the service details
     private lateinit var serviceTitleTextView: TextView
     private lateinit var serviceDescriptionTextView: TextView
     private lateinit var serviceCategoryTextView: TextView
     private lateinit var priceTextView: TextView
-    private lateinit var createOrderButton: Button
+    private lateinit var assistButton: Button
 
     //Uer review buttoon
     private lateinit var userReviewButton: Button
@@ -70,11 +81,23 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
         var viewOnlyMode: Boolean = false
     }
 
+    private lateinit var order: Order
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_specific_request)
 
+
+
+        // Get the Order object from the intent extras
+        val orderExtra = intent.getParcelableExtra<Order>("orderPassed") as? Order
+        if (orderExtra != null) {
+            order = orderExtra
+            Log.d("DisplaySpecificRequest", "Order retrieved successfully: $order")
+        } else {
+            order = Order()
+            Log.d("DisplaySpecificRequest", "No Order found in intent extras. Using default Order.")
+        }
 
         service = (intent.getParcelableExtra("ServiceRequest") as? ServiceRequest)!!
         Log.d("DisplaySpecificRequest", "ServiceRequest is not null")
@@ -101,19 +124,37 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
         userUid = service.userUid!!
         serviceUid = service.uid!!
         //Map everything here
-        userReviewButton = findViewById(R.id.btnViewReviews)
+//        userReviewButton = findViewById(R.id.btnViewReviews)
         toolBar = findViewById(R.id.tbService)
-        showProfileImageBtn = findViewById(R.id.ibProfileDropdown)
+//        showProfileImageBtn = findViewById(R.id.ibProfileDropdown)
         serviceTitleTextView = findViewById(R.id.tvServiceTitle)
         serviceDescriptionTextView = findViewById(R.id.tvServiceDescription)
         serviceCategoryTextView = findViewById(R.id.tvServiceCategory)
         priceTextView = findViewById(R.id.tvPriceService)
-        createOrderButton = findViewById(R.id.btnCreateOrderService)
+        assistButton = findViewById(R.id.btnCreateOrderService)
         profileImageView = findViewById(R.id.ivProfileImage)
         nameTextView = findViewById(R.id.tvNameService)
         floatingActionButton = findViewById(R.id.fabMessageSeller)
-        userRating = findViewById(R.id.tvRatingService)
-        totalJobs = findViewById(R.id.tvJobsAccomplishedService)
+//        userRating = findViewById(R.id.tvRatingService)
+//        totalJobs = findViewById(R.id.tvJobsAccomplishedService)
+        dateTextView = findViewById(R.id.date_orderDetails)
+        timePicker = findViewById(R.id.time_orderDetails)
+        addressTextView = findViewById(R.id.address_fragmentBottomBookingDetails)
+        dateAndTimeTextView = findViewById(R.id.dateAndTimeOrdered_orderDetails)
+        contactNumber = findViewById(R.id.number_orderDetails)
+        modeOfPayment = findViewById(R.id.mode_orderDetails)
+
+
+        dateTextView.text = "${dateTextView.text} ${order.date}"
+        timePicker.text = "${timePicker.text} ${order.time}"
+        priceTextView.text = "${priceTextView.text} ${order.price.toString()}"
+        serviceCategoryTextView.text = "${serviceCategoryTextView.text} ${order.category}"
+        serviceTitleTextView.text = "${serviceTitleTextView.text} ${order.title}"
+        serviceDescriptionTextView.text = "${serviceDescriptionTextView.text} ${order.description}"
+        dateAndTimeTextView.text = "Date and Time Booked: ${convertLongToDate(order.dateOrdered)}"
+        addressTextView.text = "${addressTextView.text} ${order.address}"
+        modeOfPayment.text = "Mode of Payment: ${order.modeOfPayment}"
+
 
 
         userReviewButton.setOnClickListener {
@@ -127,7 +168,7 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
         floatingActionButton.setOnClickListener {
             goToChatLogActivity()
         }
-        createOrderButton.setOnClickListener {
+        assistButton.setOnClickListener {
             val price = service.price ?: 0
             val bottomFragment = BottomFragmentAssist.newInstance(price)
             bottomFragment.show(supportFragmentManager, "TAG")
@@ -146,6 +187,11 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
         showUserReviewRatingAndJobsFinished()
 
 
+    }
+
+    private fun convertLongToDate(long: Long): String {
+        val resultdate = Date(long)
+        return resultdate.toString()
     }
 
     private fun showUserReviewRatingAndJobsFinished() {
@@ -174,7 +220,7 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
 
     private fun checkIfViewMode() {
         if (viewOnlyMode) {
-            createOrderButton.isEnabled = false
+            assistButton.isEnabled = false
             floatingActionButton.isEnabled = false
             val snackbar = Snackbar.make(findViewById(R.id.container_activityDisplaySpecificService), "View-Only Mode", Snackbar.LENGTH_INDEFINITE)
             snackbar.show()
@@ -182,7 +228,7 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
             return
         }
         if (!viewOnlyMode) {
-            createOrderButton.isEnabled = true
+            assistButton.isEnabled = true
             floatingActionButton.isEnabled = true
         }
     }
@@ -249,7 +295,7 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
                     serviceDescriptionTextView.text = "${service.description}"
                     serviceCategoryTextView.text = "Category: ${service.category}"
                     priceTextView.text = "Rp ${service.price}"
-                    createOrderButton.text = createOrderButton.text.toString() + " (Rp ${service.price})"
+                    assistButton.text = assistButton.text.toString() + " (Rp ${service.price})"
                 }
 
             }
