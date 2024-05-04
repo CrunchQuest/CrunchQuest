@@ -40,7 +40,7 @@ class SignUpActivity : AppCompatActivity() {
     lateinit var fname: EditText
     lateinit var lname: EditText
     lateinit var email: EditText
-    lateinit var mobileNum: EditText
+//    lateinit var mobileNum: EditText
     lateinit var password: EditText
     lateinit var confirmPass: EditText
 //    lateinit var age: TextView
@@ -207,11 +207,11 @@ class SignUpActivity : AppCompatActivity() {
             email.requestFocus()
             return
         }
-        if (mobileNum.text.toString().length != 12) {
-            mobileNum.error = "Invalid. Please use this format, 080000000000"
-            mobileNum.requestFocus()
-            return
-        }
+//        if (mobileNum.text.toString().length != 12) {
+//            mobileNum.error = "Invalid. Please use this format, 080000000000"
+//            mobileNum.requestFocus()
+//            return
+//        }
         if (password.text.toString().isEmpty()) {
             password.error = "Please enter password"
             password.requestFocus()
@@ -226,7 +226,7 @@ class SignUpActivity : AppCompatActivity() {
         //Dialog before sign up
         val dialogBuilder = AlertDialog.Builder(this)
         // set message of alert dialog
-        dialogBuilder.setMessage("Please make sure that the Email and Mobile Number is still active.")
+        dialogBuilder.setMessage("Please make sure that the Email is still active.")
                 // if the dialog is cancelable
                 .setCancelable(true)
                 // positive button text and action
