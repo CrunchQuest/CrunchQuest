@@ -23,8 +23,13 @@ import com.example.crunchquest.data.model.Service
 import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.User
 import com.example.crunchquest.data.model.UserSellerInfo
-import com.example.crunchquest.ui.general.DisplayReviewsActivity
 import com.example.crunchquest.ui.messages.ChatLogActivity
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
@@ -35,11 +40,14 @@ import com.squareup.picasso.Picasso
 import java.util.Date
 
 
-class DisplaySpecificRequestActivity : AppCompatActivity() {
+class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var toolBar: Toolbar
 
     private lateinit var userUid: String
     private lateinit var serviceUid: String
+
+    //nmap -> this is for the map
+    private lateinit var mMap: GoogleMap
 
     //user -> this is for the first card view where all informations are from the model User
     private lateinit var profileImageView: ImageView
@@ -62,7 +70,7 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
     private lateinit var assistButton: Button
 
     //Uer review buttoon
-    private lateinit var userReviewButton: Button
+//    private lateinit var userReviewButton: Button
 
     //floating action button
     private lateinit var floatingActionButton: FloatingActionButton
@@ -88,6 +96,9 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
         setContentView(R.layout.activity_display_specific_request)
 
 
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
         // Get the Order object from the intent extras
         val orderExtra = intent.getParcelableExtra<Order>("orderPassed") as? Order
@@ -157,11 +168,12 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
 
 
 
-        userReviewButton.setOnClickListener {
-            val intent = Intent(this, DisplayReviewsActivity::class.java)
-            intent.putExtra("userUid", userUid)
-            startActivity(intent)
-        }
+//        userReviewButton.setOnClickListener {
+//            val intent = Intent(this, DisplayReviewsActivity::class.java)
+//            intent.putExtra("userUid", userUid)
+//            startActivity(intent)
+//        }
+
         toolBar.setNavigationOnClickListener {
             finish()
         }
@@ -174,17 +186,17 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
             bottomFragment.show(supportFragmentManager, "TAG")
         }
         //show Profile infos
-        showProfileImageBtn.setOnClickListener {
-            userUidForFragment = userUid
-            val profileFragment = BottomFragmentShowProfile()
-            profileFragment.show(supportFragmentManager, "TAG")
-
-        }
+//        showProfileImageBtn.setOnClickListener {
+//            userUidForFragment = userUid
+//            val profileFragment = BottomFragmentShowProfile()
+//            profileFragment.show(supportFragmentManager, "TAG")
+//
+//        }
         fetchUserData()
         fetchService()
         imageSlider()
         checkIfViewMode()
-        showUserReviewRatingAndJobsFinished()
+//        showUserReviewRatingAndJobsFinished()
 
 
     }
@@ -319,6 +331,15 @@ class DisplaySpecificRequestActivity : AppCompatActivity() {
             override fun onCancelled(p0: DatabaseError) {
             }
         })
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        // Add a marker in Sydney and move the camera
+        val sydney = LatLng(-34.0, 151.0)
+        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
 }
