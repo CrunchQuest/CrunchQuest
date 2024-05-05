@@ -275,15 +275,15 @@
                     app:layout_constraintBottom_toBottomOf="@+id/educationalAttainmentEditText_activityAboutMeAsSeller"
                     app:layout_constraintEnd_toEndOf="@+id/educationalAttainmentEditText_activityAboutMeAsSeller" />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/mainButton_activityAboutMeAsSeller"
                     android:layout_width="0dp"
                     android:layout_height="46dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="40dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="40dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/rounded_buttons_seller"
+                    android:background="@drawable/rounded_buttons"
                     android:text="Update"
                     android:textColor="#FFFFFF"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -336,13 +336,13 @@
                             app:layout_constraintStart_toEndOf="@+id/viewReviewsButton_activityAboutMeAsSeller"
                             app:layout_constraintTop_toBottomOf="@+id/userRating_activityAboutMeAsASeller" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/viewReviewsButton_activityAboutMeAsSeller"
                             android:layout_width="129dp"
                             android:layout_height="64dp"
-                            android:background="@color/cqPurpleMain"
+                            android:background="@drawable/rounded_button_inverted"
                             android:text="VIEW REVIEWS"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/main_cq_purple"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintDimensionRatio="w,1:1"
                             app:layout_constraintStart_toStartOf="parent"

@@ -193,5 +193,7 @@
     <string name="mock_test_navigation">1. Select the option and the answer will be saved once you click on the submit button.\n\n2. Once you click on the submit button, you cannot change the answer and the solution will be displayed on the bottom.\n\n3. To go onto the next question, slide towards left.</string>
     <string name="field_mobile_number">Phone Number</string>
     <string name="field_confirm_password">Confirm Password</string>
+    <string name="client_mode_description">Browse various service categories, and book which service you would need</string>
+    <string name="provider_mode_description">List your services and earn cash through the mobile application</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

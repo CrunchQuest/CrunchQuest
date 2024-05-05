@@ -96,7 +96,7 @@
             android:layout_gravity="end"
             android:fontFamily="@font/dm_sans_regular"
             android:text="@string/field_forgot_password"
-            android:textColor="@color/cqPurpleMain"
+            android:textColor="@color/main_cq_purple"
             android:textSize="14sp" />
 
 
@@ -123,7 +123,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="32dp"
         android:text="@string/sign_up_prompt"
-        android:textColor="@color/cqPurpleMain"
+        android:textColor="@color/main_cq_purple"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -138,7 +138,7 @@
         android:layout_marginHorizontal="@dimen/medium_margin"
         android:layout_marginVertical="@dimen/medium_margin"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/cqPurpleMain"
+        android:backgroundTint="@color/main_cq_purple"
         android:fontFamily="@font/dm_sans_medium"
         android:padding="@dimen/button_padding"
         android:text="@string/field_login"

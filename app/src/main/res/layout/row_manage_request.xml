@@ -43,6 +43,7 @@
                 android:id="@+id/title_request"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="sans-serif-medium"
@@ -61,7 +62,7 @@
                 android:layout_marginEnd="16dp"
                 android:fontFamily="sans-serif-black"
                 android:text="PRICE"
-                android:textColor="@color/lightBlue"
+                android:textColor="@color/dark_cq_purple"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

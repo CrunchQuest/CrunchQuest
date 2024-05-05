@@ -11,6 +11,7 @@
         android:id="@+id/textView30"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-black"
         android:text="UNVERIFIED"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,6 +22,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-black"
         android:text="HOW DOES IT WORK?"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,6 +33,7 @@
         android:id="@+id/textView29"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Send verification to use this feature."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,31 +43,34 @@
         android:id="@+id/textView9"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Submit the requirements needed and wait until your account is verified by the administrators. For Service Providers, please submit selfie image, valid ID, and certificate. For Clients, please submit a selfie image and Valid ID."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/submitButton_dialog_verify"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/rounded_button"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_buttons"
+        android:textColor="@color/white"
         android:text="VERIFY NOW"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cancelButton_dialog_verify"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/cancelButton_dialog_verify"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/rounded_button_inverted"
         android:text="NOT NOW"
+        android:textColor="@color/main_cq_purple"
         app:layout_constraintEnd_toStartOf="@+id/submitButton_dialog_verify"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/submitButton_dialog_verify" />

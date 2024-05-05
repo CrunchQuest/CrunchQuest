@@ -163,7 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/medium_margin"
             android:layout_marginVertical="@dimen/medium_margin"
-            android:backgroundTint="@color/cqPurpleMain"
+            android:backgroundTint="@color/main_cq_purple"
             android:fontFamily="@font/dm_sans_medium"
             android:padding="@dimen/button_padding"
             android:text="@string/field_signup"
@@ -177,7 +177,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/login_prompt"
-            android:textColor="@color/cqPurpleMain"
+            android:textColor="@color/main_cq_purple"
             android:textSize="14sp" />
 
     </LinearLayout>

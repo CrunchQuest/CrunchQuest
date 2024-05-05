@@ -13,16 +13,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:fillViewport="true"
-        >
+        android:paddingBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_requestActivity"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -48,19 +51,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
-                <Button
-                    android:id="@+id/button_requestActivity"
-                    android:layout_width="0dp"
-                    android:layout_height="46dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/rounded_buttons"
-                    android:text="SUBMIT YOUR REQUEST"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etModePayment" />
 
                 <EditText
                     android:id="@+id/category_activityRequest"
@@ -82,25 +72,25 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
-                <com.google.android.material.button.MaterialButton
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnDate"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/rounded_buttons"
-                    android:backgroundTint="@color/cqPurpleMain"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_button_inverted"
                     android:text="Pick date"
-                    android:textColor="@color/text_color"
-                    app:layout_constraintStart_toStartOf="@+id/timePicker"
+                    android:textColor="@color/dark_cq_purple"
+                    app:layout_constraintStart_toStartOf="@+id/textView32"
                     app:layout_constraintTop_toBottomOf="@+id/textView32" />
 
                 <TimePicker
                     android:id="@+id/timePicker"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="102dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="50dp"
                     android:timePickerMode="spinner"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.494"
@@ -111,14 +101,15 @@
                     android:id="@+id/tvDate"
                     android:layout_width="0dp"
                     android:layout_height="49dp"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="50dp"
                     android:background="@drawable/rounded_edit_text"
                     android:enabled="false"
                     android:padding="15dp"
                     android:textColor="@color/text_color"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/btnDate"
-                    app:layout_constraintEnd_toEndOf="@+id/timePicker"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btnDate"
                     app:layout_constraintTop_toTopOf="@+id/btnDate" />
 
@@ -127,7 +118,7 @@
                     android:id="@+id/view14"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="8dp"
                     android:background="@android:color/darker_gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -138,7 +129,7 @@
                     android:id="@+id/view15"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="8dp"
                     android:background="@android:color/darker_gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -148,7 +139,7 @@
                     android:id="@+id/view16"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="8dp"
                     android:background="@android:color/darker_gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -159,7 +150,7 @@
                     android:id="@+id/view17"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="8dp"
                     android:background="@android:color/darker_gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -170,24 +161,28 @@
                     android:id="@+id/textView32"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="8dp"
                     android:drawableLeft="@drawable/ic_calendar"
                     android:text="DATE NEEDED"
-                    app:layout_constraintStart_toStartOf="@+id/btnDate"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view14" />
 
                 <TextView
                     android:id="@+id/textView33"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:drawableLeft="@drawable/ic_time"
                     android:text="TIME NEEDED"
-                    app:layout_constraintStart_toStartOf="@+id/timePicker"
+                    app:layout_constraintStart_toStartOf="@+id/textView32"
                     app:layout_constraintTop_toBottomOf="@+id/view15" />
 
                 <TextView
                     android:id="@+id/textView34"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:drawableLeft="@drawable/ic_address"
                     android:text="COMPLETE ADDRESS"
                     app:layout_constraintStart_toStartOf="@+id/timePicker"
@@ -197,6 +192,7 @@
                     android:id="@+id/textView27"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:drawableLeft="@drawable/ic_mode"
                     android:text="MODE OF PAYMENT"
                     app:layout_constraintStart_toStartOf="@+id/etAddress"
@@ -206,6 +202,7 @@
                     android:id="@+id/etAddress"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/rounded_edit_text"
                     android:hint="Street name, building"
                     android:padding="15dp"
@@ -218,6 +215,7 @@
                     android:id="@+id/etModePayment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/rounded_edit_text"
                     android:enabled="false"
                     android:hint="Mode"
@@ -346,6 +344,7 @@
                             android:id="@+id/textView13"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
                             android:fontFamily="sans-serif-black"
                             android:text="How does Service Request work?"
                             android:textSize="16sp"
@@ -356,6 +355,9 @@
                         <com.codesgood.views.JustifiedTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
                             android:justificationMode="inter_word"
                             android:text="If the service you're looking for isn't available or listed on the services category, you could create a service request instead. In this request, you could describe the service you're looking to purchase. Please be as detailed as possible when filling up details. When the service you're looking for is noticed by a service provider, they could message you and create the request for you."
                             app:layout_constraintEnd_toEndOf="parent"
@@ -399,10 +401,11 @@
                     android:id="@+id/gotItTextView_activityRequest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="10dp"
                     android:clickable="true"
                     android:text="GOT IT"
-                    android:textColor="@color/lightBlue"
+                    android:textColor="@color/dark_cq_purple"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/howCardView_activityRequest" />
@@ -438,5 +441,19 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_requestActivity"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_buttons"
+        android:text="SUBMIT YOUR REQUEST"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

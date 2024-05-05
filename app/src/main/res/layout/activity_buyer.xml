@@ -22,7 +22,7 @@
         android:background="@color/white"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:theme="@style/Theme.CrunchQuest"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,8 +34,8 @@
         android:layout_alignParentBottom="true"
         android:background="@color/design_default_color_surface"
         app:itemIconSize="24dp"
-        app:itemIconTint="?attr/colorPrimaryVariant"
-        app:itemTextColor="?attr/colorPrimaryVariant"
+        app:itemIconTint="@color/main_cq_purple"
+        app:itemTextColor="@color/main_cq_purple"
         app:menu="@menu/menu_nav_buyer" />
 
 

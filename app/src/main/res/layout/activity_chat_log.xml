@@ -23,7 +23,7 @@
         app:layout_constraintEnd_toStartOf="@+id/button_activityChatLog"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_activityChatLog"
         android:layout_width="100dp"
         android:layout_height="50dp"

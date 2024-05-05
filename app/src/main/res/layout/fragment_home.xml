@@ -52,49 +52,66 @@
                     android:layout_height="2dp"
                     android:layout_gravity="center"
                     app:tabIndicator="@null"
-                    app:tabIndicatorColor="@color/cqPurpleMain"
+                    app:tabIndicatorColor="@color/main_cq_purple"
                     app:tabIndicatorHeight="1dp"
                     app:tabMode="scrollable"
-                    app:tabSelectedTextColor="@color/cqPurpleMain"
+                    app:tabSelectedTextColor="@color/main_cq_purple"
                     app:tabTextColor="@color/text_color"
                     app:layout_constraintBottom_toBottomOf="@id/viewPager"
                     app:layout_constraintEnd_toEndOf="@id/viewPager"
                     app:layout_constraintStart_toStartOf="@id/viewPager" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/categoriesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:text="Category"
+                    android:textColor="@color/dark_cq_purple"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/viewPager" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView_fragmentHome"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    app:spanCount="5"
-                    tools:itemCount="8"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tab_layout"/>
+                    app:layout_constraintTop_toBottomOf="@+id/categoriesTextView"
+                    app:spanCount="5"
+                    tools:itemCount="8" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/categoriesTextView"
+                    android:id="@+id/questTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Quest"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="@color/text_color"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
+                    android:text="Quest"
+                    android:textColor="@color/dark_cq_purple"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recyclerView_fragmentHome"/>
+                    app:layout_constraintTop_toBottomOf="@+id/recyclerView_fragmentHome" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/serviceRequestRecyclerView_activityBuyersRequest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/categoriesTextView" />
+                    app:layout_constraintTop_toBottomOf="@id/questTextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -113,7 +130,7 @@
         android:scaleType="center"
         android:src="@drawable/ic_add_quest"
         app:tint="@null"
-        app:backgroundTint="@color/cqPurpleMain"
+        app:backgroundTint="@color/main_cq_purple"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="30dp" />

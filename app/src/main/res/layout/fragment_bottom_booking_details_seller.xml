@@ -124,11 +124,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_fragmentBottomBookingDetailsSeller" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_fragmentBottomBookingDetailsSeller"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_buttons_seller"
+        android:background="@drawable/rounded_buttons"
         android:text="CONTACT BUYER"
         android:textColor="#F3EAEA"
         app:layout_constraintEnd_toEndOf="parent"
@@ -136,12 +136,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mode_fragmentBottomBookingDetailsSeller" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/marButton_fragmentBottomBookingDetailsSeller"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:background="@drawable/rounded_buttons_seller"
+        android:background="@drawable/rounded_buttons"
         android:text="ACCEPT OR DECLINE"
         android:textColor="#F3EAEA"
         app:layout_constraintEnd_toEndOf="parent"
@@ -170,12 +170,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dandt_fragmentBottomBookingDetailsSeller" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/complete_fragmentBottomBookingDetailsSeller"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:background="@drawable/rounded_buttons_seller"
+        android:background="@drawable/rounded_buttons"
         android:text="CONFIRM BOOKING"
         android:textColor="#FDFDFD"
         app:layout_constraintEnd_toEndOf="parent"

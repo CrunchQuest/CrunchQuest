@@ -21,7 +21,7 @@
         app:navigationIcon="@drawable/ic_cancel"
         app:title="Submit the Following" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/submitButton_activitySendRequirements"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

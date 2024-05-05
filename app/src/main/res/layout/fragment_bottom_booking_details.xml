@@ -15,6 +15,7 @@
           android:id="@+id/date_orderDetails"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
           android:drawableLeft="@drawable/ic_calendar"
           android:gravity="center|left"
           android:text="Date:"
@@ -26,6 +27,7 @@
           android:id="@+id/time_orderDetails"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
           android:drawableLeft="@drawable/ic_time"
           android:gravity="center|left"
           android:text="Time:"
@@ -37,6 +39,7 @@
           android:id="@+id/price_orderDetails"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
           android:drawableLeft="@drawable/ic_money"
           android:gravity="center|left"
           android:text="Price: Rp"
@@ -51,6 +54,7 @@
           android:drawableLeft="@drawable/ic_category"
           android:gravity="center|left"
           android:text="Category:"
+          android:layout_marginTop="8dp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/price_orderDetails" />
@@ -62,6 +66,7 @@
           android:drawableLeft="@drawable/ic_title"
           android:gravity="center|left"
           android:text="Title:"
+          android:layout_marginTop="8dp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/category_orderDetails" />
@@ -73,6 +78,7 @@
           android:drawableLeft="@drawable/ic_description"
           android:gravity="center|left"
           android:text="Service Description:"
+          android:layout_marginTop="8dp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/title_orderDetails" />
@@ -84,6 +90,7 @@
           android:drawableLeft="@drawable/ic_calendar"
           android:gravity="center|left"
           android:text="Date and Time Ordered:"
+          android:layout_marginTop="8dp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/description_orderDetails" />
@@ -94,12 +101,14 @@
           android:layout_height="wrap_content"
           android:fontFamily="sans-serif-medium"
           android:text="BOOKING DETAILS"
+
+          android:textColor="@color/dark_blue"
           android:textSize="18sp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent" />
 
-      <Button
+      <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/button_orderDetails"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
@@ -107,6 +116,7 @@
           android:text="Message Service Provider"
           android:textColor="#FFFFFF"
           app:layout_constraintEnd_toEndOf="parent"
+          android:layout_marginTop="16dp"
           app:layout_constraintHorizontal_bias="0.6"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/mode_orderDetails" />
@@ -118,6 +128,7 @@
           android:drawableLeft="@drawable/ic_contact_number"
           android:gravity="start|left"
           android:text="Contact Number: "
+          android:layout_marginTop="8dp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/dateAndTimeOrdered_orderDetails" />
@@ -129,16 +140,18 @@
           android:drawableLeft="@drawable/ic_mode"
           android:gravity="start|left"
           android:text="Mode of Payment:"
+          android:layout_marginTop="8dp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintHorizontal_bias="0.6"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/number_orderDetails" />
 
-      <Button
+      <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/anotherButton_orderDetails"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginTop="5dp"
+          android:layout_marginTop="8dp"
+
           android:background="@drawable/rounded_buttons"
           android:text="Button"
           android:textColor="#FFFFFF"
@@ -146,11 +159,11 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/button_orderDetails" />
 
-      <Button
+      <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/cancelButton_orderDetails"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginTop="5dp"
+          android:layout_marginTop="8dp"
           android:background="@drawable/rounded_buttons"
           android:text="CANCEL ORDER"
           android:textColor="#FFFFFF"
@@ -162,6 +175,7 @@
           android:id="@+id/address_fragmentBottomBookingDetails"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
           android:drawableLeft="@drawable/ic_location"
           android:gravity="center|left"
           android:text="Address:"
