@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.crunchquest.R
+import com.example.crunchquest.ui.buyer.BuyerActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class SplashScreenActivity : AppCompatActivity() {
@@ -26,7 +27,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 finish()
                 // THere is a logged in user
             } else {
-                val i = Intent(this, ChooseActivity::class.java)
+                val i = Intent(this, BuyerActivity::class.java)
                 startActivity(i)
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 finish()

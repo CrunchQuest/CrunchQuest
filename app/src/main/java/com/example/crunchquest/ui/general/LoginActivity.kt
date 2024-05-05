@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.User
 import com.example.crunchquest.databinding.ActivityLoginBinding
+import com.example.crunchquest.ui.buyer.BuyerActivity
 import com.example.crunchquest.ui.dialogs.ResetPassword
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -140,7 +141,7 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI(currentUser: FirebaseUser?) {
         if (currentUser != null) {
             if (currentUser.isEmailVerified) {
-                val intent = Intent(this, ChooseActivity::class.java)
+                val intent = Intent(this, BuyerActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 Toast.makeText(baseContext, "Signed in",

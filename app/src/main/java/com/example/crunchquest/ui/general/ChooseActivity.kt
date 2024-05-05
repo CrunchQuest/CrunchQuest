@@ -41,47 +41,60 @@ class ChooseActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_choose)
 
-        clientBtn = findViewById(R.id.clientButton)
-        spBtn = findViewById(R.id.spButton)
-        logoutBtn = findViewById(R.id.logoutAgad)
+        val intent = Intent(this@ChooseActivity, BuyerActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
 
-        checkboxVerifyClient = findViewById(R.id.checkboxVerifyClient)
-        checkboxVerifyServiceProvider = findViewById(R.id.checkboxVerifyServiceProvider)
+//        clientBtn = findViewById(R.id.clientButton)
+//        spBtn = findViewById(R.id.spButton)
+//        logoutBtn = findViewById(R.id.logoutAgad)
+//
+//        checkboxVerifyClient = findViewById(R.id.checkboxVerifyClient)
+//        checkboxVerifyServiceProvider = findViewById(R.id.checkboxVerifyServiceProvider)
+//
+//        checkboxVerifyClient.setOnCheckedChangeListener { _, isChecked ->
+//            if (isChecked) {
+//                // Update the user's status in Firebase to verified client
+//                val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+//                val ref = FirebaseDatabase.getInstance().getReference("users/$currentUserUid")
+//                ref.child("verifiedClient").setValue("VERIFIED")
+//            }
+//            // WARNING, HARDCODE TO ALWAYS ACCEPT
+//            else{
+//                val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+//                val ref = FirebaseDatabase.getInstance().getReference("users/$currentUserUid")
+//                ref.child("verifiedClient").setValue("VERIFIED")
+//            }
+//        }
+//
+//        checkboxVerifyServiceProvider.setOnCheckedChangeListener { _, isChecked ->
+//            if (isChecked) {
+//                // Update the user's status in Firebase to verified service provider
+//                val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+//                val ref = FirebaseDatabase.getInstance().getReference("users/$currentUserUid")
+//                ref.child("verifiedServiceProvider").setValue("VERIFIED")
+//            }
+//        }
 
-        checkboxVerifyClient.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // Update the user's status in Firebase to verified client
-                val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
-                val ref = FirebaseDatabase.getInstance().getReference("users/$currentUserUid")
-                ref.child("verifiedClient").setValue("VERIFIED")
-            }
-        }
+//        logoutBtn.setOnClickListener {
+//            showLogoutDialog()
+//        }
+//        clientBtn.setOnClickListener {
+//            //Go to buyer's activity
+//            checkIfVerifiedClient()
+//        }
+//
+//        spBtn.setOnClickListener {
+//            //Go to Service Provider Screen
+//            checkIfVerifiedSP()
+//        }
 
-        checkboxVerifyServiceProvider.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // Update the user's status in Firebase to verified service provider
-                val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
-                val ref = FirebaseDatabase.getInstance().getReference("users/$currentUserUid")
-                ref.child("verifiedServiceProvider").setValue("VERIFIED")
-            }
-        }
 
-        logoutBtn.setOnClickListener {
-            showLogoutDialog()
-        }
-        clientBtn.setOnClickListener {
-            //Go to buyer's activity
-            checkIfVerifiedClient()
-        }
 
-        spBtn.setOnClickListener {
-            //Go to Service Provider Screen
-            checkIfVerifiedSP()
-
-        }
-        fetchCurrentUser()
+//        fetchCurrentUser()
 
 
 

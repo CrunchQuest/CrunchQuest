@@ -115,9 +115,9 @@ class HomeFragment : Fragment() {
                         intent.putExtra("intent", "buyer")
                         startActivity(intent)
                     }
-                    R.id.changeMode -> {
-                        startActivity(Intent(requireContext(), ChooseActivity::class.java))
-                    }
+//                    R.id.changeMode -> {
+//                        startActivity(Intent(requireContext(), ChooseActivity::class.java))
+//                    }
                     R.id.logOut -> {
                         showDialogFun()
                     }
