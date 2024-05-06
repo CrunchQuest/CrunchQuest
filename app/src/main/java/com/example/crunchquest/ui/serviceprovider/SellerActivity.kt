@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Order
 import com.example.crunchquest.ui.buyer.BuyerActivity
-import com.example.crunchquest.ui.general.ChooseActivity
 import com.example.crunchquest.ui.general.LoginActivity
 import com.example.crunchquest.ui.general.ProfileSettingsActivity
 import com.example.crunchquest.ui.messages.MessagesActivity

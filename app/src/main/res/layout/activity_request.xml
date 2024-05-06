@@ -355,9 +355,6 @@
                         <com.codesgood.views.JustifiedTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
                             android:justificationMode="inter_word"
                             android:text="If the service you're looking for isn't available or listed on the services category, you could create a service request instead. In this request, you could describe the service you're looking to purchase. Please be as detailed as possible when filling up details. When the service you're looking for is noticed by a service provider, they could message you and create the request for you."
                             app:layout_constraintEnd_toEndOf="parent"
@@ -427,6 +424,15 @@
                     android:layout_height="50dp"
                     app:layout_constraintEnd_toEndOf="@+id/category_activityRequest"
                     app:layout_constraintTop_toTopOf="@+id/category_activityRequest" />
+
+                <Spinner
+                    android:id="@+id/spinnerModeOfPayment_activityRequest"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:padding="15dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/etModePayment"
+                    app:layout_constraintEnd_toEndOf="@+id/etModePayment"
+                    app:layout_constraintTop_toTopOf="@+id/etModePayment" />
 
                 <TextView
                     android:id="@+id/textView12"

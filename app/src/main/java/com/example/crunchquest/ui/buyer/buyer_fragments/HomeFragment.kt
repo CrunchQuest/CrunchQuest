@@ -1,7 +1,9 @@
 package com.example.crunchquest.ui.buyer.buyer_fragments
 
+import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -18,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
@@ -37,7 +40,6 @@ import com.example.crunchquest.ui.buyer.buyer_activities.RequestActivity
 import com.example.crunchquest.ui.buyer.buyer_activities.ServiceCategoryActivity
 import com.example.crunchquest.ui.components.groupie_views.ServiceCategoryItem
 import com.example.crunchquest.ui.components.groupie_views.ServiceRequestItem
-import com.example.crunchquest.ui.general.ChooseActivity
 import com.example.crunchquest.ui.general.LoginActivity
 import com.example.crunchquest.ui.general.ProfileSettingsActivity
 import com.example.crunchquest.utility.handlers.ServiceRequestHandler
@@ -62,6 +64,9 @@ class HomeFragment : Fragment() {
     private lateinit var fabHandler: Handler
     private lateinit var longClickRunnable: Runnable
     private var isExpanded = false
+
+    // Maps
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
     // Service Request
     lateinit var serviceRequestRecyclerView: RecyclerView
@@ -127,7 +132,13 @@ class HomeFragment : Fragment() {
             popupMenu.show()
         }
 
-        val images = listOf(R.drawable.food1, R.drawable.food2, R.drawable.food3, R.drawable.food4, R.drawable.food5)
+        val images = listOf(
+            R.drawable.food1,
+            R.drawable.food2,
+            R.drawable.food3,
+            R.drawable.food4,
+            R.drawable.food5
+        )
         val viewPager = v.findViewById<ViewPager2>(R.id.viewPager)
         viewPager.adapter = SliderAdapter(images)
 
@@ -139,7 +150,8 @@ class HomeFragment : Fragment() {
         // Check if userId is not null
         if (userId != null) {
             // Get the reference to the image in Firebase Storage
-            val storageReference = FirebaseStorage.getInstance().reference.child("profileImages/${userId}")
+            val storageReference =
+                FirebaseStorage.getInstance().reference.child("profileImages/${userId}")
 
             // Load the image into the CircleImageView
             storageReference.downloadUrl.addOnSuccessListener { uri ->
@@ -206,9 +218,15 @@ class HomeFragment : Fragment() {
         }
 
         // Quest RecycleView
-        serviceRequestRecyclerView = v.findViewById(R.id.serviceRequestRecyclerView_activityBuyersRequest)
+        serviceRequestRecyclerView =
+            v.findViewById(R.id.serviceRequestRecyclerView_activityBuyersRequest)
         serviceRequestArrayList = ArrayList()
-        serviceRequestRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        serviceRequestRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         //Floating action button
         mainFab = v.findViewById(R.id.mainFab)
@@ -229,9 +247,26 @@ class HomeFragment : Fragment() {
             if (isExpanded) {
                 collapseSubFabs()
             } else {
-                // Navigate to RequestActivity
-                val intent = Intent(v.context, RequestActivity::class.java)
-                startActivity(intent)
+                // Check if the location permission has been granted
+                if (ActivityCompat.checkSelfPermission(
+                        v.context,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        v.context,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    // Permission is not granted, request it
+                    ActivityCompat.requestPermissions(
+                        requireActivity(),
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        LOCATION_PERMISSION_REQUEST_CODE
+                    )
+                } else {
+                    // Navigate to RequestActivity
+                    val intent = Intent(v.context, RequestActivity::class.java)
+                    startActivity(intent)
+                }
             }
         }
         mainFab.setOnTouchListener { _, event ->

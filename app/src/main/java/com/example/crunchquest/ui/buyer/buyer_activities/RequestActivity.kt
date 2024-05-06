@@ -1,13 +1,15 @@
 package com.example.crunchquest.ui.buyer.buyer_activities
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
@@ -16,15 +18,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.TimePicker
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import com.example.crunchquest.R
+import com.example.crunchquest.R.array
+import com.example.crunchquest.R.id
+import com.example.crunchquest.R.layout
 import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.User
 import com.example.crunchquest.utility.handlers.ServiceRequestHandler
@@ -35,6 +41,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
 
 class RequestActivity : AppCompatActivity() {
@@ -54,6 +63,13 @@ class RequestActivity : AppCompatActivity() {
     lateinit var spinner: Spinner
     lateinit var categoryEditText: EditText
 
+    private lateinit var dateButton: Button
+    private lateinit var dateTextView: TextView
+    private lateinit var timePicker: TimePicker
+    lateinit var spinnerPayment: Spinner
+    private lateinit var addressEditText: EditText
+    private lateinit var modeEditText: EditText
+
     companion object {
         var isHintGone: Boolean = false
     }
@@ -63,25 +79,57 @@ class RequestActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_request)
+        setContentView(layout.activity_request)
 
         // Maps Activity
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         //Map everything
-        titleEditText = findViewById(R.id.title_activityRequest)
-        descriptionEditText = findViewById(R.id.description_activityRequest)
-        priceEditText = findViewById(R.id.price_activityRequest)
-        counterTextView = findViewById(R.id.counter_activityRequest)
-        button = findViewById(R.id.button_requestActivity)
-        goneTextView = findViewById(R.id.gotItTextView_activityRequest)
-        goneView = findViewById(R.id.goneView_activityRequest)
-        goneCardView = findViewById(R.id.howCardView_activityRequest)
-        toolbar = findViewById(R.id.toolBar_activityRequest)
-        spinner = findViewById(R.id.spinnerCategory_activityRequest)
-        categoryEditText = findViewById(R.id.category_activityRequest)
+        titleEditText = findViewById(id.title_activityRequest)
+        descriptionEditText = findViewById(id.description_activityRequest)
+        priceEditText = findViewById(id.price_activityRequest)
+        counterTextView = findViewById(id.counter_activityRequest)
+        button = findViewById(id.button_requestActivity)
+        goneTextView = findViewById(id.gotItTextView_activityRequest)
+        goneView = findViewById(id.goneView_activityRequest)
+        goneCardView = findViewById(id.howCardView_activityRequest)
+        toolbar = findViewById(id.toolBar_activityRequest)
+        spinner = findViewById(id.spinnerCategory_activityRequest)
+        categoryEditText = findViewById(id.category_activityRequest)
+
+        addressEditText = findViewById<EditText>(id.etAddress)
+        spinnerPayment = findViewById<Spinner>(id.spinnerModeOfPayment_activityRequest)
+        modeEditText = findViewById<EditText>(id.etModePayment)
+        dateButton = findViewById<Button>(id.btnDate)
+        dateTextView = findViewById<TextView>(id.tvDate)
+        timePicker = findViewById<TimePicker>(id.timePicker)
+
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+        dateButton.setOnClickListener {
+            dateTextView.error = null
+            dateTextView.text = null
+
+            val dpd = DatePickerDialog(this, { _, year, month, dayOfMonth ->
+                checkDatePicked(year, month, dayOfMonth)
+                
+                // Format the picked date
+                val pickedDate = "${month(month)} $dayOfMonth, $year"
+
+                // Set the picked date as the text of dateTextView
+                dateTextView.text = pickedDate
+
+            }, year, month, day)
+            dpd.show()
+        }
+
+        modeOfPayment()
+
         //Checks the text of the button
         checkFirst()
         button.setOnClickListener {
@@ -111,12 +159,12 @@ class RequestActivity : AppCompatActivity() {
             finish()
         }
         //spinner
-        ArrayAdapter.createFromResource(this, R.array.services_category, android.R.layout.simple_spinner_item)
+        ArrayAdapter.createFromResource(this, array.services_category, android.R.layout.simple_spinner_item)
                 .also { adapter ->
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spinner.adapter = adapter
                 }
-        val arrayList = resources.getStringArray(R.array.services_category)
+        val arrayList = resources.getStringArray(array.services_category)
         spinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(arg0: AdapterView<*>?, arg1: View,
                                         arg2: Int, arg3: Long) {
@@ -129,6 +177,113 @@ class RequestActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun checkDatePicked(yearPicked: Int, monthPicked: Int, dayOfMonthPicked: Int) {
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.BASIC_ISO_DATE
+        val formatted = current.format(formatter)
+
+        val currentYear = formatted.substring(0, 4).toInt()
+        val currentMonth = formatted.substring(4, 6).toInt()
+        val currentDay = formatted.substring(6).toInt()
+
+        val monthPickedPlusOne = monthPicked + 1
+
+        Log.d(BottomFragmentAssist.TAG, "CURRENT_DATE : Year: $currentYear Month: $currentMonth Day: $currentDay")
+        Log.d(BottomFragmentAssist.TAG, "PICKED_DATE: Year: $yearPicked Month: $monthPickedPlusOne Day: $dayOfMonthPicked")
+
+        if (yearPicked < currentYear) {
+            displayToast()
+            return
+        }
+        if ((monthPickedPlusOne < currentMonth) && (yearPicked >= currentYear)) {
+            displayToast()
+            return
+        }
+        if ((dayOfMonthPicked < currentDay) && (yearPicked >= currentYear && monthPickedPlusOne == currentMonth)) {
+            displayToast()
+            return
+        }
+        var day = ""
+        if (dayOfMonthPicked <= 9){
+            day = "0$dayOfMonthPicked"
+        } else {
+            day = currentDay.toString()
+        }
+
+        dateTextView.text = "${month(monthPicked)} $day, $yearPicked"
+
+
+    }
+
+    private fun month(monthOfYear: Int): String? {
+        when (monthOfYear) {
+            0 -> {
+                return "January"
+            }
+            1 -> {
+                return "February"
+            }
+            2 -> {
+                return "March"
+            }
+            3 -> {
+                return "April"
+            }
+            4 -> {
+                return "May"
+            }
+            5 -> {
+                return "June"
+            }
+            6 -> {
+                return "July"
+            }
+            7 -> {
+                return "August"
+            }
+            8 -> {
+                return "September"
+            }
+            9 -> {
+                return "October"
+            }
+            10 -> {
+                return "November"
+            }
+            else -> {
+                return "December"
+            }
+        }
+
+    }
+
+    private fun displayToast() {
+        Toast.makeText(this, "Invalid date. You cannot enter a date from the past.", Toast.LENGTH_LONG).show()
+    }
+
+    private fun modeOfPayment() {
+        //Add the different service categories to the spinner
+        ArrayAdapter.createFromResource(this, R.array.modeOfPayment, android.R.layout.simple_spinner_item)
+            .also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerPayment.adapter = adapter
+            }
+        val arrayList = resources.getStringArray(R.array.modeOfPayment)
+        spinnerPayment.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(arg0: AdapterView<*>?, arg1: View,
+                                        arg2: Int, arg3: Long) {
+                modeEditText.setText(arrayList[arg2])
+            }
+
+            override fun onNothingSelected(arg0: AdapterView<*>?) {
+                modeEditText.text = null
+
+            }
+        }
     }
 
     private fun checkHint() {
@@ -148,9 +303,6 @@ class RequestActivity : AppCompatActivity() {
     }
 
     private fun checkAndCreate() {
-
-        // Request location permission when the user clicks the submit button
-        requestLocationPermission()
 
 
         //Check the title
@@ -214,15 +366,43 @@ class RequestActivity : AppCompatActivity() {
                     ref.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             val user = snapshot.getValue(User::class.java)
-                            val serviceRequest = ServiceRequest(
-                                    userUid = currentUserUid,
-                                    description = descriptionEditText.text.toString(),
-                                    title = titleEditText.text.toString(),
-                                    price = priceEditText.text.toString().toInt(),
-                                    category = categoryEditText.text.toString()
-                            )
-                            if (serviceRequestHandler.createServiceRequest(serviceRequest)) {
-                                Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()
+                            // Check if the location permission has been granted
+                            if (ActivityCompat.checkSelfPermission(
+                                    this@RequestActivity,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                this@RequestActivity,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
+                                ) {
+                                // Permission is not granted, request it
+                                ActivityCompat.requestPermissions(
+                                    this@RequestActivity,
+                                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                                    LOCATION_PERMISSION_REQUEST_CODE
+                                )
+                            } else {
+                                // Get the user's current location
+                                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                                    val serviceRequest = ServiceRequest(
+                                        userUid = currentUserUid,
+                                        description = descriptionEditText.text.toString(),
+                                        title = titleEditText.text.toString(),
+                                        price = priceEditText.text.toString().toInt(),
+                                        category = categoryEditText.text.toString(),
+                                        latitude = location.latitude,
+                                        longitude = location.longitude,
+                                        date = dateTextView.text.toString(),
+                                        time = "${timePicker.hour}:${timePicker.minute}",
+                                        address = addressEditText.text.toString(),
+                                        modeOfPayment = modeEditText.text.toString()
+
+
+                                    )
+                                    if (serviceRequestHandler.createServiceRequest(serviceRequest)) {
+                                        Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
                             }
                             finish()
                         }
@@ -291,7 +471,17 @@ class RequestActivity : AppCompatActivity() {
             Toast.makeText(this, "Choose a category.", Toast.LENGTH_SHORT).show()
             return
         }
-        val serviceRequest = ServiceRequest(uid = ManageRequestActivity.serviceRequestGettingEdited!!.uid, title = titleEditText.text.toString(), description = descriptionEditText.text.toString(), price = priceEditText.text.toString().toInt(), userUid = currentUserUid, category = categoryEditText.text.toString()
+        val serviceRequest = ServiceRequest(
+            uid = ManageRequestActivity.serviceRequestGettingEdited!!.uid,
+            title = titleEditText.text.toString(),
+            description = descriptionEditText.text.toString(),
+            price = priceEditText.text.toString().toInt(),
+            userUid = currentUserUid,
+            category = categoryEditText.text.toString(),
+            date = dateTextView.text.toString(),
+            time = "${timePicker.hour}:${timePicker.minute}",
+            address = addressEditText.text.toString(),
+            modeOfPayment = modeEditText.text.toString()
         )
         if (serviceRequestHandler.updateServiceRequest(serviceRequest)) {
             Toast.makeText(this, "Service request updated", Toast.LENGTH_SHORT).show()
@@ -301,7 +491,7 @@ class RequestActivity : AppCompatActivity() {
     }
 
     private fun setCategory(category: String) {
-        var arrayList = resources.getStringArray(R.array.services_category)
+        var arrayList = resources.getStringArray(array.services_category)
         if (category == arrayList[0]) {
             spinner.setSelection(0)
             return
@@ -346,62 +536,6 @@ class RequestActivity : AppCompatActivity() {
         ManageRequestActivity.serviceRequestGettingEdited = null
     }
 
-    private fun requestLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
-        } else {
-            getLocation()
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLocation()
-            } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun getLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                // Use location.latitude and location.longitude
-                // Pass the location data to DisplaySpecificRequestActivity
-                goToDisplaySpecificRequestActivity(location)
-            }
-        }
-    }
-
-    private fun goToDisplaySpecificRequestActivity(location: Location) {
-        val intent = Intent(this, DisplaySpecificRequestActivity::class.java)
-        intent.putExtra("latitude", location.latitude)
-        intent.putExtra("longitude", location.longitude)
-        startActivity(intent)
-    }
 
 
 }

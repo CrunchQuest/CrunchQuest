@@ -257,50 +257,6 @@
                             app:layout_constraintTop_toBottomOf="@+id/address_fragmentBottomBookingDetails" />
 
                         <TextView
-                            android:id="@+id/dateAndTimeOrdered_orderDetails"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:drawableLeft="@drawable/ic_calendar"
-                            android:gravity="center|left"
-                            android:text="Date and Time Ordered:"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/view34" />
-
-                        <View
-                            android:id="@+id/view35"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="8dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/dateAndTimeOrdered_orderDetails" />
-
-                        <TextView
-                            android:id="@+id/number_orderDetails"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:drawableLeft="@drawable/ic_contact_number"
-                            android:gravity="start|left"
-                            android:text="Contact Number: "
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/view35" />
-
-                        <View
-                            android:id="@+id/view36"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="8dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/number_orderDetails" />
-
-                        <TextView
                             android:id="@+id/mode_orderDetails"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -311,7 +267,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.6"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/view36" />
+                            app:layout_constraintTop_toBottomOf="@+id/view34" />
 
                         <View
                             android:id="@+id/view37"

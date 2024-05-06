@@ -95,7 +95,10 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_specific_request)
 
+        // Retrieve the ServiceRequest object from the intent extras
+        val serviceRequest = intent.getParcelableExtra<ServiceRequest>("ServiceRequest")
 
+        // Maps Fragment
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -110,8 +113,14 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d("DisplaySpecificRequest", "No Order found in intent extras. Using default Order.")
         }
 
-        service = (intent.getParcelableExtra("ServiceRequest") as? ServiceRequest)!!
-        Log.d("DisplaySpecificRequest", "ServiceRequest is not null")
+        val serviceExtra = intent.getParcelableExtra<ServiceRequest>("ServiceRequest")
+        if (serviceExtra != null) {
+            service = serviceExtra ?: ServiceRequest()
+            Log.d("DisplaySpecificRequest", "ServiceRequest retrieved successfully: $service")
+        } else {
+            Log.d("DisplaySpecificRequest", "No ServiceRequest found in intent extras.")
+            // Handle the case when serviceExtra is null
+        }
 
         serviceToBeOrdered = service
 
@@ -119,16 +128,34 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("DisplaySpecificRequest", "ServiceRequest: $serviceToBeOrdered")
 
         // Use the ServiceRequest object to populate your views
-        serviceTitleTextView = findViewById(R.id.tvServiceTitle)
-        serviceDescriptionTextView = findViewById(R.id.tvServiceDescription)
-        serviceCategoryTextView = findViewById(R.id.tvServiceCategory)
-        priceTextView = findViewById(R.id.tvPriceService)
+        if (serviceRequest != null) {
+            serviceTitleTextView = findViewById(R.id.tvServiceTitle)
+            serviceDescriptionTextView = findViewById(R.id.tvServiceDescription)
+            serviceCategoryTextView = findViewById(R.id.tvServiceCategory)
+            priceTextView = findViewById(R.id.tvPriceService)
+            dateTextView = findViewById(R.id.date_orderDetails)
+            timePicker = findViewById(R.id.time_orderDetails)
+            addressTextView = findViewById(R.id.address_fragmentBottomBookingDetails)
+//            dateAndTimeTextView = findViewById(R.id.dateAndTimeOrdered_orderDetails)
+//            contactNumber = findViewById(R.id.number_orderDetails)
+            modeOfPayment = findViewById(R.id.mode_orderDetails)
 
-        // Set the text of your TextViews
-        serviceTitleTextView.text = service.title
-        serviceDescriptionTextView.text = service.description
-        serviceCategoryTextView.text = service.category
-        priceTextView.text = service.price.toString()
+            // Set the text of your TextViews
+            serviceTitleTextView.text = service.title
+            serviceDescriptionTextView.text = service.description
+            serviceCategoryTextView.text = service.category
+            priceTextView.text = service.price.toString()
+            dateTextView.text = service.date
+            timePicker.text = service.time
+            addressTextView.text = service.address
+//            dateAndTimeTextView.text = service.dateBooked
+//            contactNumber.text = service.contactNumber
+            modeOfPayment.text = service.modeOfPayment
+        } else {
+            Log.d("DisplaySpecificRequest", "ServiceRequest is null")
+        }
+
+
 
         //intents
         serviceToBeOrdered = service
@@ -138,33 +165,25 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
 //        userReviewButton = findViewById(R.id.btnViewReviews)
         toolBar = findViewById(R.id.tbService)
 //        showProfileImageBtn = findViewById(R.id.ibProfileDropdown)
-        serviceTitleTextView = findViewById(R.id.tvServiceTitle)
-        serviceDescriptionTextView = findViewById(R.id.tvServiceDescription)
-        serviceCategoryTextView = findViewById(R.id.tvServiceCategory)
-        priceTextView = findViewById(R.id.tvPriceService)
+
         assistButton = findViewById(R.id.btnCreateOrderService)
         profileImageView = findViewById(R.id.ivProfileImage)
         nameTextView = findViewById(R.id.tvNameService)
         floatingActionButton = findViewById(R.id.fabMessageSeller)
 //        userRating = findViewById(R.id.tvRatingService)
 //        totalJobs = findViewById(R.id.tvJobsAccomplishedService)
-        dateTextView = findViewById(R.id.date_orderDetails)
-        timePicker = findViewById(R.id.time_orderDetails)
-        addressTextView = findViewById(R.id.address_fragmentBottomBookingDetails)
-        dateAndTimeTextView = findViewById(R.id.dateAndTimeOrdered_orderDetails)
-        contactNumber = findViewById(R.id.number_orderDetails)
-        modeOfPayment = findViewById(R.id.mode_orderDetails)
 
 
-        dateTextView.text = "${dateTextView.text} ${order.date}"
-        timePicker.text = "${timePicker.text} ${order.time}"
-        priceTextView.text = "${priceTextView.text} ${order.price.toString()}"
-        serviceCategoryTextView.text = "${serviceCategoryTextView.text} ${order.category}"
-        serviceTitleTextView.text = "${serviceTitleTextView.text} ${order.title}"
-        serviceDescriptionTextView.text = "${serviceDescriptionTextView.text} ${order.description}"
-        dateAndTimeTextView.text = "Date and Time Booked: ${convertLongToDate(order.dateOrdered)}"
-        addressTextView.text = "${addressTextView.text} ${order.address}"
-        modeOfPayment.text = "Mode of Payment: ${order.modeOfPayment}"
+        //Temporary Comments
+//        dateTextView.text = "${dateTextView.text} ${order.date}"
+//        timePicker.text = "${timePicker.text} ${order.time}"
+//        priceTextView.text = "${priceTextView.text} ${order.price.toString()}"
+//        serviceCategoryTextView.text = "${serviceCategoryTextView.text} ${order.category}"
+//        serviceTitleTextView.text = "${serviceTitleTextView.text} ${order.title}"
+//        serviceDescriptionTextView.text = "${serviceDescriptionTextView.text} ${order.description}"
+//        dateAndTimeTextView.text = "Date and Time Booked: ${convertLongToDate(order.dateOrdered)}"
+//        addressTextView.text = "${addressTextView.text} ${order.address}"
+//        modeOfPayment.text = "Mode of Payment: ${order.modeOfPayment}"
 
 
 
@@ -336,10 +355,16 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        // Get latitude and longitude from the ServiceRequest object
+        val latitude = service.latitude ?: 0.0
+        val longitude = service.longitude ?: 0.0
+
+        // Create a LatLng object using the latitude and longitude
+        val userLocation = LatLng(latitude, longitude)
+
+        // Add a marker at the user's location and move the camera
+        mMap.addMarker(MarkerOptions().position(userLocation).title("Marker in User Location"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation))
     }
 
 }

@@ -26,7 +26,6 @@ import com.example.crunchquest.ui.buyer.buyer_fragments.BuyerManageFragment
 import com.example.crunchquest.ui.buyer.buyer_fragments.HomeFragment
 import com.example.crunchquest.ui.buyer.buyer_fragments.ProfileFragment
 import com.example.crunchquest.ui.buyer.buyer_fragments.SearchFragment
-import com.example.crunchquest.ui.general.ChooseActivity
 import com.example.crunchquest.ui.general.LoginActivity
 import com.example.crunchquest.ui.general.ProfileSettingsActivity
 import com.example.crunchquest.ui.messages.MessagesActivity
