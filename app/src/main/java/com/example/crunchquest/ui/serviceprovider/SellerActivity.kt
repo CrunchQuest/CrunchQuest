@@ -162,9 +162,9 @@ class SellerActivity : AppCompatActivity() {
 
 
             }
-            R.id.changeMode -> {
-                startActivity(Intent(this, ChooseActivity::class.java))
-            }
+//            R.id.changeMode -> {
+//                startActivity(Intent(this, ChooseActivity::class.java))
+//            }
 
         }
         return super.onOptionsItemSelected(item)

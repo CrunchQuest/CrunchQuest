@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="services_category">
+        <item>Computer Repair</item>
+        <item>Home Cleaning</item>
+        <item>Plumbing</item>
+        <item>Electrical</item>
+        <item>Moving</item>
+        <item>Delivery</item>
+        <item>Aircon</item>
+        <item>Home Repair</item>
+        <item>Auto Repair</item>
+    </string-array>
+
+    <string-array name="educationStatus">
+        <item>Primary School Graduate</item>
+        <item>Secondary School Graduate</item>
+        <item>High School Graduate</item>
+        <item>University Graduate</item>
+        <item>Postgraduate</item>
+        <item>On going</item>
+    </string-array>
+
+    <string-array name="skillLevel">
+        <item>Beginner</item>
+        <item>Intermediate</item>
+        <item>Expert</item>
+    </string-array>
+
+    <string-array name="modeOfPayment">
+        <item>Cash</item>
+        <item>Mobile Payments</item>
+        <item>Electronic Bank Transfers</item>
+    </string-array>
+
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+</resources>

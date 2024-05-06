@@ -19,6 +19,10 @@ import com.example.crunchquest.ui.dialogs.ResetPassword
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 
 class LoginActivity : AppCompatActivity() {
@@ -141,9 +145,11 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI(currentUser: FirebaseUser?) {
         if (currentUser != null) {
             if (currentUser.isEmailVerified) {
-                val intent = Intent(this, BuyerActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                //check if user has do the personalization survey first
+                checkUserPreferences(currentUser.uid)
+//                val intent = Intent(this, BuyerActivity::class.java)
+//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                startActivity(intent)
                 Toast.makeText(baseContext, "Signed in",
                         Toast.LENGTH_LONG).show()
             } else {
@@ -155,6 +161,31 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(baseContext, "Incorrect email or password.",
                     Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun checkUserPreferences(uid: String) {
+        val preferencesRef = FirebaseDatabase.getInstance().getReference("/users/$uid/preferences")
+        preferencesRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Preferences exist, navigate to BuyerActivity or any other activity
+                    val intent = Intent(this@LoginActivity, BuyerActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    finish()
+                } else {
+                    // Preferences don't exist, redirect to PreferencesActivity
+                    val intent = Intent(this@LoginActivity, PersonalizationActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    finish()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle errors
+            }
+        })
     }
 
     //log in function. Checks first if the views are filled. If yes, check first if the account info is correct. If correct, checks if it is verified.

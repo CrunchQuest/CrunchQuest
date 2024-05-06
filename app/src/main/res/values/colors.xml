@@ -92,6 +92,10 @@
     <color name="correct_ans_border">@color/blue</color>
     <color name="main_cq_purple">#7E0792</color>
     <color name="dark_cq_purple">#3B0051</color>
+
+    <color name="cool_white">#F3F4F6</color>
+    <color name="cool_black">#3A3839</color>
+
     <color name="coolBlack">#2B2B2B</color>
     <color name="alternate_cq_purple">#5B067B</color>
 

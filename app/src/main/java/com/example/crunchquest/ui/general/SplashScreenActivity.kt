@@ -3,15 +3,21 @@ package com.example.crunchquest.ui.general
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.crunchquest.R
 import com.example.crunchquest.ui.buyer.BuyerActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class SplashScreenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_splash_screen)
 
         var imageView = findViewById<ImageView>(R.id.iv_note)
@@ -27,14 +33,34 @@ class SplashScreenActivity : AppCompatActivity() {
                 finish()
                 // THere is a logged in user
             } else {
-                val i = Intent(this, BuyerActivity::class.java)
-                startActivity(i)
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                finish()
+                // User is logged in and checking if user has done personalization survey
+                checkUserPreferences(currentUser.uid)
+            }
+        }
+    }
+
+    private fun checkUserPreferences(uid: String) {
+        val preferencesRef = FirebaseDatabase.getInstance().getReference("/users/$uid/preferences")
+        preferencesRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Preferences exist, navigate to BuyerActivity or any other activity
+                    val intent = Intent(this@SplashScreenActivity, BuyerActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    finish()
+                } else {
+                    // Preferences don't exist, redirect to PreferencesActivity
+                    val intent = Intent(this@SplashScreenActivity, PersonalizationActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    finish()
+                }
             }
 
-        }
-
-
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle errors
+            }
+        })
     }
 }
