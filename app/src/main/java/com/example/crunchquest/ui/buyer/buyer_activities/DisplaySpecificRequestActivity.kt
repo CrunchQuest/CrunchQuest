@@ -5,18 +5,12 @@ package com.example.crunchquest.ui.buyer.buyer_activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.ceylonlabs.imageviewpopup.ImagePopup
-import com.denzcoskun.imageslider.ImageSlider
-import com.denzcoskun.imageslider.constants.ScaleTypes
-import com.denzcoskun.imageslider.interfaces.ItemClickListener
-import com.denzcoskun.imageslider.models.SlideModel
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Order
 import com.example.crunchquest.data.model.Service
@@ -213,7 +207,6 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
 //        }
         fetchUserData()
         fetchService()
-        imageSlider()
         checkIfViewMode()
 //        showUserReviewRatingAndJobsFinished()
 
@@ -264,41 +257,6 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun imageSlider() {
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        val imageSlider: ImageSlider = findViewById(R.id.isService)
-        val remoteImages: ArrayList<SlideModel> = ArrayList()
-        val ref = FirebaseDatabase.getInstance().getReference("/Sliders/$serviceUid")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.children.forEach {
-                    remoteImages.add(SlideModel(it.child("url").value.toString(), "", ScaleTypes.CENTER_CROP))
-                }
-                imageSlider.setImageList(remoteImages, ScaleTypes.CENTER_CROP)
-                imageSlider.stopSliding()
-                imageSlider.setItemClickListener(object : ItemClickListener {
-                    override fun onItemSelected(position: Int) {
-//                        var showPictureFragment = ShowPictureFragment()
-//                        showPictureFragment.show(supportFragmentManager, "TAG")
-//                        ShowPictureFragment.serviceUid = serviceUid
-                        Log.d("POSITIONTRYLANG", "$position")
-                        val url = remoteImages[position].imageUrl!!
-                        val imagePopup = ImagePopup(this@DisplaySpecificRequestActivity)
-                        imagePopup.initiatePopupWithPicasso(url)
-                        imagePopup.viewPopup()
-                    }
-
-                })
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-        })
-        imageSlider.stopSliding()
-
-    }
 
     private fun goToChatLogActivity() {
         val intent = Intent(applicationContext, ChatLogActivity::class.java)
