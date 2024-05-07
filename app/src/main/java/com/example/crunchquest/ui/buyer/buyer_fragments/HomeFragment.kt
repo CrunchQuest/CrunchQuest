@@ -221,12 +221,6 @@ class HomeFragment : Fragment() {
         serviceRequestRecyclerView =
             v.findViewById(R.id.serviceRequestRecyclerView_activityBuyersRequest)
         serviceRequestArrayList = ArrayList()
-        serviceRequestRecyclerView.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(),
-                DividerItemDecoration.VERTICAL
-            )
-        )
 
         //Floating action button
         mainFab = v.findViewById(R.id.mainFab)

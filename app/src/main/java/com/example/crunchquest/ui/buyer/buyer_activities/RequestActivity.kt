@@ -369,42 +369,49 @@ class RequestActivity : AppCompatActivity() {
                             // Check if the location permission has been granted
                             if (ActivityCompat.checkSelfPermission(
                                     this@RequestActivity,
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                this@RequestActivity,
-                                Manifest.permission.ACCESS_COARSE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED
-                                ) {
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                    this@RequestActivity,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                                ) != PackageManager.PERMISSION_GRANTED
+                            ) {
                                 // Permission is not granted, request it
                                 ActivityCompat.requestPermissions(
                                     this@RequestActivity,
                                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                                     LOCATION_PERMISSION_REQUEST_CODE
                                 )
-                            } else {
-                                // Get the user's current location
-                                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                                    val serviceRequest = ServiceRequest(
-                                        userUid = currentUserUid,
-                                        description = descriptionEditText.text.toString(),
-                                        title = titleEditText.text.toString(),
-                                        price = priceEditText.text.toString().toInt(),
-                                        category = categoryEditText.text.toString(),
-                                        latitude = location.latitude,
-                                        longitude = location.longitude,
-                                        date = dateTextView.text.toString(),
-                                        time = "${timePicker.hour}:${timePicker.minute}",
-                                        address = addressEditText.text.toString(),
-                                        modeOfPayment = modeEditText.text.toString()
+                                return
+                            }
 
-
-                                    )
-                                    if (serviceRequestHandler.createServiceRequest(serviceRequest)) {
-                                        Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()
+                            // Permission is granted, request the device's last known location
+                            fusedLocationClient.lastLocation
+                                .addOnSuccessListener(this@RequestActivity) { location ->
+                                    // Got last known location. In some rare situations, this can be null.
+                                    if (location != null) {
+                                        // Location available, create the service request
+                                        val serviceRequest = ServiceRequest(
+                                            userUid = currentUserUid,
+                                            description = descriptionEditText.text.toString(),
+                                            title = titleEditText.text.toString(),
+                                            price = priceEditText.text.toString().toInt(),
+                                            category = categoryEditText.text.toString(),
+                                            latitude = location.latitude,
+                                            longitude = location.longitude,
+                                            date = dateTextView.text.toString(),
+                                            time = "${timePicker.hour}:${timePicker.minute}",
+                                            address = addressEditText.text.toString(),
+                                            modeOfPayment = modeEditText.text.toString()
+                                        )
+                                        if (serviceRequestHandler.createServiceRequest(serviceRequest)) {
+                                            Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()
+                                        }
+                                        finish()
+                                    } else {
+                                        // Location not available
+                                        Toast.makeText(applicationContext, "Location not available", Toast.LENGTH_SHORT).show()
                                     }
                                 }
-                            }
-                            finish()
                         }
 
                         override fun onCancelled(error: DatabaseError) {
