@@ -317,12 +317,20 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
         val latitude = service.latitude ?: 0.0
         val longitude = service.longitude ?: 0.0
 
-        // Create a LatLng object using the latitude and longitude
-        val userLocation = LatLng(latitude, longitude)
+        // Check if both latitude and longitude are 0.0
+        if (latitude == 0.0 && longitude == 0.0) {
+            // Hide the map fragment
+            val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+            if (mapFragment != null) {
+                supportFragmentManager.beginTransaction().hide(mapFragment).commit()
+            }
+        } else {
+            // Create a LatLng object using the latitude and longitude
+            val userLocation = LatLng(latitude, longitude)
 
-        // Add a marker at the user's location and move the camera
-        mMap.addMarker(MarkerOptions().position(userLocation).title("Marker in User Location"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation))
+            // Add a marker at the user's location and move the camera
+            mMap.addMarker(MarkerOptions().position(userLocation).title("Marker in User Location"))
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation))
+        }
     }
-
 }

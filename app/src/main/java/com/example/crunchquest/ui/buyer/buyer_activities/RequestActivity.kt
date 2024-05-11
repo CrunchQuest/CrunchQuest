@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -23,6 +24,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -69,7 +71,8 @@ class RequestActivity : AppCompatActivity() {
     lateinit var spinnerPayment: Spinner
     private lateinit var addressEditText: EditText
     private lateinit var modeEditText: EditText
-
+    private lateinit var switchLocation: SwitchCompat
+    private var isLocationAllowed: Boolean = false
     companion object {
         var isHintGone: Boolean = false
     }
@@ -99,6 +102,7 @@ class RequestActivity : AppCompatActivity() {
         toolbar = findViewById(id.toolBar_activityRequest)
         spinner = findViewById(id.spinnerCategory_activityRequest)
         categoryEditText = findViewById(id.category_activityRequest)
+        switchLocation = findViewById(id.switch_location)
 
         addressEditText = findViewById<EditText>(id.etAddress)
         spinnerPayment = findViewById<Spinner>(id.spinnerModeOfPayment_activityRequest)
@@ -106,6 +110,13 @@ class RequestActivity : AppCompatActivity() {
         dateButton = findViewById<Button>(id.btnDate)
         dateTextView = findViewById<TextView>(id.tvDate)
         timePicker = findViewById<TimePicker>(id.timePicker)
+
+        switchLocation = findViewById(R.id.switch_location)
+
+        switchLocation.setOnCheckedChangeListener { _, isChecked ->
+            isLocationAllowed = isChecked
+        }
+
 
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
@@ -302,6 +313,11 @@ class RequestActivity : AppCompatActivity() {
         }
     }
 
+    // Function to check if location is allowed
+    private fun isLocationAllowed(): Boolean {
+        return isLocationAllowed
+    }
+
     private fun checkAndCreate() {
 
 
@@ -353,82 +369,70 @@ class RequestActivity : AppCompatActivity() {
         //This may be the problem of the BUG
         // please check this
 
-        //Dialog before sign out
         val dialogBuilder = AlertDialog.Builder(this)
-        // set message of alert dialog
         dialogBuilder.setMessage("Create request?")
-                // if the dialog is cancelable
-                .setCancelable(true)
-                // positive button text and action
-                .setPositiveButton("Create", DialogInterface.OnClickListener { _, _ ->
-                    // If everything is good to go.
-                    val ref = FirebaseDatabase.getInstance().getReference("/users/$currentUserUid")
-                    ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val user = snapshot.getValue(User::class.java)
-                            // Check if the location permission has been granted
-                            if (ActivityCompat.checkSelfPermission(
-                                    this@RequestActivity,
-                                    Manifest.permission.ACCESS_FINE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                    this@RequestActivity,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED
-                            ) {
-                                // Permission is not granted, request it
-                                ActivityCompat.requestPermissions(
-                                    this@RequestActivity,
-                                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                                    LOCATION_PERMISSION_REQUEST_CODE
-                                )
-                                return
+            .setCancelable(true)
+            .setPositiveButton("Create") { _, _ ->
+                // Check if the location permission has been granted
+                if (!isLocationAllowed() || (ActivityCompat.checkSelfPermission(
+                        this@RequestActivity,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        this@RequestActivity,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED)
+                ) {
+                    // Location permission not granted or location not allowed
+                    createRequest(null) // Pass null location
+                } else {
+                    // Location permission granted and location allowed
+                    fusedLocationClient.lastLocation
+                        .addOnSuccessListener(this@RequestActivity) { location ->
+                            if (location != null) {
+                                // Location available, create the service request with location
+                                createRequest(location)
+                            } else {
+                                // Location not available, create the service request with null location
+                                createRequest(null)
                             }
-
-                            // Permission is granted, request the device's last known location
-                            fusedLocationClient.lastLocation
-                                .addOnSuccessListener(this@RequestActivity) { location ->
-                                    // Got last known location. In some rare situations, this can be null.
-                                    if (location != null) {
-                                        // Location available, create the service request
-                                        val serviceRequest = ServiceRequest(
-                                            userUid = currentUserUid,
-                                            description = descriptionEditText.text.toString(),
-                                            title = titleEditText.text.toString(),
-                                            price = priceEditText.text.toString().toInt(),
-                                            category = categoryEditText.text.toString(),
-                                            latitude = location.latitude,
-                                            longitude = location.longitude,
-                                            date = dateTextView.text.toString(),
-                                            time = "${timePicker.hour}:${timePicker.minute}",
-                                            address = addressEditText.text.toString(),
-                                            modeOfPayment = modeEditText.text.toString()
-                                        )
-                                        if (serviceRequestHandler.createServiceRequest(serviceRequest)) {
-                                            Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()
-                                        }
-                                        finish()
-                                    } else {
-                                        // Location not available
-                                        Toast.makeText(applicationContext, "Location not available", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
                         }
+                }
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
 
-                        override fun onCancelled(error: DatabaseError) {
-                        }
-                    })
-                })
-                // negative button text and action
-                .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, _ ->
-                    dialog.cancel()
-                })
-        // create dialog box
         val alert = dialogBuilder.create()
-        // set title for alert dialog box
         alert.setTitle("Confirmation")
-        // show alert dialog
         alert.show()
+    }
 
+    private fun createRequest(location: Location?) {
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$currentUserUid")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(User::class.java)
+                val serviceRequest = ServiceRequest(
+                    userUid = currentUserUid,
+                    description = descriptionEditText.text.toString(),
+                    title = titleEditText.text.toString(),
+                    price = priceEditText.text.toString().toInt(),
+                    category = categoryEditText.text.toString(),
+                    latitude = location?.latitude ?: 0.0, // Set latitude to 0.0 if location is null
+                    longitude = location?.longitude ?: 0.0, // Set longitude to 0.0 if location is null
+                    date = dateTextView.text.toString(),
+                    time = "${timePicker.hour}:${timePicker.minute}",
+                    address = addressEditText.text.toString(),
+                    modeOfPayment = modeEditText.text.toString()
+                )
+                if (serviceRequestHandler.createServiceRequest(serviceRequest)) {
+                    Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()
+                }
+                finish()
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun checkFirst() {
