@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class ReviewDialog(fragment: Fragment, order: Order) {
+class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategories: Array<String>) {
     private val fragment: Fragment = fragment
     private val order: Order = order
     private var dialog: AlertDialog? = null
@@ -66,7 +66,8 @@ class ReviewDialog(fragment: Fragment, order: Order) {
                 uid = id,
                 userUid = currentUserUid,
                 review = editText.text.toString(),
-                rating = ratingBar.rating.toInt()
+                rating = ratingBar.rating.toInt(),
+                categoryId = servicesCategories.indexOf(order.category)
         )
         ref.child(id).setValue(review)
 

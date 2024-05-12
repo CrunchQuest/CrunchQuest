@@ -195,7 +195,7 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         if (order.reviewed == false) {
             //close the bottom frafment here
             dismissBottomSheet()
-            val reviewDialog = ReviewDialog(this@BottomFragmentOrderDetails, order)
+            val reviewDialog = ReviewDialog(this@BottomFragmentOrderDetails, order,resources.getStringArray(R.array.services_category))
             reviewDialog.showReviewDialog()
         } else if (order.reviewed == true) {
             Toast.makeText(v.context, "You already submitted a review for this order.", Toast.LENGTH_SHORT).show()
