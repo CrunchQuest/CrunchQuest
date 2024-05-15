@@ -49,13 +49,13 @@ class DisplaySpecificServiceActivity : AppCompatActivity() {
     private lateinit var priceTextView: TextView
     private lateinit var createOrderButton: Button
 
-    //Uer review buttoon
+    //Uer review button
     private lateinit var userReviewButton: Button
 
     //floating action button
     private lateinit var floatingActionButton: FloatingActionButton
 
-    //showProfileFrafment
+    //showProfileFragment
     private lateinit var showProfileImageBtn: ImageButton
     private lateinit var service: Service
 
@@ -181,7 +181,7 @@ class DisplaySpecificServiceActivity : AppCompatActivity() {
 //                        var showPictureFragment = ShowPictureFragment()
 //                        showPictureFragment.show(supportFragmentManager, "TAG")
 //                        ShowPictureFragment.serviceUid = serviceUid
-                        Log.d("POSITIONTRYLANG", "$position")
+                        Log.d("TRANSPOSITION", "$position")
                         val url = remoteImages[position].imageUrl!!
                         val imagePopup = ImagePopup(this@DisplaySpecificServiceActivity)
                         imagePopup.initiatePopupWithPicasso(url)

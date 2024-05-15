@@ -18,6 +18,7 @@ import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.User
 import com.example.crunchquest.data.model.UserSellerInfo
 import com.example.crunchquest.ui.messages.ChatLogActivity
+import com.example.crunchquest.utility.handlers.ServiceRequestHandler
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -39,6 +41,7 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var userUid: String
     private lateinit var serviceUid: String
+    var serviceRequestHandler = ServiceRequestHandler()
 
     //nmap -> this is for the map
     private lateinit var mMap: GoogleMap
@@ -194,9 +197,10 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
             goToChatLogActivity()
         }
         assistButton.setOnClickListener {
-            val price = service.price ?: 0
-            val bottomFragment = BottomFragmentAssist.newInstance(price)
-            bottomFragment.show(supportFragmentManager, "TAG")
+
+            createTheOrder()
+
+
         }
         //show Profile infos
 //        showProfileImageBtn.setOnClickListener {
@@ -212,6 +216,124 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     }
+
+    private fun createTheOrder() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            val currentUserUid = currentUser.uid
+            val bookedToRef =
+                FirebaseDatabase.getInstance().getReference("booked_to/$currentUserUid")
+            val requestUserUid = serviceToBeOrdered?.bookedBy
+            if (requestUserUid != null) {
+                val bookedByRef =
+                    FirebaseDatabase.getInstance().getReference("booked_by/$requestUserUid")
+                val userRef = FirebaseDatabase.getInstance().getReference("users/$currentUserUid")
+                userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val user = snapshot.getValue(User::class.java)!!
+                        val order = Order(
+                            uid = currentUserUid,
+                            service_booked_uid = serviceToBeOrdered!!.uid,
+                            address = addressTextView.text.toString(),
+                            date = dateTextView.text.toString(),
+                            name = "${user.firstName} ${user.lastName}",
+                            price = serviceToBeOrdered!!.price,
+                            time = service.time,
+                            title = serviceToBeOrdered!!.title,
+                            category = serviceToBeOrdered!!.category,
+                            description = serviceToBeOrdered!!.description,
+                            userUid = currentUserUid,
+                            modeOfPayment = modeOfPayment.text.toString(),
+                            bookedBy = requestUserUid, // Set bookedBy to the requestUserUid
+                            bookedTo = currentUserUid // Set bookedTo to the currentUserUid
+                        )
+                        bookedByRef.child(requestUserUid).setValue(order)
+                        bookedToRef.child(currentUserUid).setValue(order)
+                        Log.d("DisplaySpecificRequest", "bookedBy is set to: ${order.bookedBy}")
+                        Log.d("DisplaySpecificRequest", "bookedTo is set to: ${order.bookedTo}")
+
+                        // Remove the ServiceRequest from the database
+                        val serviceRequestRef = FirebaseDatabase.getInstance().getReference("/services/${service.userUid}/${service.uid}")
+                        serviceRequestRef.removeValue()
+
+                        // Log the order details
+                        Log.d(
+                            "OrderDetails", "Order Title: ${order.title} " +
+                                    "\nOrder Description: ${order.description}" +
+                                    "\nTarget Price: ${order.price}" +
+                                    "\nCategory: ${order.category}" +
+                                    "\nDate: ${order.date}" +
+                                    "\nTime: ${order.time}" +
+                                    "\nAddress: ${order.address}" +
+                                    "\nDate Ordered: ${order.dateOrdered}" +
+                                    "\nBuyer Confirmation: ${order.buyerConfirmation}" +
+                                    "\nSeller Confirmation: ${order.sellerConfirmation}" +
+                                    "\nReviewed: ${order.reviewed}" +
+                                    "\nMode of Payment: ${order.modeOfPayment}" +
+                                    "\nBooked To: ${order.bookedTo}"
+                        )
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {}
+                })
+            }
+
+
+            val notificationsRef = FirebaseDatabase.getInstance().getReference("/notifications/")
+            notificationsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val count =
+                        snapshot.child("$currentUserUid").value?.toString()?.toIntOrNull() ?: 0
+                    notificationsRef.child("$currentUserUid").setValue(count + 1)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+
+            val intent = Intent().apply {
+                putExtra("ServiceRequest", serviceToBeOrdered)
+            }
+
+            setResult(RESULT_OK, intent)
+        }
+
+//        val intent = Intent(this, BuyerActivity::class.java)
+//        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+//        intent.putExtra(BottomFragmentCreateOrder.TAG, BottomFragmentCreateOrder.TAG)
+//        startActivity(intent)
+
+        finish()
+    }
+
+//    private fun getTheTime(): String {
+//        var output: String
+//        var hr = 0
+//        var minute = ""
+//        var text = ""
+//
+//        if (timePicker.hour >= 13) {
+//            hr = timePicker.hour - 12
+//            text = "PM"
+//        } else if (timePicker.hour == 12) {
+//            hr = timePicker.hour
+//            text = "PM"
+//        } else {
+//            hr = timePicker.hour
+//            text = "AM"
+//        }
+//
+//        if (timePicker.minute <= 9) {
+//            minute = "0${timePicker.minute}"
+//        } else {
+//            minute = "${timePicker.minute}"
+//        }
+//
+//        output = "$hr:$minute $text"
+//        return output
+//
+//
+//    }
 
     private fun convertLongToDate(long: Long): String {
         val resultdate = Date(long)

@@ -1,6 +1,7 @@
 package com.example.crunchquest.ui.buyer.buyer_fragments
 
 import android.Manifest
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,7 +23,6 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -38,6 +38,7 @@ import com.example.crunchquest.ui.buyer.bottomNavigationBuyer
 import com.example.crunchquest.ui.buyer.buyer_activities.DisplaySpecificRequestActivity
 import com.example.crunchquest.ui.buyer.buyer_activities.RequestActivity
 import com.example.crunchquest.ui.buyer.buyer_activities.ServiceCategoryActivity
+import com.example.crunchquest.ui.components.groupie_views.OrderItem
 import com.example.crunchquest.ui.components.groupie_views.ServiceCategoryItem
 import com.example.crunchquest.ui.components.groupie_views.ServiceRequestItem
 import com.example.crunchquest.ui.general.LoginActivity
@@ -74,6 +75,8 @@ class HomeFragment : Fragment() {
     private var serviceRequestHandler = ServiceRequestHandler()
     var currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
 
+    // Add a variable to store the clicked item
+    var clickedServiceRequestItem: ServiceRequestItem? = null
 
     private lateinit var v: View
     private lateinit var recyclerView: RecyclerView
@@ -91,6 +94,7 @@ class HomeFragment : Fragment() {
 
     companion object {
         val SERVICECATEGORY = "serviceCategory"
+        const val REQUEST_CODE = 1
     }
 
 
@@ -207,7 +211,7 @@ class HomeFragment : Fragment() {
             adapter = adapterCategory
         }
 
-        recyclerView.addItemDecoration(CustomItemDecoration(-50)) // replace 10 with your desired space
+        recyclerView.addItemDecoration(CustomItemDecoration(-50))
 
         val btn = v.findViewById<Button>(R.id.searchBtn)
         //Button onclick listener
@@ -289,6 +293,32 @@ class HomeFragment : Fragment() {
         return v
     }
 
+    // Add this method to your HomeFragment class
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // Get the ServiceRequest object or its ID
+            val serviceRequest = data?.getSerializableExtra("ServiceRequest") as? ServiceRequest
+            if (serviceRequest != null) {
+                // Remove the ServiceRequest from adapterRequest
+                var serviceRequestItem: ServiceRequestItem? = null
+                for (i in 0 until adapterRequest.itemCount) {
+                    val item = adapterRequest.getItem(i)
+                    if (item is ServiceRequestItem && item.serviceRequest == serviceRequest) {
+                        serviceRequestItem = item
+                        break
+                    }
+                }
+
+                if (serviceRequestItem != null) {
+                    adapterRequest.remove(serviceRequestItem)
+                    serviceRequestArrayList.remove(serviceRequestItem.serviceRequest) // remove from the data source
+                    adapterRequest.notifyDataSetChanged() // notify the adapter about the data change
+                }
+            }
+        }
+    }
+
     private fun fetchServiceRequests() {
         serviceRequestHandler.serviceRequestRef.addListenerForSingleValueEvent(object :
             ValueEventListener {
@@ -302,13 +332,23 @@ class HomeFragment : Fragment() {
                 }
                 serviceRequestRecyclerView.adapter = adapterRequest
 
+                // Modify the ServiceRequestItem click listener
                 adapterRequest.setOnItemClickListener { item, view ->
                     val serviceRequestItem = item as ServiceRequestItem
+                    clickedServiceRequestItem = serviceRequestItem
                     val intent = Intent(view.context, DisplaySpecificRequestActivity::class.java)
                     intent.putExtra("ServiceRequest", serviceRequestItem.serviceRequest)
-                    startActivity(intent)
+                    startActivityForResult(intent, REQUEST_CODE)
+
+                    // Add a log message
+                    Log.d("ServiceRequest", "Clicked on service request: ${serviceRequestItem.serviceRequest}")
 
 
+                }
+
+                // Add a method to add an OrderItem to the adapter
+                fun addOrderItem(orderItem: OrderItem) {
+                    adapterRequest.add(orderItem)
                 }
 
 //                hideOrShowViews()
@@ -423,3 +463,5 @@ class CustomItemDecoration(private val space: Int) : RecyclerView.ItemDecoration
         }
     }
 }
+
+

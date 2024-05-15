@@ -23,6 +23,24 @@ class Order(var uid: String? = null,
             var buyerConfirmation: String = "",
             var sellerConfirmation: String = "",
             var reviewed: Boolean = false,
-            var modeOfPayment: String? = ""
+            var modeOfPayment: String? = "",
+            var bookedBy: String? = "",
+            var bookedTo: String? = "",
 
-) : Parcelable
+) : Parcelable {
+    override fun toString(): String {
+        return "Order Title: $title " +
+                "\nOrder Description: $description" +
+                "\nTarget Price: $price" +
+                "\nCategory: $category" +
+                "\nDate: $date" +
+                "\nTime: $time" +
+                "\nAddress: $address" +
+                "\nDate Ordered: $dateOrdered" +
+                "\nBuyer Confirmation: $buyerConfirmation" +
+                "\nSeller Confirmation: $sellerConfirmation" +
+                "\nReviewed: $reviewed" +
+                "\nMode of Payment: $modeOfPayment" +
+                "\nBooked To: $bookedTo"
+    }
+}

@@ -16,6 +16,7 @@ import com.example.crunchquest.ui.components.groupie_views.OrderItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.xwray.groupie.GroupAdapter
@@ -58,8 +59,16 @@ class OrdersFragment : Fragment() {
 
     private fun fetchOrders() {
         val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
-        val ref = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
-        ref.addValueEventListener(object : ValueEventListener {
+
+        // Fetch orders where the current user is the one who created the request
+        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
+        fetchOrdersFromDatabase(bookedByRef)
+
+        // Fetch orders where the current user is the one who assists the request
+        val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$currentUserUid")
+        fetchOrdersFromDatabase(bookedToRef)
+
+        bookedByRef.addValueEventListener(object : ValueEventListener {
             @SuppressLint("UseRequireInsteadOfGet")
             override fun onDataChange(snapshot: DataSnapshot) {
                 adapter.clear()
@@ -85,6 +94,31 @@ class OrdersFragment : Fragment() {
             }
         })
 
+    }
+
+    private fun fetchOrdersFromDatabase(ref: DatabaseReference) {
+        ref.addValueEventListener(object : ValueEventListener {
+            @SuppressLint("UseRequireInsteadOfGet")
+            override fun onDataChange(snapshot: DataSnapshot) {
+                adapter.clear()
+                snapshot.children.forEach { order ->
+                    val order = order.getValue(Order::class.java)!!
+                    adapter.add(OrderItem(order, v.context))
+                    adapter.setOnItemClickListener { item, view ->
+                        val orderItem = item as OrderItem
+                        val tappedOrder = orderItem.order
+                        orderClicked = tappedOrder
+                        var orderDetailsFragment = BottomFragmentOrderDetails(orderClicked!!)
+                        orderDetailsFragment.show(fragmentManager!!, "TAG")
+                    }
+                    recyclerView.adapter = adapter
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
     }
 
 

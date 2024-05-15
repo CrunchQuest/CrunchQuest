@@ -20,7 +20,9 @@ data class ServiceRequest(
     var dateBooked: String? = null,
     var timeBooked: String? = null,
     var contactNumber: String? = null,
-    var modeOfPayment: String? = null
+    var modeOfPayment: String? = null,
+    var bookedTo: String? = null,
+    var bookedBy: String? = null,
 ) : Parcelable {
     override fun toString(): String {
         return "Service Request Title: $title " +

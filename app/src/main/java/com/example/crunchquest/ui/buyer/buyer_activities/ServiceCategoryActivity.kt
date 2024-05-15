@@ -14,12 +14,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.example.crunchquest.ui.buyer.buyer_fragments.HomeFragment
-import com.example.crunchquest.ui.components.groupie_views.ServiceItem
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Service
 import com.example.crunchquest.data.model.User
 import com.example.crunchquest.data.model.UserSellerInfo
+import com.example.crunchquest.ui.buyer.buyer_fragments.HomeFragment
+import com.example.crunchquest.ui.components.groupie_views.ServiceItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -308,7 +308,7 @@ class ServiceCategoryActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 adapter.clear()
                 snapshot.children.forEach {
-                    Log.d("TAGWALALANG", it.key.toString())
+                    Log.d("METALANGUAGE", it.key.toString())
                     if (it.key != currentUser) {
                         it.children.forEach {
                             val service = it.getValue(Service::class.java)

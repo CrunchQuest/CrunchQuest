@@ -3,7 +3,6 @@ package com.example.crunchquest.ui.buyer.buyer_activities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
@@ -408,6 +407,9 @@ class RequestActivity : AppCompatActivity() {
     }
 
     private fun createRequest(location: Location?) {
+        val currentUserUid = FirebaseAuth.getInstance().uid
+        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
+        val requestUserUid = bookedByRef.push().key!!
         val ref = FirebaseDatabase.getInstance().getReference("/users/$currentUserUid")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -423,11 +425,14 @@ class RequestActivity : AppCompatActivity() {
                     date = dateTextView.text.toString(),
                     time = "${timePicker.hour}:${timePicker.minute}",
                     address = addressEditText.text.toString(),
-                    modeOfPayment = modeEditText.text.toString()
+                    modeOfPayment = modeEditText.text.toString(),
+                    bookedBy = requestUserUid // Set bookedBy to the current user's uid
                 )
                 if (serviceRequestHandler.createServiceRequest(serviceRequest)) {
                     Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()
                 }
+                bookedByRef.child(requestUserUid).setValue(serviceRequest)
+                Log.d("RequestActivity", "bookedBy is set to: ${serviceRequest.bookedBy}")
                 finish()
             }
 
