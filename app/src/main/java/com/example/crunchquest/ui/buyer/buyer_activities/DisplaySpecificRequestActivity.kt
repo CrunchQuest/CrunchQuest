@@ -232,7 +232,7 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val user = snapshot.getValue(User::class.java)!!
                         val order = Order(
-                            uid = currentUserUid,
+                            uid = bookedByRef.push().key,
                             service_booked_uid = serviceToBeOrdered!!.uid,
                             address = addressTextView.text.toString(),
                             date = dateTextView.text.toString(),

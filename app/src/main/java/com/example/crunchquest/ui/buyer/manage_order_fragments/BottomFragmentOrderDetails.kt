@@ -114,9 +114,10 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
             .setPositiveButton("Confirm") { _, _ ->
                 val bookedBy = order.userUid
                 val bookedTo = order.service_provider_uid
-                val orderUid = order.uid
+                val orderUid = order.bookedBy
+                val orderUid2 = order.uid
 
-                if (bookedBy != null && bookedTo != null && orderUid != null) {
+                if (bookedBy != null && orderUid != null) {
                     val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid")
                     ref.removeValue().addOnSuccessListener {
                         Log.d("CancelOrder", "Order removed from booked_by/$bookedBy/$orderUid")
@@ -129,6 +130,13 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
                         Log.d("CancelOrder", "Order removed from booked_to/$bookedTo/$orderUid")
                     }.addOnFailureListener { e ->
                         Log.e("CancelOrder", "Failed to remove order from booked_to/$bookedTo/$orderUid", e)
+                    }
+
+                    val anotherAnotherRef = FirebaseDatabase.getInstance().getReference("service_requests/$orderUid2")
+                    anotherAnotherRef.removeValue().addOnSuccessListener {
+                        Log.d("CancelOrder", "Order removed from service_requests/$orderUid2")
+                    }.addOnFailureListener { e ->
+                        Log.e("CancelOrder", "Failed to remove order from service_requests/$orderUid2", e)
                     }
 
                     Toast.makeText(v.context, "Order cancelled.", Toast.LENGTH_SHORT).show()
