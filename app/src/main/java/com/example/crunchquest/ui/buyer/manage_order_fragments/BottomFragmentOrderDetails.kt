@@ -29,6 +29,7 @@ import java.util.Date
 
 class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment() {
     private lateinit var v: View
+    private var orderClicked = orderPassed
     private lateinit var date: TextView
     private lateinit var time: TextView
     private lateinit var price: TextView
@@ -106,6 +107,34 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
 
         return v
     }
+
+//    fun acceptOrDeclineOrder() {
+//        val dialogBuilder = AlertDialog.Builder(requireContext())
+//        dialogBuilder.setMessage("Do you want to Accept this order or Decline?")
+//            .setCancelable(true)
+//            .setPositiveButton("Accept", DialogInterface.OnClickListener { _, _ ->
+//                val bookedBy = orderClicked.userUid!!
+//                val bookedTo = orderClicked.service_provider_uid!!
+//                val bookingUid = orderClicked.uid!!
+//                val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
+//                bookedByRef.child("status").setValue("ACCEPTED")
+//                val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
+//                bookedToRef.child("status").setValue("ACCEPTED")
+//            })
+//            .setNegativeButton("Decline", DialogInterface.OnClickListener { dialog, _ ->
+//                val bookingUid = orderClicked.uid!!
+//                val bookedBy = orderClicked.userUid!!
+//                val bookedTo = orderClicked.service_provider_uid!!
+//                val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
+//                val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
+//                bookedByRef.removeValue()
+//                bookedToRef.removeValue()
+//                dialog.cancel()
+//            })
+//        val alert = dialogBuilder.create()
+//        alert.setTitle("Order")
+//        alert.show()
+//    }
 
     private fun cancelOrder() {
         val dialogBuilder = AlertDialog.Builder(v.context)

@@ -2,8 +2,8 @@
 
 package com.example.crunchquest.ui.buyer.manage_order_fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,63 +60,58 @@ class OrdersFragment : Fragment() {
     private fun fetchOrders() {
         val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
 
-        // Fetch orders where the current user is the one who created the request
+        // Fetch orders where the current user is the one who created the request (booked_by)
         val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
-        fetchOrdersFromDatabase(bookedByRef)
-
-        // Fetch orders where the current user is the one who assists the request
-        val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$currentUserUid")
-        fetchOrdersFromDatabase(bookedToRef)
-
-        bookedByRef.addValueEventListener(object : ValueEventListener {
-            @SuppressLint("UseRequireInsteadOfGet")
+        bookedByRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                adapter.clear()
-                snapshot.children.forEach { order ->
-                    val order = order.getValue(Order::class.java)!!
-                    if (order.status == "NEW") {
-                        adapter.add(OrderItem(order, v.context))
-                    }
-                    adapter.setOnItemClickListener { item, view ->
-                        val orderItem = item as OrderItem
-                        val tappedOrder = orderItem.order
-                        orderClicked = tappedOrder
-                        var orderDetailsFragment = BottomFragmentOrderDetails(orderClicked!!)
-                        orderDetailsFragment.show(fragmentManager!!, "TAG")
-
-                    }
-                    recyclerView.adapter = adapter
+                if (snapshot.exists() && snapshot.children.any()) {
+                    // If there are orders where the current user is the one who created the request, fetch them
+                    fetchOrdersFromDatabase(bookedByRef, "Request User")
+                } else {
+                    // If there are no orders where the current user is the one who created the request, fetch orders where the current user is the one who assists the request (booked_to)
+                    val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$currentUserUid")
+                    fetchOrdersFromDatabase(bookedToRef, "Assist User")
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                // Handle error
             }
         })
-
     }
 
-    private fun fetchOrdersFromDatabase(ref: DatabaseReference) {
+    private fun fetchOrdersFromDatabase(ref: DatabaseReference, userType: String) {
         ref.addValueEventListener(object : ValueEventListener {
-            @SuppressLint("UseRequireInsteadOfGet")
             override fun onDataChange(snapshot: DataSnapshot) {
-                adapter.clear()
-                snapshot.children.forEach { order ->
-                    val order = order.getValue(Order::class.java)!!
-                    adapter.add(OrderItem(order, v.context))
-                    adapter.setOnItemClickListener { item, view ->
+                if (isAdded) { // Check if the Fragment is currently added to its activity
+                    adapter.clear()
+                    Log.d("OrdersFragment", "$userType DataSnapshot: $snapshot") // Log the DataSnapshot
+                    snapshot.children.forEach { orderSnapshot ->
+                        val order = orderSnapshot.getValue(Order::class.java) ?: return
+                        if (order.status == "NEW") {
+                            val orderItem = OrderItem(order, requireContext())
+                            adapter.add(orderItem)
+                            Log.d("OrdersFragment", "$userType Added OrderItem: $orderItem") // Log the OrderItem
+                        }
+                    }
+                    // Set item click listener outside the loop
+                    adapter.setOnItemClickListener { item, _ ->
                         val orderItem = item as OrderItem
                         val tappedOrder = orderItem.order
                         orderClicked = tappedOrder
-                        var orderDetailsFragment = BottomFragmentOrderDetails(orderClicked!!)
-                        orderDetailsFragment.show(fragmentManager!!, "TAG")
+                        val orderDetailsFragment = BottomFragmentOrderDetails(orderClicked!!)
+                        orderDetailsFragment.show(parentFragmentManager, TAG)
+//                        orderDetailsFragment.acceptOrDeclineOrder() // Call the acceptOrDeclineOrder function when an OrderItem is clicked
                     }
                     recyclerView.adapter = adapter
+                    Log.d("OrdersFragment", "$userType Adapter Item Count: ${adapter.itemCount}") // Log the adapter item count
+                } else {
+                    Log.d("OrdersFragment", "$userType Has no orders") // Log that there are no orders for the current user
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                // Handle error
             }
         })
     }

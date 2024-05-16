@@ -325,18 +325,18 @@ class RequestActivity : AppCompatActivity() {
 
         //Check the title
         if (titleEditText.text.toString().isEmpty()) {
-            titleEditText.error = "Fill up the title"
+            titleEditText.error = "Title is required"
             titleEditText.requestFocus()
             return
         }
-        if (titleEditText.text.toString().length < 11 || titleEditText.text.toString().length > 25 ) {
-            titleEditText.error = "The title should be 11-25 characters."
+        if (titleEditText.text.toString().length < 8 || titleEditText.text.toString().length > 25 ) {
+            titleEditText.error = "The title should be 8-25 characters."
             titleEditText.requestFocus()
             return
         }
         //Check the description
         if (descriptionEditText.text.toString().isEmpty()) {
-            descriptionEditText.error = "Add a description"
+            descriptionEditText.error = "Description is required"
             descriptionEditText.requestFocus()
             return
         }
@@ -346,25 +346,58 @@ class RequestActivity : AppCompatActivity() {
             return
         }
 //        //Check the price
-//        var numeric = true
-//        try {
-//            val num = parseInt(priceEditText.text.toString())
-//        } catch (e: NumberFormatException) {
-//            numeric = false
-//        }
-//        if(numeric == false) {
-//            priceEditText.error = "Please enter a valid number."
-//            priceEditText.requestFocus()
-//            return
-//        }
-        if (priceEditText.text.toString().toInt() <= 10000) {
+        val priceText = priceEditText.text.toString()
+        if (priceText.isEmpty()) {
+            priceEditText.error = "Price is required."
+            priceEditText.requestFocus()
+            return
+        }
+
+        val price = try {
+            priceText.toInt()
+        } catch (e: NumberFormatException) {
+            priceEditText.error = "Please enter a valid number."
+            priceEditText.requestFocus()
+            return
+        }
+
+        if (price <= 10000) {
             priceEditText.error = "Price is below minimum."
             priceEditText.requestFocus()
             return
         }
+
+        //Check the category
         if (categoryEditText.text.toString().isEmpty()) {
             spinner.requestFocus()
             Toast.makeText(this, "Choose a category.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Check the date
+        if (dateTextView.text.toString().isEmpty()) {
+            dateTextView.error = "Date is required."
+            dateTextView.requestFocus()
+            return
+        }
+
+        // Check the time
+        if (timePicker.hour == 0 && timePicker.minute == 0) {
+            Toast.makeText(this, "Time is required.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Check the address
+        if (addressEditText.text.toString().isEmpty()) {
+            addressEditText.error = "Address is required."
+            addressEditText.requestFocus()
+            return
+        }
+
+        // Check the mode of payment
+        if (modeEditText.text.toString().isEmpty()) {
+            modeEditText.error = "Mode of payment is required."
+            modeEditText.requestFocus()
             return
         }
 
