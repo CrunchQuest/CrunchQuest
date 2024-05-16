@@ -224,6 +224,8 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
             val bookedToRef =
                 FirebaseDatabase.getInstance().getReference("booked_to/$currentUserUid")
             val requestUserUid = serviceToBeOrdered?.bookedBy
+            val assistToRef =
+                FirebaseDatabase.getInstance().getReference("booked_by/assistConfirmation")
             if (requestUserUid != null) {
                 val bookedByRef =
                     FirebaseDatabase.getInstance().getReference("booked_by/$requestUserUid")
@@ -231,9 +233,10 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
                 userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val user = snapshot.getValue(User::class.java)!!
+                        val serviceUid = serviceToBeOrdered!!.uid
                         val order = Order(
-                            uid = bookedByRef.push().key,
-                            service_booked_uid = serviceToBeOrdered!!.uid,
+                            uid = assistToRef.push().key,
+                            service_booked_uid = serviceUid,
                             address = addressTextView.text.toString(),
                             date = dateTextView.text.toString(),
                             name = "${user.firstName} ${user.lastName}",
@@ -245,12 +248,15 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
                             userUid = currentUserUid,
                             modeOfPayment = modeOfPayment.text.toString(),
                             bookedBy = requestUserUid, // Set bookedBy to the requestUserUid
-                            bookedTo = currentUserUid // Set bookedTo to the currentUserUid
+//                            bookedTo = currentUserUid, // Set bookedTo to the currentUserUid
+                            assistUser = assistToRef.push().key,
                         )
                         bookedByRef.child(requestUserUid).setValue(order)
                         bookedToRef.child(currentUserUid).setValue(order)
+
                         Log.d("DisplaySpecificRequest", "bookedBy is set to: ${order.bookedBy}")
                         Log.d("DisplaySpecificRequest", "bookedTo is set to: ${order.bookedTo}")
+                        Log.d("DisplaySpecificRequest", "assistUser is set to: ${order.assistUser}")
 
                         // Remove the ServiceRequest from the database
                         val serviceRequestRef = FirebaseDatabase.getInstance().getReference("/services/${service.userUid}/${service.uid}")
@@ -270,7 +276,8 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
                                     "\nSeller Confirmation: ${order.sellerConfirmation}" +
                                     "\nReviewed: ${order.reviewed}" +
                                     "\nMode of Payment: ${order.modeOfPayment}" +
-                                    "\nBooked To: ${order.bookedTo}"
+                                    "\nBooked To: ${order.bookedTo}" +
+                                    "\nAssistUser: ${order.assistUser}"
                         )
                     }
 

@@ -26,7 +26,8 @@ class Order(var uid: String? = null,
             var modeOfPayment: String? = "",
             var bookedBy: String? = "",
             var bookedTo: String? = "",
-
+            var buyerReview: String? = "",
+            var assistUser: String? = ""
 ) : Parcelable {
     override fun toString(): String {
         return "Order Title: $title " +
@@ -41,6 +42,8 @@ class Order(var uid: String? = null,
                 "\nSeller Confirmation: $sellerConfirmation" +
                 "\nReviewed: $reviewed" +
                 "\nMode of Payment: $modeOfPayment" +
-                "\nBooked To: $bookedTo"
+                "\nBooked To: $bookedTo" +
+                "\nserviceBookedUid: $service_booked_uid" +
+                "\nassistUser: $assistUser"
     }
 }

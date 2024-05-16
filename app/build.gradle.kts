@@ -154,4 +154,8 @@ dependencies {
 
     // Maps
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+    // Firebase App Check
+    implementation("com.google.firebase:firebase-appcheck:16.0.0-beta02")
+    implementation("com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta02")
 }

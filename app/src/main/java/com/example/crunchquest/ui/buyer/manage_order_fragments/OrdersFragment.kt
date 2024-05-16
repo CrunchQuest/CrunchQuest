@@ -93,14 +93,31 @@ class OrdersFragment : Fragment() {
                             adapter.add(orderItem)
                             Log.d("OrdersFragment", "$userType Added OrderItem: $orderItem") // Log the OrderItem
                         }
+                        // Retrieve tempUser from the Order object
+                        val tempUser = order.assistUser
+                        Log.d("OrdersFragment", "$userType tempUser: $tempUser") // Log tempUser
                     }
                     // Set item click listener outside the loop
                     adapter.setOnItemClickListener { item, _ ->
                         val orderItem = item as OrderItem
                         val tappedOrder = orderItem.order
                         orderClicked = tappedOrder
-                        val orderDetailsFragment = BottomFragmentRequestDetails(orderClicked!!)
-                        orderDetailsFragment.show(parentFragmentManager, TAG)
+
+                        // Log the Order Object
+                        Log.d("OrdersFragment", "$userType Tapped Order: $tappedOrder")
+
+                        if (tappedOrder.assistUser == null) {
+                            // If the order has not been assisted, navigate to BottomFragmentOrderDetails
+                            val orderDetailsFragment = BottomFragmentOrderDetails(orderClicked!!)
+                            orderDetailsFragment.show(parentFragmentManager, TAG)
+                        } else {
+                            // If the order has been assisted, navigate to BottomFragmentRequestDetails
+                            val bundle = Bundle()
+                            bundle.putString("requestUser", tappedOrder.assistUser)
+                            val requestDetailsFragment = BottomFragmentRequestDetails(orderClicked!!)
+                            requestDetailsFragment.arguments = bundle
+                            requestDetailsFragment.show(parentFragmentManager, TAG)
+                        }
                     }
                     recyclerView.adapter = adapter
                     Log.d("OrdersFragment", "$userType Adapter Item Count: ${adapter.itemCount}") // Log the adapter item count

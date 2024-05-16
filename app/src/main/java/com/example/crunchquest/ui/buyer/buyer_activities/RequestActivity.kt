@@ -12,7 +12,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -454,7 +453,9 @@ class RequestActivity : AppCompatActivity() {
                     time = "${timePicker.hour}:${timePicker.minute}",
                     address = addressEditText.text.toString(),
                     modeOfPayment = modeEditText.text.toString(),
-                    bookedBy = requestUserUid // Set bookedBy to the current user's uid
+                    bookedTo = null, // Set bookedTo to null initially
+                    bookedBy = requestUserUid, // Set bookedBy to the current user's uid
+                    assistConfirmation = null,
                 )
                 if (serviceRequestHandler.createServiceRequest(serviceRequest)) {
                     Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()

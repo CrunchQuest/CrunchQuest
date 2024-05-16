@@ -24,6 +24,7 @@ data class ServiceRequest(
     var bookedTo: String? = null,
     var bookedBy: String? = null,
     var categoryId: List<Int>? = null,
+    var assistConfirmation: String? = null
 ) : Parcelable {
     override fun toString(): String {
         return "Service Request Title: $title " +
@@ -38,7 +39,8 @@ data class ServiceRequest(
                 "\nDate Booked: $dateBooked" +
                 "\nTime Booked: $timeBooked" +
                 "\nContact Number: $contactNumber" +
-                "\nMode of Payment: $modeOfPayment"
+                "\nMode of Payment: $modeOfPayment" +
+                "\nAssist Confirmation: $assistConfirmation"
 
     }
 }

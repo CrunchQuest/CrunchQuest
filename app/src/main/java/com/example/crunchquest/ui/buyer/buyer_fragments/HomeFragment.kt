@@ -357,7 +357,7 @@ class HomeFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             // Get the ServiceRequest object or its ID
-            val serviceRequest = data?.getSerializableExtra("ServiceRequest") as? ServiceRequest
+            val serviceRequest = data?.getParcelableExtra("ServiceRequest") as? ServiceRequest
             if (serviceRequest != null) {
                 // Remove the ServiceRequest from adapterRequest
                 var serviceRequestItem: ServiceRequestItem? = null

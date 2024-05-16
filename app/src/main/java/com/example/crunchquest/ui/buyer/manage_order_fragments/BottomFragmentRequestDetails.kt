@@ -103,29 +103,27 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
     }
 
     private fun statusListener() {
+        val bookedBy = orderClicked.userUid
+        val bookedTo = orderClicked.service_provider_uid
+        val orderUid = orderClicked.uid
 
-        val bookedBy = orderClicked.userUid!!
-        val bookedTo = orderClicked.service_provider_uid!!
-        val orderUid = orderClicked.uid!!
-        val ref = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$orderUid")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                try {
-                    val order = snapshot.getValue(Order::class.java)!!
-                    if (order.buyerConfirmation == "CONFIRMED" && order.sellerConfirmation == "CONFIRMED") {
+        if (bookedBy != null && bookedTo != null && orderUid != null) {
+            val ref = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$orderUid")
+            ref.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val order = snapshot.getValue(Order::class.java)
+                    if (order != null && order.buyerConfirmation == "CONFIRMED" && order.sellerConfirmation == "CONFIRMED") {
                         ref.child("/status").setValue("COMPLETED")
-
                     }
-                } catch (e: NullPointerException) {
-
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
-
-
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                }
+            })
+        } else {
+            // Handle the case where bookedBy, bookedTo, or orderUid is null
+        }
     }
 
 
@@ -213,28 +211,37 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
         dialogBuilder.setMessage("Do you want to Accept this order or Decline?")
             .setCancelable(true)
             .setPositiveButton("Accept", DialogInterface.OnClickListener { _, _ ->
-                val bookedBy = orderClicked.userUid!!
-                val bookedTo = orderClicked.service_provider_uid!!
-                val bookingUid = orderClicked.uid!!
-                val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
-                bookedByRef.child("status").setValue("ACCEPTED")
-                val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
-                bookedToRef.child("status").setValue("ACCEPTED")
+                val bookedBy = orderClicked.userUid
+                val bookedTo = orderClicked.service_provider_uid
+                val bookingUid = orderClicked.uid
+                if (bookedBy != null && bookedTo != null && bookingUid != null) {
+                    val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
+                    bookedByRef.child("status").setValue("ACCEPTED")
+                    val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
+                    bookedToRef.child("status").setValue("ACCEPTED")
+                } else {
+                    // Handle the case where bookedBy, bookedTo, or bookingUid is null
+                    Toast.makeText(context, "Error: Missing order information.", Toast.LENGTH_SHORT).show()
+                }
             })
             .setNegativeButton("Decline", DialogInterface.OnClickListener { dialog, _ ->
-                val bookingUid = orderClicked.uid!!
-                val bookedBy = orderClicked.userUid!!
-                val bookedTo = orderClicked.service_provider_uid!!
-                val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
-                val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
-                bookedByRef.removeValue()
-                bookedToRef.removeValue()
-                dialog.cancel()
+                val bookingUid = orderClicked.uid
+                val bookedBy = orderClicked.userUid
+                val bookedTo = orderClicked.service_provider_uid
+                if (bookedBy != null && bookedTo != null && bookingUid != null) {
+                    val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
+                    val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
+                    bookedByRef.removeValue()
+                    bookedToRef.removeValue()
+                    dialog.cancel()
+                } else {
+                    // Handle the case where bookedBy, bookedTo, or bookingUid is null
+                    Toast.makeText(context, "Error: Missing order information.", Toast.LENGTH_SHORT).show()
+                }
             })
         val alert = dialogBuilder.create()
         alert.setTitle("Order")
         alert.show()
-
     }
 
     private fun checkStatus() {

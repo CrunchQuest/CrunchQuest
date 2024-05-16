@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.UserPerformance
 import com.example.crunchquest.ui.buyer.BuyerActivity
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -20,6 +23,10 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_splash_screen)
+
+        val firebaseApp = FirebaseApp.initializeApp(/* context= */ this)!!
+        // Register the App Check provider.
+        FirebaseAppCheck.getInstance(firebaseApp).installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance())
 
         var imageView = findViewById<ImageView>(R.id.iv_note)
 
