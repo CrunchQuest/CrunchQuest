@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Order
+import com.example.crunchquest.data.model.UserPerformance
 import com.example.crunchquest.data.model.UserReview
 import com.example.crunchquest.data.model.UserSellerInfo
 import com.google.firebase.auth.FirebaseAuth
@@ -93,6 +94,20 @@ class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategor
 
             }
         })
+
+        // Update user performance
+        val performanceRef = FirebaseDatabase.getInstance().getReference("user_performance/${order.bookedTo}/${review.categoryId}")
+        performanceRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val performance = snapshot.getValue(UserPerformance::class.java) ?: UserPerformance()
+                performance.rating += ratingBar.rating.toInt()
+                performance.total += 1
+                performanceRef.setValue(performance)
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
 
         Toast.makeText(v.context, "Thank you for the review!", Toast.LENGTH_SHORT).show()
         dismissDialog()
