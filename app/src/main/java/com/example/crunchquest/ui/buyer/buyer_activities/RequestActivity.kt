@@ -72,6 +72,9 @@ class RequestActivity : AppCompatActivity() {
     private lateinit var modeEditText: EditText
     private lateinit var switchLocation: SwitchCompat
     private var isLocationAllowed: Boolean = false
+
+    private var selectedCategoryIndex: Int = 0
+
     companion object {
         var isHintGone: Boolean = false
     }
@@ -169,16 +172,16 @@ class RequestActivity : AppCompatActivity() {
             finish()
         }
         //spinner
-        ArrayAdapter.createFromResource(this, array.services_category, android.R.layout.simple_spinner_item)
-                .also { adapter ->
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    spinner.adapter = adapter
-                }
-        val arrayList = resources.getStringArray(array.services_category)
-        spinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(arg0: AdapterView<*>?, arg1: View,
-                                        arg2: Int, arg3: Long) {
-                categoryEditText.setText(arrayList.get(arg2))
+        ArrayAdapter.createFromResource(this, R.array.services_category, android.R.layout.simple_spinner_item)
+            .also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = adapter
+            }
+        val arrayList = resources.getStringArray(R.array.services_category)
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(arg0: AdapterView<*>?, arg1: View, arg2: Int, arg3: Long) {
+                categoryEditText.setText(arrayList[arg2])
+                selectedCategoryIndex = arg2 // Store the selected index
             }
 
             override fun onNothingSelected(arg0: AdapterView<*>?) {
@@ -414,12 +417,14 @@ class RequestActivity : AppCompatActivity() {
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
+                val categoryIdArray = generateCategoryIdArray(selectedCategoryIndex, 9)
                 val serviceRequest = ServiceRequest(
                     userUid = currentUserUid,
                     description = descriptionEditText.text.toString(),
                     title = titleEditText.text.toString(),
                     price = priceEditText.text.toString().toInt(),
                     category = categoryEditText.text.toString(),
+                    categoryId = categoryIdArray,
                     latitude = location?.latitude ?: 0.0, // Set latitude to 0.0 if location is null
                     longitude = location?.longitude ?: 0.0, // Set longitude to 0.0 if location is null
                     date = dateTextView.text.toString(),
@@ -438,6 +443,12 @@ class RequestActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {}
         })
+    }
+
+    fun generateCategoryIdArray(selectedIndex: Int, arraySize: Int): List<Int> {
+        val categoryIdArray = MutableList(arraySize) { 0 }
+        categoryIdArray[selectedIndex] = 1
+        return categoryIdArray
     }
 
     private fun checkFirst() {
