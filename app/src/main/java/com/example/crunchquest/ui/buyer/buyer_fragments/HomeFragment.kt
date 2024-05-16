@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -32,6 +33,8 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.ServiceRequest
+import com.example.crunchquest.data.model.UserLocation
+import com.example.crunchquest.data.model.UserPerformance
 import com.example.crunchquest.ui.adapter.SliderAdapter
 import com.example.crunchquest.ui.buyer.BuyerActivity
 import com.example.crunchquest.ui.buyer.bottomNavigationBuyer
@@ -44,12 +47,15 @@ import com.example.crunchquest.ui.components.groupie_views.ServiceRequestItem
 import com.example.crunchquest.ui.general.LoginActivity
 import com.example.crunchquest.ui.general.ProfileSettingsActivity
 import com.example.crunchquest.utility.handlers.ServiceRequestHandler
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.xwray.groupie.GroupAdapter
@@ -68,6 +74,7 @@ class HomeFragment : Fragment() {
 
     // Maps
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     // Service Request
     lateinit var serviceRequestRecyclerView: RecyclerView
@@ -104,6 +111,10 @@ class HomeFragment : Fragment() {
         v = inflater.inflate(R.layout.fragment_home, container, false)
         val toolbar: Toolbar = v.findViewById(R.id.my_toolbar)
         (activity as AppCompatActivity).supportActionBar?.hide()
+
+        // Location
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
 
         val circleImageView: ImageView = toolbar.findViewById(R.id.circleImageView)
 
@@ -241,6 +252,9 @@ class HomeFragment : Fragment() {
             fabHandler.postDelayed(longClickRunnable, 1000)
             true
         }
+
+        checkUserLocation()
+
         mainFab.setOnClickListener {
             if (isExpanded) {
                 collapseSubFabs()
@@ -291,6 +305,51 @@ class HomeFragment : Fragment() {
         fetchServiceRequests()
 
         return v
+    }
+
+    //Check if user has allow the location fror pushing the last/current location to database
+    private fun checkUserLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                v.context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                v.context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission is not granted, request it
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            // Permission is granted
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener(requireActivity()) { location ->
+                    if (location != null) {
+                        pushLocation(location)
+                    } else {
+                        Log.e("TAG", "Location is null")
+                    }
+                }
+        }
+    }
+
+    private fun pushLocation(location: Location) {
+        val currentLocation = FirebaseDatabase.getInstance().getReference("user_current_location/${currentUserUid}")
+        currentLocation.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val userLocation = snapshot.getValue(UserLocation::class.java) ?: UserLocation()
+                userLocation.latitude = location.latitude
+                userLocation.longitude = location.longitude
+                userLocation.timestamp = System.currentTimeMillis()
+
+                currentLocation.setValue(userLocation)
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     // Add this method to your HomeFragment class

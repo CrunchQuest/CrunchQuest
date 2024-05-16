@@ -70,8 +70,6 @@ class RequestActivity : AppCompatActivity() {
     lateinit var spinnerPayment: Spinner
     private lateinit var addressEditText: EditText
     private lateinit var modeEditText: EditText
-    private lateinit var switchLocation: SwitchCompat
-    private var isLocationAllowed: Boolean = false
 
     private var selectedCategoryIndex: Int = 0
 
@@ -104,7 +102,6 @@ class RequestActivity : AppCompatActivity() {
         toolbar = findViewById(id.toolBar_activityRequest)
         spinner = findViewById(id.spinnerCategory_activityRequest)
         categoryEditText = findViewById(id.category_activityRequest)
-        switchLocation = findViewById(id.switch_location)
 
         addressEditText = findViewById<EditText>(id.etAddress)
         spinnerPayment = findViewById<Spinner>(id.spinnerModeOfPayment_activityRequest)
@@ -112,13 +109,6 @@ class RequestActivity : AppCompatActivity() {
         dateButton = findViewById<Button>(id.btnDate)
         dateTextView = findViewById<TextView>(id.tvDate)
         timePicker = findViewById<TimePicker>(id.timePicker)
-
-        switchLocation = findViewById(R.id.switch_location)
-
-        switchLocation.setOnCheckedChangeListener { _, isChecked ->
-            isLocationAllowed = isChecked
-        }
-
 
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
@@ -316,9 +306,9 @@ class RequestActivity : AppCompatActivity() {
     }
 
     // Function to check if location is allowed
-    private fun isLocationAllowed(): Boolean {
-        return isLocationAllowed
-    }
+//    private fun isLocationAllowed(): Boolean {
+//        return isLocationAllowed
+//    }
 
     private fun checkAndCreate() {
 
@@ -409,14 +399,14 @@ class RequestActivity : AppCompatActivity() {
             .setCancelable(true)
             .setPositiveButton("Create") { _, _ ->
                 // Check if the location permission has been granted
-                if (!isLocationAllowed() || (ActivityCompat.checkSelfPermission(
+                if (ActivityCompat.checkSelfPermission(
                         this@RequestActivity,
                         Manifest.permission.ACCESS_FINE_LOCATION
                     ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                         this@RequestActivity,
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     ) != PackageManager.PERMISSION_GRANTED)
-                ) {
+                {
                     // Location permission not granted or location not allowed
                     createRequest(null) // Pass null location
                 } else {
@@ -458,8 +448,8 @@ class RequestActivity : AppCompatActivity() {
                     price = priceEditText.text.toString().toInt(),
                     category = categoryEditText.text.toString(),
                     categoryId = categoryIdArray,
-                    latitude = location?.latitude ?: 0.0, // Set latitude to 0.0 if location is null
-                    longitude = location?.longitude ?: 0.0, // Set longitude to 0.0 if location is null
+                    latitude = location?.latitude ?: 0.0,
+                    longitude = location?.longitude ?: 0.0,
                     date = dateTextView.text.toString(),
                     time = "${timePicker.hour}:${timePicker.minute}",
                     address = addressEditText.text.toString(),
