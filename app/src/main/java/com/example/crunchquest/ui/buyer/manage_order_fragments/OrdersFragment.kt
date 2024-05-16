@@ -99,9 +99,8 @@ class OrdersFragment : Fragment() {
                         val orderItem = item as OrderItem
                         val tappedOrder = orderItem.order
                         orderClicked = tappedOrder
-                        val orderDetailsFragment = BottomFragmentOrderDetails(orderClicked!!)
+                        val orderDetailsFragment = BottomFragmentRequestDetails(orderClicked!!)
                         orderDetailsFragment.show(parentFragmentManager, TAG)
-//                        orderDetailsFragment.acceptOrDeclineOrder() // Call the acceptOrDeclineOrder function when an OrderItem is clicked
                     }
                     recyclerView.adapter = adapter
                     Log.d("OrdersFragment", "$userType Adapter Item Count: ${adapter.itemCount}") // Log the adapter item count
