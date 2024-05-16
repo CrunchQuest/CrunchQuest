@@ -228,7 +228,7 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
                 FirebaseDatabase.getInstance().getReference("booked_by/assistConfirmation")
             if (requestUserUid != null) {
                 val bookedByRef =
-                    FirebaseDatabase.getInstance().getReference("booked_by/$requestUserUid")
+                    FirebaseDatabase.getInstance().getReference("booked_by/${service.userUid}")
                 val userRef = FirebaseDatabase.getInstance().getReference("users/$currentUserUid")
                 userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -245,14 +245,19 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
                             title = serviceToBeOrdered!!.title,
                             category = serviceToBeOrdered!!.category,
                             description = serviceToBeOrdered!!.description,
-                            userUid = currentUserUid,
+//                            userUid = currentUserUid,
                             modeOfPayment = modeOfPayment.text.toString(),
                             bookedBy = requestUserUid, // Set bookedBy to the requestUserUid
-//                            bookedTo = currentUserUid, // Set bookedTo to the currentUserUid
+                            bookedTo = currentUserUid, // Set bookedTo to the currentUserUid
                             assistUser = assistToRef.push().key,
+                            assistConfirmation = "TRUE",
                         )
-                        bookedByRef.child(requestUserUid).setValue(order)
-                        bookedToRef.child(currentUserUid).setValue(order)
+                        if (serviceUid != null) {
+                            bookedByRef.child(serviceUid).setValue(order)
+                        }
+                        if (serviceUid != null) {
+                            bookedToRef.child(serviceUid).setValue(order)
+                        }
 
                         Log.d("DisplaySpecificRequest", "bookedBy is set to: ${order.bookedBy}")
                         Log.d("DisplaySpecificRequest", "bookedTo is set to: ${order.bookedTo}")

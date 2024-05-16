@@ -27,7 +27,8 @@ class Order(var uid: String? = null,
             var bookedBy: String? = "",
             var bookedTo: String? = "",
             var buyerReview: String? = "",
-            var assistUser: String? = ""
+            var assistUser: String? = "",
+            var assistConfirmation: String? = "FALSE"
 ) : Parcelable {
     override fun toString(): String {
         return "Order Title: $title " +

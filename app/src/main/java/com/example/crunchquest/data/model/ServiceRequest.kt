@@ -24,7 +24,7 @@ data class ServiceRequest(
     var bookedTo: String? = null,
     var bookedBy: String? = null,
     var categoryId: List<Int>? = null,
-    var assistConfirmation: String? = null
+    var assistConfirmation: String? = "FALSE"
 ) : Parcelable {
     override fun toString(): String {
         return "Service Request Title: $title " +

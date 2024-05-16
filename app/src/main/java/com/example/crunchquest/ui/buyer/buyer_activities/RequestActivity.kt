@@ -442,6 +442,7 @@ class RequestActivity : AppCompatActivity() {
                 val categoryIdArray = generateCategoryIdArray(selectedCategoryIndex, 9)
                 val serviceRequest = ServiceRequest(
                     userUid = currentUserUid,
+
                     description = descriptionEditText.text.toString(),
                     title = titleEditText.text.toString(),
                     price = priceEditText.text.toString().toInt(),
@@ -454,13 +455,13 @@ class RequestActivity : AppCompatActivity() {
                     address = addressEditText.text.toString(),
                     modeOfPayment = modeEditText.text.toString(),
                     bookedTo = null, // Set bookedTo to null initially
-                    bookedBy = requestUserUid, // Set bookedBy to the current user's uid
-                    assistConfirmation = null,
+                    bookedBy = currentUserUid, // Set bookedBy to the current user's uid
+                    assistConfirmation = "FALSE",
                 )
                 if (serviceRequestHandler.createServiceRequest(serviceRequest)) {
                     Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()
                 }
-                bookedByRef.child(requestUserUid).setValue(serviceRequest)
+                serviceRequest.uid?.let { bookedByRef.child(it).setValue(serviceRequest) }
                 Log.d("RequestActivity", "bookedBy is set to: ${serviceRequest.bookedBy}")
                 finish()
             }
