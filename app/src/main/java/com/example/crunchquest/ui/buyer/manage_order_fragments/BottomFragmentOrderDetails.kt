@@ -114,34 +114,6 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         return v
     }
 
-//    fun acceptOrDeclineOrder() {
-//        val dialogBuilder = AlertDialog.Builder(requireContext())
-//        dialogBuilder.setMessage("Do you want to Accept this order or Decline?")
-//            .setCancelable(true)
-//            .setPositiveButton("Accept", DialogInterface.OnClickListener { _, _ ->
-//                val bookedBy = orderClicked.userUid!!
-//                val bookedTo = orderClicked.service_provider_uid!!
-//                val bookingUid = orderClicked.uid!!
-//                val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
-//                bookedByRef.child("status").setValue("ACCEPTED")
-//                val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
-//                bookedToRef.child("status").setValue("ACCEPTED")
-//            })
-//            .setNegativeButton("Decline", DialogInterface.OnClickListener { dialog, _ ->
-//                val bookingUid = orderClicked.uid!!
-//                val bookedBy = orderClicked.userUid!!
-//                val bookedTo = orderClicked.service_provider_uid!!
-//                val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
-//                val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
-//                bookedByRef.removeValue()
-//                bookedToRef.removeValue()
-//                dialog.cancel()
-//            })
-//        val alert = dialogBuilder.create()
-//        alert.setTitle("Order")
-//        alert.show()
-//    }
-
     private fun cancelOrder() {
         val dialogBuilder = AlertDialog.Builder(v.context)
         dialogBuilder.setMessage("Do you want to cancel this order?")
@@ -149,7 +121,7 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
             .setPositiveButton("Confirm") { _, _ ->
                 val bookedBy = order.userUid
                 val bookedTo = order.service_provider_uid
-                val orderUid = order.bookedBy
+                val orderUid = order.uid
                 val orderUid2 = order.uid
 
                 if (bookedBy != null && orderUid != null) {
@@ -185,13 +157,14 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         val alert = dialogBuilder.create()
         alert.setTitle("Cancel Order")
         alert.show()
+        dismissBottomSheet()
     }
 
 
     private fun statusListener() {
-        val bookedBy = order.userUid
-        val bookedTo = order.service_provider_uid
-        val orderUid = order.uid
+        val bookedBy = order.bookedBy
+        val bookedTo = order.bookedTo
+        val orderUid = order.service_booked_uid
 
         if (bookedBy != null && bookedTo != null && orderUid != null) {
             val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid")
@@ -206,35 +179,40 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
+        } else {
+            Log.d("StatusListener", "bookedBy, bookedTo, or orderUid is null. bookedBy: $bookedBy, bookedTo: $bookedTo, orderUid: $orderUid")
         }
     }
 
 
     private fun confirmTheOrder() {
-        if (order.buyerConfirmation != "CONFIRMED") {
+        if (order?.buyerConfirmation != "CONFIRMED") {
             val dialogBuilder = AlertDialog.Builder(v.context)
             dialogBuilder.setMessage("Do you want to confirm that this order is finished?")
-                    .setCancelable(true)
-                    .setPositiveButton("Confirm") { _, _ ->
-                        val bookedBy = order.userUid!!
-                        val bookedTo = order.service_provider_uid!!
-                        val orderUid = order.uid!!
-                        val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid")
-                        val anotherRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$orderUid")
+                .setCancelable(true)
+                .setPositiveButton("Confirm") { _, _ ->
+                    val bookedBy = order?.bookedBy
+                    val bookedTo = order?.bookedTo
+                    val orderUid = order?.service_booked_uid
+                    Log.d("ConfirmOrder", "bookedBy: $bookedBy, bookedTo: $bookedTo, orderUid: $orderUid")
+                    if (bookedBy != null && bookedTo != null && orderUid != null) {
                         if (checkDate(order.date!!)) {
                             Toast.makeText(v.context, "The Current Date is less than the Booking Date. ", Toast.LENGTH_SHORT).show()
                         } else {
+                            val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid")
+                            val anotherRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$orderUid")
                             anotherRef.child("buyerConfirmation").setValue("CONFIRMED")
                             Toast.makeText(v.context, "Booking confirmed as completed.", Toast.LENGTH_SHORT).show()
                             ref.child("buyerConfirmation").setValue("CONFIRMED")
                             statusListener()
-
                         }
-
+                    } else {
+                        Log.d("ConfirmOrder", "bookedBy, bookedTo, or orderUid is null. bookedBy: $bookedBy, bookedTo: $bookedTo, orderUid: $orderUid")
                     }
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        dialog.cancel()
-                    }
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.cancel()
+                }
             val alert = dialogBuilder.create()
             alert.setTitle("Confirmation")
             alert.show()
@@ -242,7 +220,6 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
             Toast.makeText(v.context, "You already confirmed this booking.", Toast.LENGTH_SHORT).show()
         }
     }
-
     private fun addAReview() {
         if (order.reviewed == false) {
             //close the bottom frafment here

@@ -2,8 +2,8 @@
 
 package com.example.crunchquest.ui.buyer.manage_order_fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +16,7 @@ import com.example.crunchquest.ui.components.groupie_views.OrderItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.xwray.groupie.GroupAdapter
@@ -38,8 +39,8 @@ class OnGoingFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_manage_on_going, container, false)
-        recyclerView = v.findViewById<RecyclerView>(R.id.recyclerView_onGoing)
+        v = inflater.inflate(R.layout.fragment_manage_orders, container, false)
+        recyclerView = v.findViewById<RecyclerView>(R.id.recyclerView_manage)
         recyclerView.apply {
             layoutManager = GridLayoutManager(v.context, 2).apply {
                 spanSizeLookup = i
@@ -53,76 +54,117 @@ class OnGoingFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         fetchOrders()
+
     }
 
     private fun fetchOrders() {
         val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
-        val ref = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
-        ref.addValueEventListener(object : ValueEventListener {
-            @SuppressLint("UseRequireInsteadOfGet")
-            override fun onDataChange(snapshot: DataSnapshot) {
-                adapter.clear()
-                snapshot.children.forEach { order ->
-                    val order = order.getValue(Order::class.java)!!
-                    if (order.status == "ACCEPTED") {
-                        adapter.add(OrderItem(order, v.context))
-                    }
-                    adapter.setOnItemClickListener { item, view ->
-                        val orderItem = item as OrderItem
-                        val tappedOrder = orderItem.order
-                        orderClicked = tappedOrder
-                        var orderDetailsFragment = BottomFragmentOrderDetails(orderClicked!!)
-                        orderDetailsFragment.show(fragmentManager!!, "TAG")
 
-                    }
-                    recyclerView.adapter = adapter
+        // Fetch orders where the current user is the one who created the request (booked_by)
+        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
+        bookedByRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists() && snapshot.children.any()) {
+                    // If there are orders where the current user is the one who created the request, fetch them
+                    fetchOrdersFromDatabase(bookedByRef, "Request User")
+                } else {
+                    // If there are no orders where the current user is the one who created the request, fetch orders where the current user is the one who assists the request (booked_to)
+                    val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$currentUserUid")
+                    fetchOrdersFromDatabase(bookedToRef, "Assist User")
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                // Handle error
             }
         })
     }
 
-    private fun statusListener() {
-
-        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        val anotherRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUser")
-        anotherRef.addValueEventListener(object : ValueEventListener{
+    private fun fetchOrdersFromDatabase(ref: DatabaseReference, userType: String) {
+        ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.children.forEach{ booking ->
-                    val order = booking.getValue(Order::class.java)
-                    val orderUid = order!!.uid!!
-                    val ref = FirebaseDatabase.getInstance().getReference("booked_by/$currentUser/$orderUid")
-                    ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            try {
-                                val order = snapshot.getValue(Order::class.java)!!
-                                if (order.buyerConfirmation == "CONFIRMED" && order.sellerConfirmation == "CONFIRMED") {
-                                    ref.child("/status").setValue("COMPLETED")
+                if (isAdded) { // Check if the Fragment is currently added to its activity
+                    adapter.clear()
+                    Log.d("OnGoingFragment", "$userType DataSnapshot: $snapshot") // Log the DataSnapshot
+                    snapshot.children.forEach { orderSnapshot ->
+                        val order = orderSnapshot.getValue(Order::class.java) ?: return
+                        if (order.status == "ACCEPTED") {
+                            val orderItem = OrderItem(order, requireContext())
+                            adapter.add(orderItem)
+                            Log.d("OnGoingFragment", "$userType Added OrderItem: $orderItem") // Log the OrderItem
+                        }
+                        // Retrieve tempUser from the Order object
+                        val tempUser = order.assistUser
+                        Log.d("OnGoingFragment", "$userType tempUser: $tempUser") // Log tempUser
+                    }
+                    // Set item click listener outside the loop
+                    adapter.setOnItemClickListener { item, _ ->
+                        val orderItem = item as OrderItem
+                        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+                        val tappedOrder = orderItem.order
+                        orderClicked = tappedOrder
 
-                                }
-                            } catch (e: NullPointerException) {
+                        // Log the Order Object
+                        Log.d("OnGoingFragment", "$userType Tapped Order: $tappedOrder")
+                        Log.d("OnGoingFragment", "Current User ID: $currentUserId")
+                        Log.d("OnGoingFragment", "Booked By: ${tappedOrder.bookedBy}")
+                        Log.d("OnGoingFragment", "tappedOrder.userUid: ${tappedOrder.userUid}")
+                        if (currentUserId == tappedOrder.bookedBy) {
 
+                            Log.d("OnGoingFragment", "REQUESTER ONLY")
+                            // REQUESTER
+                            if (tappedOrder.assistConfirmation == "TRUE") {
+                                Log.d("OnGoingFragment", "REQUESTER AND ASSISTED")
+                                val bundle = Bundle()
+                                bundle.putString("requestUser", tappedOrder.assistUser)
+                                val requestDetailsFragment = BottomFragmentRequestDetails(orderClicked!!) // ACCEPT DECLINE
+                                requestDetailsFragment.arguments = bundle
+                                requestDetailsFragment.show(parentFragmentManager, TAG)
+                            } else {
+                                Log.d("OnGoingFragment", "REQUESTER NOT ASSISTED")
+                                val orderDetailsFragment = BottomFragmentOrderDetails(orderClicked!!) // CANCEL AND MESSAGE
+                                orderDetailsFragment.show(parentFragmentManager, TAG)
                             }
+                        } else {
+                            // ASSISTER
+                            Log.d("OnGoingFragment", "ELSE ASSISTER ONLY")
+                            val orderDetailsFragment = BottomFragmentOrderDetails(orderClicked!!) // CANCEL AND MESSAGE
+                            orderDetailsFragment.show(parentFragmentManager, TAG)
                         }
-
-                        override fun onCancelled(error: DatabaseError) {
-                        }
-                    })
+                    }
+                    recyclerView.adapter = adapter
+                    Log.d("OnGoingFragment", "$userType Adapter Item Count: ${adapter.itemCount}") // Log the adapter item count
+                } else {
+                    Log.d("OnGoingFragment", "$userType Has no orders") // Log that there are no orders for the current user
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                // Handle error
             }
         })
+    }
 
+        private fun statusListener() {
+        val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val ref = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (bookingSnapshot in snapshot.children) {
+                    val bookedBy = orderClicked?.bookedBy
+                    val bookingUid = orderClicked?.service_booked_uid
+                    val order = bookingSnapshot.getValue(Order::class.java)
+                    if (order != null && order.buyerConfirmation == "CONFIRMED" && order.sellerConfirmation == "CONFIRMED") {
+                        val orderRef = FirebaseDatabase.getInstance().getReference("booked_by/${bookedBy}/$bookingUid")  // marks this
+                        orderRef.child("status").setValue("COMPLETED")
+                    }
+                }
+            }
 
-
-
-
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "onCancelled: ${error.message}")
+            }
+        })
     }
 
 
