@@ -19,6 +19,7 @@ import com.example.crunchquest.data.model.User
 import com.example.crunchquest.ui.dialogs.ReviewDialog
 import com.example.crunchquest.ui.messages.ChatLogActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -38,7 +39,7 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
     private lateinit var description: TextView
     private lateinit var dateOrdered: TextView
     private lateinit var contactNum: TextView
-    private lateinit var button: Button
+    private lateinit var messageButton: Button
     private lateinit var anotherButton: Button
     private lateinit var address: TextView
     private lateinit var mode: TextView
@@ -67,7 +68,7 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         description = v.findViewById(R.id.description_orderDetails)
         dateOrdered = v.findViewById(R.id.dateAndTimeOrdered_orderDetails)
         contactNum = v.findViewById(R.id.number_orderDetails)
-        button = v.findViewById(R.id.button_orderDetails)
+        messageButton = v.findViewById(R.id.button_orderDetails)
         anotherButton = v.findViewById(R.id.anotherButton_orderDetails)
         address = v.findViewById(R.id.address_fragmentBottomBookingDetails)
         cancelButton= v.findViewById(R.id.cancelButton_orderDetails)
@@ -100,10 +101,15 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
             cancelOrder()
         }
 
-        button.setOnClickListener {
-            fetchUserAndGoToChatLogActivity()
-        }
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
+        if (order.userUid == currentUserId) {
+            messageButton.isGone = true
+        } else {
+            messageButton.setOnClickListener {
+                fetchUserAndGoToChatLogActivity()
+            }
+        }
 
         return v
     }
