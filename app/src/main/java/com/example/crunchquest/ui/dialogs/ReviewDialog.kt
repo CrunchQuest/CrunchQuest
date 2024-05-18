@@ -59,7 +59,7 @@ class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategor
     }
 
     private fun submitReview() {
-        val userBeingReviewed = order.service_provider_uid!!
+        val userBeingReviewed = order.bookedTo!!
         val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
         val ref = FirebaseDatabase.getInstance().getReference("reviews/$userBeingReviewed")
         val id = ref.push().key!!
@@ -72,13 +72,13 @@ class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategor
         )
         ref.child(id).setValue(review)
 
-        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/${order.userUid}/${order.uid}")
+        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/${order.bookedBy}/${order.service_booked_uid}")
         bookedByRef.child("/reviewed").setValue(true)
 
-        val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/${order.service_provider_uid}/${order.uid}")
+        val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/${order.bookedTo}/${order.service_booked_uid}")
         bookedToRef.child("/reviewed").setValue(true)
 
-        val refToTheSeller = FirebaseDatabase.getInstance().getReference("user_seller_info/${order.service_provider_uid}")
+        val refToTheSeller = FirebaseDatabase.getInstance().getReference("user_seller_info/${order.bookedTo}")
         refToTheSeller.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val sellerInfo = snapshot.getValue(UserSellerInfo::class.java)!!
@@ -94,6 +94,12 @@ class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategor
 
             }
         })
+
+        // Set buyer review
+        val bookedTo = order.bookedTo
+        val bookingUid = order.service_booked_uid
+        val refReviewBuyer = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
+        refReviewBuyer.child("buyerReview").setValue(review)
 
         // Update user performance
         val performanceRef = FirebaseDatabase.getInstance().getReference("user_performance/${order.bookedTo}/${review.categoryId}")
