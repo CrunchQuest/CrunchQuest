@@ -54,7 +54,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 if (dataSnapshot.exists()) {
                     // Preferences exist, check user performance
                     val servicesCategories = resources.getStringArray(R.array.services_category)
-                    checkUserPerformance(uid, servicesCategories.size) {
+                    checkUserPerformance(uid, servicesCategories) {
                         // Navigate to BuyerActivity or any other activity after checking performance
                         val intent = Intent(this@SplashScreenActivity, BuyerActivity::class.java)
                         startActivity(intent)
@@ -76,13 +76,18 @@ class SplashScreenActivity : AppCompatActivity() {
         })
     }
 
-    private fun checkUserPerformance(uid: String, numberOfCategories: Int, onComplete: () -> Unit) {
+    private fun checkUserPerformance(uid: String, servicesCategories: Array<String>, onComplete: () -> Unit) {
         val performanceRef = FirebaseDatabase.getInstance().getReference("user_performance/$uid")
         performanceRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (i in 0 until numberOfCategories) {
+                for (i in servicesCategories.indices) {
                     if (!dataSnapshot.hasChild(i.toString())) {
-                        performanceRef.child(i.toString()).setValue(UserPerformance())
+                        val userPerformance = UserPerformance(
+                            rating = 0,
+                            total = 0,
+                            category_name = servicesCategories[i]
+                        )
+                        performanceRef.child(i.toString()).setValue(userPerformance)
                     }
                 }
                 onComplete() // Call the onComplete function after checking/initializing performance
@@ -93,5 +98,4 @@ class SplashScreenActivity : AppCompatActivity() {
             }
         })
     }
-
 }
