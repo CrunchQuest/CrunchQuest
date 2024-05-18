@@ -114,7 +114,7 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
                     val order = snapshot.getValue(Order::class.java)
                     Log.d("StatusListener", "Order: $order")
                     if (order != null && order.buyerConfirmation == "CONFIRMED" && order.sellerConfirmation == "CONFIRMED") {
-                        ref.child("/status").setValue("COMPLETED - TEST OVERWRITE ON REQUEST")
+                        ref.child("/status").setValue("COMPLETED")
                         Log.d("StatusListener", "Order status set to COMPLETED for order: $orderUid")
                     }
                 }

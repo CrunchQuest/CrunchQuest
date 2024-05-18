@@ -264,8 +264,9 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
                         Log.d("DisplaySpecificRequest", "assistUser is set to: ${order.assistUser}")
 
                         // Remove the ServiceRequest from the database
-                        val serviceRequestRef = FirebaseDatabase.getInstance().getReference("/services/${service.userUid}/${service.uid}")
+                        val serviceRequestRef = FirebaseDatabase.getInstance().getReference("/service_requests/${service.uid}")
                         serviceRequestRef.removeValue()
+//                        serviceRequestRef.child(!!).removeValue()
 
                         // Log the order details
                         Log.d(

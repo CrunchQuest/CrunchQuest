@@ -47,7 +47,6 @@ class OnGoingFragment : Fragment() {
             }
         }
         fetchOrders()
-        statusListener()
         return v
     }
 
@@ -141,28 +140,6 @@ class OnGoingFragment : Fragment() {
 
             override fun onCancelled(error: DatabaseError) {
                 // Handle error
-            }
-        })
-    }
-
-        private fun statusListener() {
-        val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        val ref = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
-        ref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (bookingSnapshot in snapshot.children) {
-                    val bookedBy = orderClicked?.bookedBy
-                    val bookingUid = orderClicked?.service_booked_uid
-                    val order = bookingSnapshot.getValue(Order::class.java)
-                    if (order != null && order.buyerConfirmation == "CONFIRMED" && order.sellerConfirmation == "CONFIRMED") {
-                        val orderRef = FirebaseDatabase.getInstance().getReference("booked_by/${bookedBy}/$bookingUid")  // marks this
-                        orderRef.child("status").setValue("COMPLETED")
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "onCancelled: ${error.message}")
             }
         })
     }
