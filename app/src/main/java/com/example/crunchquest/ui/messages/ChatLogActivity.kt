@@ -99,9 +99,9 @@ class ChatLogActivity : AppCompatActivity() {
                     if (message.fromId == FirebaseAuth.getInstance().currentUser!!.uid) {
                         val currentUser = BuyerActivity.currentUser
                         if (currentUser != null) {
-                            adapter.add(ChatFromItem(message.text!!, currentUser, message.timeStamp!!))
+                            adapter.add(ChatToItem(message.text!!, currentUser, message.timeStamp!!))
                         } else {
-                            adapter.add(ChatToItem(message.text!!, toUser!!, message.timeStamp!!))
+                            adapter.add(ChatFromItem(message.text!!, toUser!!, message.timeStamp!!))
                         }
                     } else {
                         adapter.add(ChatToItem(message.text!!, toUser!!, message.timeStamp!!))
