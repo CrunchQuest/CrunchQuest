@@ -92,9 +92,8 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         anotherButton.setOnClickListener {
             if (anotherButton.text == CONFIRM_TEXT) {
                 confirmTheOrder()
-            } else if (anotherButton.text == ADD_REVIEW_TEXT) {
-                addAReview()
-
+            } else {
+                Toast.makeText(v.context, "You already confirmed this booking.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -270,7 +269,7 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
                 cancelButton.isGone = true
             }
             "COMPLETED" -> {
-                anotherButton.isGone = false
+                anotherButton.isGone = true
                 anotherButton.text = ADD_REVIEW_TEXT
                 cancelButton.isGone = true
             }

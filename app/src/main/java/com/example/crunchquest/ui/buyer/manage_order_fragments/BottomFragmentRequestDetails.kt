@@ -15,6 +15,7 @@ import androidx.core.view.isGone
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Order
 import com.example.crunchquest.data.model.User
+import com.example.crunchquest.ui.dialogs.ReviewDialog
 import com.example.crunchquest.ui.messages.ChatLogActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.database.DataSnapshot
@@ -41,9 +42,16 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
     private lateinit var markButton: Button
     private lateinit var completeButton: Button
     private lateinit var modeEditText: TextView
+    private lateinit var reviewButton: Button
 
 
     override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
+
+    companion object {
+        const val CONFIRM_TEXT = "CONFIRM BOOKING"
+        const val ADD_REVIEW_TEXT = "ADD A REVIEW"
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,15 +96,39 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
         }
 
         completeButton.setOnClickListener {
-            markAsComplete()
-        }
+            if (completeButton.text == CONFIRM_TEXT) {
+                markAsComplete()
+            } else if (completeButton.text == ADD_REVIEW_TEXT) {
+                addAReview()
+            }
 
+        }
 
         statusListener()
 
 
         return v
     }
+
+    private fun addAReview() {
+        if (orderClicked.reviewed == false) {
+            //close the bottom fragment here
+            dismissBottomSheet()
+            val reviewDialog = ReviewDialog(this, orderClicked,resources.getStringArray(R.array.services_category))
+            reviewDialog.showReviewDialog()
+        } else if (orderClicked.reviewed == true) {
+            Toast.makeText(v.context, "You already submitted a review for this order.", Toast.LENGTH_SHORT).show()
+        }
+
+
+    }
+
+    private fun dismissBottomSheet() {
+        val p = requireFragmentManager().findFragmentByTag(FinishedFragment.TAG)!!
+        val df = p as BottomSheetDialogFragment
+        df.dismiss()
+    }
+
     private fun convertLongToDate(long: Long): String {
         val resultdate = Date(long)
         return resultdate.toString()
@@ -259,10 +291,12 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
             completeButton.isGone = true
         } else if (orderClicked.status == "ACCEPTED") {
             markButton.isGone = true
+            completeButton.text = CONFIRM_TEXT
             completeButton.isGone = false
         } else {
             markButton.isGone = true
-            completeButton.isGone = true
+            completeButton.text = ADD_REVIEW_TEXT
+            completeButton.isGone = false
         }
     }
 
