@@ -99,7 +99,7 @@ class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategor
         val bookedTo = order.bookedTo
         val bookingUid = order.service_booked_uid
         val refReviewBuyer = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
-        refReviewBuyer.child("buyerReview").setValue(review)
+        refReviewBuyer.child("buyerReview").setValue(review.review)
 
         // Update user performance
         val performanceRef = FirebaseDatabase.getInstance().getReference("user_performance/${order.bookedTo}/${review.categoryId}")
