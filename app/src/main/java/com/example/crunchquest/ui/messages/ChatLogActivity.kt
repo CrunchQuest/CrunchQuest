@@ -97,13 +97,18 @@ class ChatLogActivity : AppCompatActivity() {
                 if (message != null && !message.text.isNullOrEmpty()) {
                     Log.d(TAG, "Message data: ${message.text}, from: ${message.fromId}, to: ${message.toId}, timestamp: ${message.timeStamp}")
                     if (message.fromId == FirebaseAuth.getInstance().currentUser!!.uid) {
-                        val currentUser = BuyerActivity.currentUser ?: return
-                        adapter.add(ChatFromItem(message.text!!, currentUser, message.timeStamp!!))
+                        val currentUser = BuyerActivity.currentUser
+                        if (currentUser != null) {
+                            adapter.add(ChatFromItem(message.text!!, currentUser, message.timeStamp!!))
+                        } else {
+                            adapter.add(ChatToItem(message.text!!, toUser!!, message.timeStamp!!))
+                        }
                     } else {
                         adapter.add(ChatToItem(message.text!!, toUser!!, message.timeStamp!!))
                     }
                     adapter.notifyDataSetChanged()
                     recyclerView.scrollToPosition(adapter.itemCount - 1)
+                    Log.d(TAG, "Adapter size: ${adapter.itemCount}")
                 }
             }
 
