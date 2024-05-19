@@ -301,7 +301,7 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
     }
 
     private fun goToChatLogActivity() {
-        val ref = FirebaseDatabase.getInstance().getReference("users/${orderClicked.userUid}")
+        val ref = FirebaseDatabase.getInstance().getReference("users/${orderClicked.bookedTo}")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
