@@ -1,6 +1,7 @@
 package com.example.crunchquest.data.model
 
 import android.os.Parcelable
+import com.example.crunchquest.data.network.response.ServiceRequestResponse
 import com.google.firebase.database.IgnoreExtraProperties
 
 @kotlinx.parcelize.Parcelize
@@ -43,4 +44,23 @@ data class ServiceRequest(
                 "\nAssist Confirmation: $assistConfirmation"
 
     }
+}
+fun convertToServiceRequest(serviceRequestResponse: ServiceRequestResponse): ServiceRequest {
+    return ServiceRequest(
+        uid = serviceRequestResponse.uid,
+        address = serviceRequestResponse.request_data.address,
+        assistConfirmation = serviceRequestResponse.request_data.assistConfirmation,
+        bookedBy = serviceRequestResponse.request_data.bookedBy,
+        category = serviceRequestResponse.request_data.category,
+        categoryId = serviceRequestResponse.request_data.categoryId,
+        date = serviceRequestResponse.request_data.date,
+        description = serviceRequestResponse.request_data.description,
+        latitude = serviceRequestResponse.request_data.latitude,
+        longitude = serviceRequestResponse.request_data.longitude,
+        modeOfPayment = serviceRequestResponse.request_data.modeOfPayment,
+        price = serviceRequestResponse.request_data.price,
+        time = serviceRequestResponse.request_data.time,
+        title = serviceRequestResponse.request_data.title,
+        userUid = serviceRequestResponse.request_data.userUid
+    )
 }

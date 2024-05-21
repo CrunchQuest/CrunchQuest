@@ -24,6 +24,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -35,6 +36,10 @@ import com.example.crunchquest.R
 import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.UserLocation
 import com.example.crunchquest.data.model.UserPerformance
+import com.example.crunchquest.data.model.convertToServiceRequest
+import com.example.crunchquest.data.network.ApiConfig
+import com.example.crunchquest.data.network.ApiService
+import com.example.crunchquest.data.network.response.ServiceRequestResponse
 import com.example.crunchquest.ui.adapter.SliderAdapter
 import com.example.crunchquest.ui.buyer.BuyerActivity
 import com.example.crunchquest.ui.buyer.bottomNavigationBuyer
@@ -60,6 +65,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 
 class HomeFragment : Fragment() {
@@ -98,6 +105,13 @@ class HomeFragment : Fragment() {
 
 
     val searchFragment = SearchFragment()
+
+    // Network
+    private val apiService: ApiService by lazy {
+        ApiConfig.retrofit.create(ApiService::class.java)
+    }
+    private var userPreferences: List<Int> = emptyList()
+    private var serviceRequests: List<ServiceRequestResponse> = emptyList()
 
     companion object {
         val SERVICECATEGORY = "serviceCategory"
@@ -299,11 +313,13 @@ class HomeFragment : Fragment() {
         }
 
         fetchServiceCategory()
-
         //Gets all the Service Requests available
         serviceRequestRecyclerView.adapter = adapterRequest
-        fetchServiceRequests()
 
+        // TO USE THE API vvv
+//        fetchUserPreferencesAndServiceRequests()
+
+        fetchServiceRequests()
         return v
     }
 
@@ -507,6 +523,52 @@ class HomeFragment : Fragment() {
         isExpanded = false
     }
 
+    // REQUEST FROM API
+    private fun fetchUserPreferencesAndServiceRequests() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            lifecycleScope.launch {
+                try {
+                    // Fetch ranked service requests
+                    val serviceRequestsResponse = apiService.getServiceRequests(userId)
+                    val serviceRequests = serviceRequestsResponse.map { convertToServiceRequest(it) }
+                    updateRecyclerView(serviceRequests)
+                } catch (e: HttpException) {
+                    Log.e("HomeFragment", "HTTP error: ${e.message()}")
+                } catch (e: Exception) {
+                    Log.e("HomeFragment", "Error fetching data: $e")
+                }
+            }
+        } else {
+            Log.e("HomeFragment", "User ID is null")
+        }
+    }
+
+    private fun updateRecyclerView(serviceRequests: List<ServiceRequest>) {
+        adapterRequest.clear()
+        serviceRequests.forEach {
+            adapterRequest.add(ServiceRequestItem(it))
+            Log.d("ServiceRequest", "ServiceRequest from fetchServiceRequest: $it")
+        }
+        serviceRequestRecyclerView.adapter = adapterRequest
+
+        // Modify the ServiceRequestItem click listener
+        adapterRequest.setOnItemClickListener { item, view ->
+            val serviceRequestItem = item as ServiceRequestItem
+            clickedServiceRequestItem = serviceRequestItem
+            val intent = Intent(view.context, DisplaySpecificRequestActivity::class.java)
+            intent.putExtra("ServiceRequest", serviceRequestItem.serviceRequest)
+            startActivityForResult(intent, REQUEST_CODE)
+
+            // Add a log message
+            Log.d("ServiceRequest", "Clicked on service request: ${serviceRequestItem.serviceRequest}")
+        }
+
+        // Add a method to add an OrderItem to the adapter
+        fun addOrderItem(orderItem: OrderItem) {
+            adapterRequest.add(orderItem)
+        }
+    }
 }
 
 class CustomItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
