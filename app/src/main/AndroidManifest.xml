@@ -30,6 +30,9 @@
         android:theme="@style/Theme.CrunchQuest"
         tools:targetApi="31">
         <activity
+            android:name=".ui.PaymentActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.general.PersonalizationActivity"
             android:exported="false" />
 

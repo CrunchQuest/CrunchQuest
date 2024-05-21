@@ -77,7 +77,7 @@ class OrdersFragment : Fragment() {
         val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
 
         // Fetch orders where the current user is the one who created the request (booked_by)
-        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
+        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid/${orderClicked?.service_booked_uid}")
         bookedByRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists() && snapshot.children.any()) {
@@ -143,7 +143,7 @@ class OrdersFragment : Fragment() {
                         val orderItem = item as OrderItem
                         val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
                         val tappedOrder = orderItem.order
-                        FinishedFragment.orderClicked = tappedOrder
+                        orderClicked = tappedOrder
 
                         // Log the Order Object
                         Log.d("OrdersFragment", "$userType Tapped Order: $tappedOrder")

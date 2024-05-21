@@ -200,7 +200,6 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
 
             createTheOrder()
 
-
         }
         //show Profile infos
 //        showProfileImageBtn.setOnClickListener {
@@ -253,7 +252,10 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
                             assistConfirmation = "TRUE",
                         )
                         if (serviceUid != null) {
-                            bookedByRef.child(serviceUid).setValue(order)
+                            // Create a HashMap to store multiple userUids
+                            val userOrderMap = HashMap<String, Any>()
+                            userOrderMap["/$currentUserUid"] = order
+                            bookedByRef.child(serviceUid).updateChildren(userOrderMap)
                         }
                         if (serviceUid != null) {
                             bookedToRef.child(serviceUid).setValue(order)
@@ -264,8 +266,8 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
                         Log.d("DisplaySpecificRequest", "assistUser is set to: ${order.assistUser}")
 
                         // Remove the ServiceRequest from the database
-                        val serviceRequestRef = FirebaseDatabase.getInstance().getReference("/service_requests/${service.uid}")
-                        serviceRequestRef.removeValue()
+//                        val serviceRequestRef = FirebaseDatabase.getInstance().getReference("/service_requests/${service.uid}")
+//                        serviceRequestRef.removeValue()
 //                        serviceRequestRef.child(!!).removeValue()
 
                         // Log the order details
