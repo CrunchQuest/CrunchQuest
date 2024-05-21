@@ -134,55 +134,58 @@ class OrdersFragment : Fragment() {
                     adapter.clear()
                     Log.d("OrdersFragment", "$userType DataSnapshot: $snapshot") // Log the DataSnapshot
                     snapshot.children.forEach { orderSnapshot ->
-                        val order = orderSnapshot.getValue(Order::class.java) ?: return
-                        if (order.status == "NEW") {
-                            val orderItem = OrderItem(order, requireContext())
-                            adapter.add(orderItem)
-                            Log.d("OrdersFragment", "$userType Added OrderItem: $orderItem") // Log the OrderItem
+                        val order = orderSnapshot.getValue(Order::class.java)
+                        if (order != null) {
+                            if (order.status == "NEW") {
+                                val orderItem = OrderItem(order, requireContext())
+                                adapter.add(orderItem)
+                                Log.d("OrdersFragment", "$userType Added OrderItem: $orderItem") // Log the OrderItem
+                            }
+                            // Retrieve tempUser from the Order object
+                            val tempUser = order.assistUser
+                            Log.d("OrdersFragment", "$userType tempUser: $tempUser") // Log tempUser
                         }
-                        // Retrieve tempUser from the Order object
-                        val tempUser = order.assistUser
-                        Log.d("OrdersFragment", "$userType tempUser: $tempUser") // Log tempUser
                     }
                     // Set item click listener outside the loop
                     adapter.setOnItemClickListener { item, _ ->
                         val orderItem = item as OrderItem
                         val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
                         val tappedOrder = orderItem.order
-                        orderClicked = tappedOrder
+                        if (tappedOrder != null) {
+                            orderClicked = tappedOrder
 
-                        // Log the Order Object
-                        Log.d("OrdersFragment", "$userType Tapped Order: $tappedOrder")
-                        Log.d("OrdersFragment", "Current User ID: $currentUserId")
-                        Log.d("OrdersFragment", "Booked By: ${tappedOrder.bookedBy}")
-                        Log.d("OrdersFragment", "tappedOrder.userUid: ${tappedOrder.userUid}")
-                        if (currentUserId == tappedOrder.bookedBy) {
+                            // Log the Order Object
+                            Log.d("OrdersFragment", "$userType Tapped Order: $tappedOrder")
+                            Log.d("OrdersFragment", "Current User ID: $currentUserId")
+                            Log.d("OrdersFragment", "Booked By: ${tappedOrder.bookedBy}")
+                            Log.d("OrdersFragment", "tappedOrder.userUid: ${tappedOrder.userUid}")
+                            if (currentUserId == tappedOrder.bookedBy) {
 
-                            Log.d("OrdersFragment", "REQUESTER ONLY")
-                            // REQUESTER
-                            if (tappedOrder.assistConfirmation == "TRUE") {
-                                Log.d("OrdersFragment", "REQUESTER AND ASSISTED")
-                                val bundle = Bundle()
-                                bundle.putString("requestUser", tappedOrder.assistUser)
-                                val requestDetailsFragment = BottomFragmentRequestDetails(
-                                    FinishedFragment.orderClicked!!) // ACCEPT DECLINE
-                                requestDetailsFragment.arguments = bundle
-                                requestDetailsFragment.show(parentFragmentManager,
-                                    FinishedFragment.TAG
-                                )
+                                Log.d("OrdersFragment", "REQUESTER ONLY")
+                                // REQUESTER
+                                if (tappedOrder.assistConfirmation == "TRUE") {
+                                    Log.d("OrdersFragment", "REQUESTER AND ASSISTED")
+                                    val bundle = Bundle()
+                                    bundle.putString("requestUser", tappedOrder.assistUser)
+                                    val requestDetailsFragment = BottomFragmentRequestDetails(
+                                        orderClicked!!) // ACCEPT DECLINE
+                                    requestDetailsFragment.arguments = bundle
+                                    requestDetailsFragment.show(parentFragmentManager, TAG
+                                    )
+                                } else {
+                                    Log.d("OrdersFragment", "REQUESTER NOT ASSISTED")
+                                    val orderDetailsFragment = BottomFragmentOrderDetails(
+                                        FinishedFragment.orderClicked!!) // CANCEL AND MESSAGE
+                                    orderDetailsFragment.show(parentFragmentManager,
+                                        FinishedFragment.TAG
+                                    )
+                                }
                             } else {
-                                Log.d("OrdersFragment", "REQUESTER NOT ASSISTED")
-                                val orderDetailsFragment = BottomFragmentOrderDetails(
-                                    FinishedFragment.orderClicked!!) // CANCEL AND MESSAGE
-                                orderDetailsFragment.show(parentFragmentManager,
-                                    FinishedFragment.TAG
-                                )
+                                // ASSISTER
+                                Log.d("OrdersFragment", "ELSE ASSISTER ONLY")
+                                val orderDetailsFragment = BottomFragmentOrderDetails(FinishedFragment.orderClicked!!) // CANCEL AND MESSAGE
+                                orderDetailsFragment.show(parentFragmentManager, FinishedFragment.TAG)
                             }
-                        } else {
-                            // ASSISTER
-                            Log.d("OrdersFragment", "ELSE ASSISTER ONLY")
-                            val orderDetailsFragment = BottomFragmentOrderDetails(FinishedFragment.orderClicked!!) // CANCEL AND MESSAGE
-                            orderDetailsFragment.show(parentFragmentManager, FinishedFragment.TAG)
                         }
                     }
                     recyclerView.adapter = adapter
