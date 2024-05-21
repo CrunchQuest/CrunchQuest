@@ -253,7 +253,7 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
                 val bookedTo = orderClicked.bookedTo
                 val bookingUid = orderClicked.service_booked_uid
                 if (bookedBy != null && bookedTo != null && bookingUid != null) {
-                    val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid") // Guide To Set Value Inside booked_by
+                    val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid/${orderClicked.bookedTo}") // Guide To Set Value Inside booked_by
                     bookedByRef.child("status").setValue("ACCEPTED")
                     val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/${bookedTo}/$bookingUid")
                     bookedToRef.child("status").setValue("ACCEPTED")
