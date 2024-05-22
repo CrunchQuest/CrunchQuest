@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.MutableData
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import java.util.Date
@@ -220,89 +221,75 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             val currentUserUid = currentUser.uid
-            val bookedToRef =
-                FirebaseDatabase.getInstance().getReference("booked_to/$currentUserUid")
-            val requestUserUid = serviceToBeOrdered?.bookedBy
-            val assistToRef =
-                FirebaseDatabase.getInstance().getReference("booked_by/assistConfirmation")
-            if (requestUserUid != null) {
-                val bookedByRef =
-                    FirebaseDatabase.getInstance().getReference("booked_by/${service.userUid}")
+            val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$currentUserUid")
+            val assistToRef = FirebaseDatabase.getInstance().getReference("booked_by/assistConfirmation")
+
+            serviceToBeOrdered?.let { serviceRequest ->
+                val requestUserUid = serviceRequest.bookedBy
+                val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/${serviceRequest.userUid}")
                 val userRef = FirebaseDatabase.getInstance().getReference("users/$currentUserUid")
+
                 userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        val user = snapshot.getValue(User::class.java)!!
-                        val serviceUid = serviceToBeOrdered!!.uid
-                        val order = Order(
-                            uid = assistToRef.push().key,
-                            service_booked_uid = serviceUid,
-                            address = addressTextView.text.toString(),
-                            date = dateTextView.text.toString(),
-                            name = "${user.firstName} ${user.lastName}",
-                            price = serviceToBeOrdered!!.price,
-                            time = service.time,
-                            title = serviceToBeOrdered!!.title,
-                            category = serviceToBeOrdered!!.category,
-                            description = serviceToBeOrdered!!.description,
-//                            userUid = currentUserUid,
-                            modeOfPayment = modeOfPayment.text.toString(),
-                            bookedBy = requestUserUid, // Set bookedBy to the requestUserUid
-                            bookedTo = currentUserUid, // Set bookedTo to the currentUserUid
-                            assistUser = assistToRef.push().key,
-                            assistConfirmation = "TRUE",
-                        )
-                        if (serviceUid != null) {
-                            // Create a HashMap to store multiple userUids
-                            val userOrderMap = HashMap<String, Any>()
-                            userOrderMap["/$currentUserUid"] = order
-                            bookedByRef.child(serviceUid).updateChildren(userOrderMap)
+                        val user = snapshot.getValue(User::class.java)
+                        user?.let {
+                            val orderId = assistToRef.push().key ?: return
+                            val serviceUid = serviceRequest.uid
+                            val order = Order(
+                                uid = orderId,
+                                service_booked_uid = serviceUid,
+                                address = addressTextView.text.toString(),
+                                date = dateTextView.text.toString(),
+                                name = "${user.firstName} ${user.lastName}",
+                                price = serviceRequest.price,
+                                time = serviceRequest.time,
+                                title = serviceRequest.title,
+                                category = serviceRequest.category,
+                                description = serviceRequest.description,
+                                modeOfPayment = modeOfPayment.text.toString(),
+                                bookedBy = requestUserUid,
+                                bookedTo = currentUserUid,
+                                assistUser = orderId,
+                                assistConfirmation = "TRUE"
+                            )
+
+                            // Update both booked_by and booked_to nodes atomically
+                            val updates = hashMapOf<String, Any>(
+                                "/booked_by/${serviceRequest.bookedBy}/$serviceUid/$currentUserUid" to order,
+                                "/booked_to/$currentUserUid/$serviceUid" to order
+                            )
+
+                            FirebaseDatabase.getInstance().reference.updateChildren(updates).addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Log.d("DisplaySpecificRequest", "Order created and nodes updated successfully.")
+                                    // Handle the successful order creation here
+                                } else {
+                                    Log.e("DisplaySpecificRequest", "Error updating nodes: ${task.exception}")
+                                    // Handle the error here
+                                }
+                            }
                         }
-                        if (serviceUid != null) {
-                            bookedToRef.child(serviceUid).setValue(order)
-                        }
-
-                        Log.d("DisplaySpecificRequest", "bookedBy is set to: ${order.bookedBy}")
-                        Log.d("DisplaySpecificRequest", "bookedTo is set to: ${order.bookedTo}")
-                        Log.d("DisplaySpecificRequest", "assistUser is set to: ${order.assistUser}")
-
-                        // Remove the ServiceRequest from the database
-//                        val serviceRequestRef = FirebaseDatabase.getInstance().getReference("/service_requests/${service.uid}")
-//                        serviceRequestRef.removeValue()
-//                        serviceRequestRef.child(!!).removeValue()
-
-                        // Log the order details
-                        Log.d(
-                            "OrderDetails", "Order Title: ${order.title} " +
-                                    "\nOrder Description: ${order.description}" +
-                                    "\nTarget Price: ${order.price}" +
-                                    "\nCategory: ${order.category}" +
-                                    "\nDate: ${order.date}" +
-                                    "\nTime: ${order.time}" +
-                                    "\nAddress: ${order.address}" +
-                                    "\nDate Ordered: ${order.dateOrdered}" +
-                                    "\nBuyer Confirmation: ${order.buyerConfirmation}" +
-                                    "\nSeller Confirmation: ${order.sellerConfirmation}" +
-                                    "\nReviewed: ${order.reviewed}" +
-                                    "\nMode of Payment: ${order.modeOfPayment}" +
-                                    "\nBooked To: ${order.bookedTo}" +
-                                    "\nAssistUser: ${order.assistUser}"
-                        )
                     }
 
-                    override fun onCancelled(error: DatabaseError) {}
+                    override fun onCancelled(error: DatabaseError) {
+                        // Handle the error here
+                    }
                 })
             }
 
-
-            val notificationsRef = FirebaseDatabase.getInstance().getReference("/notifications/")
-            notificationsRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val count =
-                        snapshot.child("$currentUserUid").value?.toString()?.toIntOrNull() ?: 0
-                    notificationsRef.child("$currentUserUid").setValue(count + 1)
+            // Increment notifications count for the current user
+            val notificationsRef = FirebaseDatabase.getInstance().getReference("/notifications/$currentUserUid")
+            notificationsRef.runTransaction(object : com.google.firebase.database.Transaction.Handler {
+                override fun doTransaction(mutableData: MutableData): com.google.firebase.database.Transaction.Result {
+                    val currentCount = mutableData.getValue(Int::class.java) ?: 0
+                    mutableData.value = currentCount + 1
+                    return com.google.firebase.database.Transaction.success(mutableData)
                 }
 
-                override fun onCancelled(error: DatabaseError) {
+                override fun onComplete(error: DatabaseError?, committed: Boolean, snapshot: DataSnapshot?) {
+                    if (error != null) {
+                        Log.e("DisplaySpecificRequest", "Error incrementing notifications: ${error.message}")
+                    }
                 }
             })
 
@@ -313,13 +300,9 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
             setResult(RESULT_OK, intent)
         }
 
-//        val intent = Intent(this, BuyerActivity::class.java)
-//        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-//        intent.putExtra(BottomFragmentCreateOrder.TAG, BottomFragmentCreateOrder.TAG)
-//        startActivity(intent)
-
         finish()
     }
+
 
 //    private fun getTheTime(): String {
 //        var output: String

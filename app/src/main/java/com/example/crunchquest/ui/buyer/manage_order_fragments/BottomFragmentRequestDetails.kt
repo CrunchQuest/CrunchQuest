@@ -141,12 +141,14 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
 
         if (bookedBy != null && bookedTo != null && orderUid != null) {
             val ref = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$orderUid") // MARKS THISSSSSSSSSSSSS
+            val anotherRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}")
             ref.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val order = snapshot.getValue(Order::class.java)
                     Log.d("StatusListener", "Order: $order")
                     if (order != null && order.buyerConfirmation == "CONFIRMED" && order.sellerConfirmation == "CONFIRMED") {
                         ref.child("/status").setValue("COMPLETED")
+                        anotherRef.child("/status").setValue("COMPLETED")
                         Log.d("StatusListener", "Order status set to COMPLETED for order: $orderUid")
                     }
                 }
@@ -159,6 +161,7 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
             Log.d("StatusListener", "bookedBy, bookedTo, or orderUid is null. bookedBy: $bookedBy, bookedTo: $bookedTo, orderUid: $orderUid")
         }
     }
+
 
 
     private fun markAsComplete() {
@@ -179,7 +182,7 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
                     if (checkDate(orderClicked.date!!)) {
                         Toast.makeText(v.context, "The Current Date is less than the Booking Date. ", Toast.LENGTH_SHORT).show()
                     } else {
-                        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
+                        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid/${orderClicked.bookedBy}")
                         val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
                         bookedByRef.child("sellerConfirmation").setValue("CONFIRMED")
                         bookedToRef.child("sellerConfirmation").setValue("CONFIRMED")
@@ -202,6 +205,7 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
             Log.d("MarkAsComplete", "bookedBy, bookedTo, or bookingUid is null. bookedBy: $bookedBy, bookedTo: $bookedTo, bookingUid: $bookingUid")
         }
     }
+
 
     private fun checkDate(date: String): Boolean{
         val values = date.split(" ").toTypedArray()

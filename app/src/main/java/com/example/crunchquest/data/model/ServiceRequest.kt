@@ -25,7 +25,16 @@ data class ServiceRequest(
     var bookedTo: String? = null,
     var bookedBy: String? = null,
     var categoryId: List<Int>? = null,
-    var assistConfirmation: String? = "FALSE"
+    var assistConfirmation: String? = "FALSE",
+    var assistUser: String? = null, // Already included
+    var buyerConfirmation: String? = "",
+    var buyerReview: String? = "",
+    var dateOrdered: Long? = null,
+    var name: String? = null,
+    var reviewed: Boolean? = false,
+    var sellerConfirmation: String? = "",
+    var service_booked_uid: String? = null,
+    var status: String? = "NEW"
 ) : Parcelable {
     override fun toString(): String {
         return "Service Request Title: $title " +

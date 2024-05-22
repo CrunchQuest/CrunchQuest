@@ -125,11 +125,11 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
                 val orderUid2 = order.uid
 
                 if (bookedBy != null && orderUid != null) {
-                    val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid")
+                    val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}")
                     ref.removeValue().addOnSuccessListener {
-                        Log.d("CancelOrder", "Order removed from booked_by/$bookedBy/$orderUid")
+                        Log.d("CancelOrder", "Order removed from booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}")
                     }.addOnFailureListener { e ->
-                        Log.e("CancelOrder", "Failed to remove order from booked_by/$bookedBy/$orderUid", e)
+                        Log.e("CancelOrder", "Failed to remove order from booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}", e)
                     }
 
                     val anotherRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$orderUid")
@@ -167,7 +167,7 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         val orderUid = order.service_booked_uid
 
         if (bookedBy != null && bookedTo != null && orderUid != null) {
-            val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid")
+            val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}")
             ref.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val order = snapshot.getValue(Order::class.java)
@@ -208,6 +208,7 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
     }
 
 
+
     private fun confirmTheOrder() {
         if (order.buyerConfirmation != "CONFIRMED") {
             val dialogBuilder = AlertDialog.Builder(v.context)
@@ -222,7 +223,7 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
                         if (checkDate(order.date!!)) {
                             Toast.makeText(v.context, "The Current Date is less than the Booking Date. ", Toast.LENGTH_SHORT).show()
                         } else {
-                            val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid")
+                            val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedTo}")
                             val anotherRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$orderUid")
                             anotherRef.child("buyerConfirmation").setValue("CONFIRMED")
                             Toast.makeText(v.context, "Booking confirmed as completed.", Toast.LENGTH_SHORT).show()
@@ -244,6 +245,7 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
             Toast.makeText(v.context, "You already confirmed this booking.", Toast.LENGTH_SHORT).show()
         }
     }
+
     private fun addAReview() {
         if (order.reviewed == false) {
             //close the bottom frafment here

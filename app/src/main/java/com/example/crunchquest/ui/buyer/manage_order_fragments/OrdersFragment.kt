@@ -158,7 +158,7 @@ class OrdersFragment : Fragment() {
                             Log.d("OrdersFragment", "$userType Tapped Order: $tappedOrder")
                             Log.d("OrdersFragment", "Current User ID: $currentUserId")
                             Log.d("OrdersFragment", "Booked By: ${tappedOrder.bookedBy}")
-                            Log.d("OrdersFragment", "tappedOrder.userUid: ${tappedOrder.userUid}")
+                            Log.d("OrdersFragment", "tappedOrder.userUid: ${tappedOrder.bookedTo}")
                             if (currentUserId == tappedOrder.bookedBy) {
 
                                 Log.d("OrdersFragment", "REQUESTER ONLY")
@@ -183,15 +183,15 @@ class OrdersFragment : Fragment() {
                             } else {
                                 // ASSISTER
                                 Log.d("OrdersFragment", "ELSE ASSISTER ONLY")
-                                val orderDetailsFragment = BottomFragmentOrderDetails(FinishedFragment.orderClicked!!) // CANCEL AND MESSAGE
-                                orderDetailsFragment.show(parentFragmentManager, FinishedFragment.TAG)
+                                val orderDetailsFragment = BottomFragmentOrderDetails(orderClicked!!) // CANCEL AND MESSAGE
+                                orderDetailsFragment.show(parentFragmentManager, TAG)
                             }
                         }
                     }
                     recyclerView.adapter = adapter
                     Log.d("OrdersFragment", "$userType Adapter Item Count: ${adapter.itemCount}") // Log the adapter item count
                 } else {
-                    Log.d("OrdersFragment", "$userType Has no orders") // Log that there are no orders for the current user
+                    Log.d("OrdersFragment", "Fragment is not added")
                 }
             }
 

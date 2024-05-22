@@ -22,7 +22,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -433,16 +432,22 @@ class RequestActivity : AppCompatActivity() {
 
     private fun createRequest(location: Location?) {
         val currentUserUid = FirebaseAuth.getInstance().uid
+        if (currentUserUid == null) {
+            Toast.makeText(applicationContext, "User not authenticated.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
         val requestUserUid = bookedByRef.push().key!!
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$currentUserUid")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+        val userRef = FirebaseDatabase.getInstance().getReference("/users/$currentUserUid")
+
+        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
                 val categoryIdArray = generateCategoryIdArray(selectedCategoryIndex, 9)
                 val serviceRequest = ServiceRequest(
+                    uid = requestUserUid,
                     userUid = currentUserUid,
-
                     description = descriptionEditText.text.toString(),
                     title = titleEditText.text.toString(),
                     price = priceEditText.text.toString().toInt(),
@@ -454,19 +459,68 @@ class RequestActivity : AppCompatActivity() {
                     time = "${timePicker.hour}:${timePicker.minute}",
                     address = addressEditText.text.toString(),
                     modeOfPayment = modeEditText.text.toString(),
-                    bookedTo = null, // Set bookedTo to null initially
-                    bookedBy = currentUserUid, // Set bookedBy to the current user's uid
-                    assistConfirmation = "FALSE",
+                    bookedTo = null,
+                    bookedBy = currentUserUid,
+                    assistConfirmation = "FALSE"
                 )
+
+                // Check if service request was successfully created
                 if (serviceRequestHandler.createServiceRequest(serviceRequest)) {
-                    Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()
+                    // Save the service request to the database
+                    bookedByRef.child(serviceRequest.uid!!)
+                        .child(currentUserUid)
+                        .setValue(serviceRequest)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d("RequestActivity", "Service request saved successfully at booked_by/$currentUserUid/${serviceRequest.uid}/$currentUserUid")
+                                Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()
+
+                                // Create and save Order object
+                                val order = mapOf(
+                                    "uid" to serviceRequest.uid,
+                                    "service_booked_uid" to serviceRequest.uid,
+                                    "address" to serviceRequest.address,
+                                    "date" to serviceRequest.date,
+                                    "name" to "${user?.firstName} ${user?.lastName}",
+                                    "price" to serviceRequest.price,
+                                    "time" to serviceRequest.time,
+                                    "title" to serviceRequest.title,
+                                    "category" to serviceRequest.category,
+                                    "description" to serviceRequest.description,
+                                    "modeOfPayment" to serviceRequest.modeOfPayment,
+                                    "bookedBy" to currentUserUid,
+                                    "bookedTo" to currentUserUid,
+                                    "assistUser" to serviceRequest.uid,
+                                    "assistConfirmation" to "TRUE"
+                                )
+
+                                // Update nodes in booked_by/currentUserUid/serviceRequest.uid
+                                bookedByRef.child(serviceRequest.uid!!)
+                                    .child(currentUserUid)
+                                    .updateChildren(order)
+                                    .addOnCompleteListener { orderTask ->
+                                        if (orderTask.isSuccessful) {
+                                            Log.d("RequestActivity", "Order saved successfully at booked_by/$currentUserUid/${serviceRequest.uid}/$currentUserUid")
+                                        } else {
+                                            Log.d("RequestActivity", "Failed to save order: ${orderTask.exception?.message}")
+                                        }
+                                    }
+                            } else {
+                                Log.d("RequestActivity", "Failed to save service request: ${task.exception?.message}")
+                                Toast.makeText(applicationContext, "Failed to post request.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                } else {
+                    Toast.makeText(applicationContext, "Failed to create service request.", Toast.LENGTH_SHORT).show()
                 }
-                serviceRequest.uid?.let { bookedByRef.child(it).setValue(serviceRequest) }
-                Log.d("RequestActivity", "bookedBy is set to: ${serviceRequest.bookedBy}")
+
+                Log.d("RequestActivity", "Service request data: $serviceRequest")
                 finish()
             }
 
-            override fun onCancelled(error: DatabaseError) {}
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("RequestActivity", "Failed to read user data: ${error.message}")
+            }
         })
     }
 
