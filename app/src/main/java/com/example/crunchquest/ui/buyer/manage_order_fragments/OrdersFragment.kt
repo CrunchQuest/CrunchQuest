@@ -165,6 +165,7 @@ class OrdersFragment : Fragment() {
                                 // REQUESTER
                                 if (tappedOrder.assistConfirmation == "TRUE") {
                                     if (tappedOrder.bookedTo == currentUserId) {
+                                        Log.d("OrdersFragment", "Cancel Only")
                                         val orderDetailsFragment = BottomFragmentOrderDetails(
                                             orderClicked!!) // CANCEL AND MESSAGE
                                         orderDetailsFragment.show(parentFragmentManager,

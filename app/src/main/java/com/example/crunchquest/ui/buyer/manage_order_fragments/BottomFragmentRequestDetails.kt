@@ -18,6 +18,7 @@ import com.example.crunchquest.data.model.User
 import com.example.crunchquest.ui.dialogs.ReviewDialog
 import com.example.crunchquest.ui.messages.ChatLogActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -270,18 +271,50 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
                 }
             })
             .setNegativeButton("Decline", DialogInterface.OnClickListener { dialog, _ ->
-                val bookingUid = orderClicked.uid
-                val bookedBy = orderClicked.userUid
-                val bookedTo = orderClicked.service_provider_uid
-                if (bookedBy != null && bookedTo != null && bookingUid != null) {
-                    val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
-                    val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
-                    bookedByRef.removeValue()
-                    bookedToRef.removeValue()
-                    dialog.cancel()
-                } else {
-                    // Handle the case where bookedBy, bookedTo, or bookingUid is null
-                    Toast.makeText(context, "Error: Missing order information.", Toast.LENGTH_SHORT).show()
+                val bookingUid = orderClicked.service_booked_uid
+                val bookedBy = orderClicked.bookedBy
+                val bookedTo = orderClicked.bookedTo
+                val orderUid = orderClicked.service_booked_uid
+                val orderUid2 = orderClicked.uid
+//                if (bookedBy != null && bookedTo != null && bookingUid != null) {
+//                    val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
+//                    val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
+//                    bookedByRef.removeValue()
+//                    bookedToRef.removeValue()
+//                    dialog.cancel()
+//                } else {
+//                    // Handle the case where bookedBy, bookedTo, or bookingUid is null
+//                    Toast.makeText(context, "Error: Missing order information.", Toast.LENGTH_SHORT).show()
+//                }
+
+                // IF Request Decline Assist
+                val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+                if (currentUserUid != orderClicked.bookedTo) {
+                    val bookedByRef = orderClicked.bookedBy
+                    val bookedToRef = orderClicked.bookedTo
+                    val assistConfirmation = orderClicked.assistConfirmation
+                    if (bookedToRef != null && assistConfirmation != "FALSE") {
+                        if (assistConfirmation == "TRUE") {
+                            val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedTo}")
+                            ref.removeValue().addOnSuccessListener {
+                                Log.d("DeclineOrder", "Assist order removed from booked_by/$bookedBy/$orderUid/${orderClicked.bookedTo}")
+                            }.addOnFailureListener { e ->
+                                Log.e("DeclineOrder", "Failed to remove assist order from booked_by/$bookedBy/$orderUid/${orderClicked.bookedTo}", e)
+                            }
+
+                            val anotherRef = FirebaseDatabase.getInstance().getReference("booked_to/${bookedTo}/$orderUid")
+                            anotherRef.removeValue().addOnSuccessListener {
+                                Log.d("DeclineOrder", "Assist order removed from booked_to/${bookedTo}/$orderUid")
+                            }.addOnFailureListener { e ->
+                                Log.e("DeclineOrder", "Failed to remove assist order from booked_to/${bookedTo}/$orderUid", e)
+                            }
+
+                            Toast.makeText(v.context, "Assist Order Declined.", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Log.d("CancelOrder", "assistUser or assistConfirmation is null. bookedBy: $bookedByRef, assistConfirmation: $assistConfirmation")
+                    }
+
                 }
             })
         val alert = dialogBuilder.create()
