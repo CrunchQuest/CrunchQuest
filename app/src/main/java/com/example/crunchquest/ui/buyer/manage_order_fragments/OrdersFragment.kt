@@ -164,15 +164,24 @@ class OrdersFragment : Fragment() {
                                 Log.d("OrdersFragment", "REQUESTER ONLY")
                                 // REQUESTER
                                 if (tappedOrder.assistConfirmation == "TRUE") {
-                                    Log.d("OrdersFragment", "REQUESTER AND ASSISTED")
-                                    val bundle = Bundle()
-                                    bundle.putString("requestUser", tappedOrder.assistUser)
-                                    val requestDetailsFragment = BottomFragmentRequestDetails(
-                                        orderClicked!!) // ACCEPT DECLINE
-                                    requestDetailsFragment.arguments = bundle
-                                    requestDetailsFragment.show(parentFragmentManager, TAG
-                                    )
-                                } else {
+                                    if (tappedOrder.bookedTo == currentUserId) {
+                                        val orderDetailsFragment = BottomFragmentOrderDetails(
+                                            orderClicked!!) // CANCEL AND MESSAGE
+                                        orderDetailsFragment.show(parentFragmentManager,
+                                            TAG)
+                                    }
+                                    else {
+                                        Log.d("OrdersFragment", "REQUESTER AND ASSISTED")
+                                        val bundle = Bundle()
+                                        bundle.putString("requestUser", tappedOrder.assistUser)
+                                        val requestDetailsFragment = BottomFragmentRequestDetails(
+                                            orderClicked!!) // ACCEPT DECLINE
+                                        requestDetailsFragment.arguments = bundle
+                                        requestDetailsFragment.show(parentFragmentManager, TAG
+                                        )
+                                    }
+                                }
+                                else {
                                     Log.d("OrdersFragment", "REQUESTER NOT ASSISTED")
                                     val orderDetailsFragment = BottomFragmentOrderDetails(
                                         FinishedFragment.orderClicked!!) // CANCEL AND MESSAGE
