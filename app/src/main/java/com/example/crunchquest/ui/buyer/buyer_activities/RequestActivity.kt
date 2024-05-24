@@ -3,6 +3,7 @@ package com.example.crunchquest.ui.buyer.buyer_activities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
@@ -32,6 +33,11 @@ import com.example.crunchquest.R.id
 import com.example.crunchquest.R.layout
 import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.User
+import com.example.crunchquest.data.model.payment.OrderUserCombo
+import com.example.crunchquest.data.network.ApiConfig
+import com.example.crunchquest.data.network.ApiService
+import com.example.crunchquest.data.network.response.PaymentResponse
+import com.example.crunchquest.ui.PaymentActivity
 import com.example.crunchquest.utility.handlers.ServiceRequestHandler
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -40,6 +46,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -459,7 +468,8 @@ class RequestActivity : AppCompatActivity() {
                     time = "${timePicker.hour}:${timePicker.minute}",
                     address = addressEditText.text.toString(),
                     modeOfPayment = modeEditText.text.toString(),
-                    bookedTo = null,
+                    paymentUrl = "",
+                    bookedTo = "",
                     bookedBy = currentUserUid,
                     assistConfirmation = "FALSE"
                 )
@@ -472,39 +482,34 @@ class RequestActivity : AppCompatActivity() {
                         .setValue(serviceRequest)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                Log.d("RequestActivity", "Service request saved successfully at booked_by/$currentUserUid/${serviceRequest.uid}/$currentUserUid")
-                                Toast.makeText(applicationContext, "Request posted.", Toast.LENGTH_SHORT).show()
-
-                                // Create and save Order object
-                                val order = mapOf(
-                                    "uid" to serviceRequest.uid,
-                                    "service_booked_uid" to serviceRequest.uid,
-                                    "address" to serviceRequest.address,
-                                    "date" to serviceRequest.date,
-                                    "name" to "${user?.firstName} ${user?.lastName}",
-                                    "price" to serviceRequest.price,
-                                    "time" to serviceRequest.time,
-                                    "title" to serviceRequest.title,
-                                    "category" to serviceRequest.category,
-                                    "description" to serviceRequest.description,
-                                    "modeOfPayment" to serviceRequest.modeOfPayment,
-                                    "bookedBy" to currentUserUid,
-                                    "bookedTo" to currentUserUid,
-                                    "assistUser" to serviceRequest.uid,
-                                    "assistConfirmation" to "TRUE"
-                                )
-
-                                // Update nodes in booked_by/currentUserUid/serviceRequest.uid
-                                bookedByRef.child(serviceRequest.uid!!)
-                                    .child(currentUserUid)
-                                    .updateChildren(order)
-                                    .addOnCompleteListener { orderTask ->
-                                        if (orderTask.isSuccessful) {
-                                            Log.d("RequestActivity", "Order saved successfully at booked_by/$currentUserUid/${serviceRequest.uid}/$currentUserUid")
+                                // Service request saved successfully, now get the payment link
+                                val apiService = ApiConfig.retrofitPayment.create(ApiService::class.java)
+                                val orderUserCombo = OrderUserCombo(serviceRequest, user!!)
+                                val call = apiService.getPaymentLink(orderUserCombo)
+                                call.enqueue(object : Callback<PaymentResponse> {
+                                    override fun onResponse(call: Call<PaymentResponse>, response: Response<PaymentResponse>) {
+                                        if (response.isSuccessful) {
+                                            val paymentResponse = response.body()
+                                            if (paymentResponse != null) {
+                                                val checkoutUrl = paymentResponse.paymentUrl
+                                                // Open PaymentActivity with the checkout URL
+                                                val intent = Intent(this@RequestActivity, PaymentActivity::class.java)
+                                                intent.putExtra("checkoutUrl", checkoutUrl)
+                                                Log.d("RequestActivity", "Checkout URL: $checkoutUrl")
+                                                startActivity(intent)
+                                                Log.d("RequestActivity", "Starting PaymentActivity with URL: $checkoutUrl")
+                                            } else {
+                                                Toast.makeText(applicationContext, "Failed to get payment link.", Toast.LENGTH_SHORT).show()
+                                            }
                                         } else {
-                                            Log.d("RequestActivity", "Failed to save order: ${orderTask.exception?.message}")
+                                            Toast.makeText(applicationContext, "Failed to get payment link.", Toast.LENGTH_SHORT).show()
                                         }
                                     }
+
+                                    override fun onFailure(call: Call<PaymentResponse>, t: Throwable) {
+                                        Toast.makeText(applicationContext, "Failed to get payment link: ${t.message}", Toast.LENGTH_SHORT).show()
+                                    }
+                                })
                             } else {
                                 Log.d("RequestActivity", "Failed to save service request: ${task.exception?.message}")
                                 Toast.makeText(applicationContext, "Failed to post request.", Toast.LENGTH_SHORT).show()

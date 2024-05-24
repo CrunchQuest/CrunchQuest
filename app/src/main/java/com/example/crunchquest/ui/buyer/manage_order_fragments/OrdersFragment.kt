@@ -185,9 +185,8 @@ class OrdersFragment : Fragment() {
                                 else {
                                     Log.d("OrdersFragment", "REQUESTER NOT ASSISTED")
                                     val orderDetailsFragment = BottomFragmentOrderDetails(
-                                        FinishedFragment.orderClicked!!) // CANCEL AND MESSAGE
-                                    orderDetailsFragment.show(parentFragmentManager,
-                                        FinishedFragment.TAG
+                                        orderClicked!!) // CANCEL AND MESSAGE
+                                    orderDetailsFragment.show(parentFragmentManager, TAG
                                     )
                                 }
                             } else {

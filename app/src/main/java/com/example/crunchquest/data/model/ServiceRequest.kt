@@ -22,6 +22,7 @@ data class ServiceRequest(
     var timeBooked: String? = null,
     var contactNumber: String? = null,
     var modeOfPayment: String? = null,
+    var paymentUrl: String? = null,
     var bookedTo: String? = null,
     var bookedBy: String? = null,
     var categoryId: List<Int>? = null,
@@ -50,6 +51,7 @@ data class ServiceRequest(
                 "\nTime Booked: $timeBooked" +
                 "\nContact Number: $contactNumber" +
                 "\nMode of Payment: $modeOfPayment" +
+                "\nPayment URL: $paymentUrl" +
                 "\nAssist Confirmation: $assistConfirmation"
 
     }
