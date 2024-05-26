@@ -317,7 +317,7 @@ class RequestActivity : AppCompatActivity() {
             titleEditText.requestFocus()
             return
         }
-        if (titleEditText.text.toString().length < 8 || titleEditText.text.toString().length > 25 ) {
+        if (titleEditText.text.toString().length < 8 || titleEditText.text.toString().length > 50 ) {
             titleEditText.error = "The title should be 8-25 characters."
             titleEditText.requestFocus()
             return

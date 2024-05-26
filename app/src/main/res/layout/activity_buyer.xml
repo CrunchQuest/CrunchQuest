@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.buyer.BuyerActivity"
+    android:fitsSystemWindows="true"
     android:background="@color/background_color">
 
     <FrameLayout
@@ -35,8 +36,8 @@
         android:layout_alignParentBottom="true"
         android:background="@color/design_default_color_surface"
         app:itemIconSize="24dp"
-        app:itemIconTint="@color/main_cq_purple"
-        app:itemTextColor="@color/main_cq_purple"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
         app:menu="@menu/menu_nav_buyer" />
 
 

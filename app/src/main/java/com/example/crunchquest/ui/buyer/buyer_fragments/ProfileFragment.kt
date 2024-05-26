@@ -85,7 +85,7 @@ class ProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as BuyerActivity?)?.setActionBarTitle("Profile Page")
+        (activity as BuyerActivity?)?.setActionBarTitle("Profile")
         bottomNavigationBuyer.menu.findItem(R.id.profilePage).isChecked = true
     }
 

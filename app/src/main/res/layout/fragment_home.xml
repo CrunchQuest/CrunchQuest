@@ -30,8 +30,6 @@
             android:textAlignment="textStart"
             tools:context=".ui.buyer.buyer_fragments.HomeFragment">
 
-            <!-- TODO: Update blank fragment layout -->
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -42,9 +40,10 @@
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="130dp"
+                    android:layout_height="200dp"
                     app:layout_constraintBottom_toTopOf="@+id/tab_layout"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tab_layout"
@@ -67,9 +66,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
-                    android:text="Category"
-                    android:textColor="@color/dark_cq_purple"
-                    android:textSize="24sp"
+                    android:text="Quest Category"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/viewPager" />
@@ -78,9 +77,8 @@
                     android:id="@+id/recyclerView_fragmentHome"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -94,9 +92,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
-                    android:text="Quest"
-                    android:textColor="@color/dark_cq_purple"
-                    android:textSize="24sp"
+                    android:text="Recommended Quest"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recyclerView_fragmentHome" />
@@ -105,13 +103,28 @@
                     android:id="@+id/serviceRequestRecyclerView_activityBuyersRequest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/questTextView" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="See More"
+                    android:textColor="@color/alternate_cq_purple"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/questTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/questTextView"
+                    app:layout_constraintTop_toTopOf="@+id/questTextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -129,11 +142,11 @@
         android:contentDescription="Add Button"
         android:scaleType="center"
         android:src="@drawable/ic_add_quest"
-        app:tint="@null"
         app:backgroundTint="@color/main_cq_purple"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="30dp" />
+        app:maxImageSize="30dp"
+        app:tint="@null" />
 
     <!-- Sub Floating Action Buttons -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -145,6 +158,7 @@
         app:layout_constraintEnd_toEndOf="@id/mainFab"
         app:layout_constraintBottom_toTopOf="@id/mainFab"
         android:visibility="invisible"
+        app:backgroundTint="@color/main_cq_purple"
         android:contentDescription="Calendar"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -156,6 +170,7 @@
         app:layout_constraintEnd_toEndOf="@id/subFab1"
         app:layout_constraintBottom_toTopOf="@id/subFab1"
         android:visibility="invisible"
+        app:backgroundTint="@color/main_cq_purple"
         android:contentDescription="Done"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -167,6 +182,7 @@
         app:layout_constraintEnd_toEndOf="@id/subFab2"
         app:layout_constraintBottom_toTopOf="@id/subFab2"
         android:visibility="invisible"
+        app:backgroundTint="@color/main_cq_purple"
         android:contentDescription="Trash"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

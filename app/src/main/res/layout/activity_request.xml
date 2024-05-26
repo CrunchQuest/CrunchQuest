@@ -318,7 +318,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:navigationIcon="@drawable/ic_cancel"
+                    app:navigationIcon="@drawable/ic_back_alt"
                     app:title="Post a Request" />
 
                 <androidx.cardview.widget.CardView
@@ -344,7 +344,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:fontFamily="sans-serif-black"
+                            android:textStyle="bold"
                             android:text="How does Service Request work?"
                             android:textSize="16sp"
                             app:layout_constraintEnd_toEndOf="parent"

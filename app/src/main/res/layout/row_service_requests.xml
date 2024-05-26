@@ -6,9 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    margin="8dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="8dp"
+    app:cardElevation="4dp"
     app:cardMaxElevation="8dp"
     android:layout_margin="8dp">
 
@@ -19,13 +18,12 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView_serviceRowRequest"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:scaleType="centerCrop"
         android:visibility="visible"
         app:civ_circle_background_color="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -34,55 +32,53 @@
         android:id="@+id/title_serviceRowRequest"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="sans-serif-black"
-        android:text="TITLE"
+        android:maxLines="2"
+        android:text="Help me move to a new room please anyone"
         android:textColor="@color/dark_blue"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView_serviceRowRequest"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_serviceRowRequest"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.codesgood.views.JustifiedTextView
         android:id="@+id/descriptionTextView_serviceRowRequest"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:maxHeight="60dp"
-        android:text="Description"
+        android:maxLines="2"
+        android:text="I need help to move my things to a new place, help me"
+        android:textColor="@color/cool_black"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView_serviceRowRequest"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_serviceRowRequest"
+        app:layout_constraintStart_toStartOf="@+id/title_serviceRowRequest"
         app:layout_constraintTop_toBottomOf="@+id/title_serviceRowRequest" />
+
 
     <TextView
         android:id="@+id/priceTextView_serviceRowRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Price"
+        android:text="Rp17.000"
         android:textColor="#0C7A1E"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/descriptionTextView_serviceRowRequest"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionTextView_serviceRowRequest"
-        app:layout_constraintVertical_bias="0.72" />
+        app:layout_constraintTop_toBottomOf="@+id/descriptionTextView_serviceRowRequest" />
 
-    <TextView
-        android:id="@+id/categoryTextView_serviceRowRequests"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/orange_gold"
-        android:fontFamily="sans-serif-condensed"
-        android:padding="8dp"
-
-        android:text="Category"
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"
+    <ImageView
+        android:id="@+id/categoryImageView_serviceRowRequests"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/services_computer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/priceTextView_serviceRowRequest" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/priceTextView_serviceRowRequest" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

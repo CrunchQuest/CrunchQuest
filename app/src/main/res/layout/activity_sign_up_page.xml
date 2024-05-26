@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/large_margin"
-        android:fontFamily="@font/dm_sans_bold"
+        android:fontFamily="@font/montserrat_bold"
         android:text="@string/signup_fragment_heading"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_margin"
-        android:fontFamily="@font/dm_sans_regular"
+        android:fontFamily="@font/montserrat_regular"
         android:text="@string/signup_fragment_sub_heading"
         android:textColor="@color/subheading_color"
         app:layout_constraintLeft_toLeftOf="@+id/tvSignupHeading"
@@ -66,7 +66,7 @@
                     android:id="@+id/etFirstName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_medium"
+                    android:textStyle="bold"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -87,7 +87,7 @@
                     android:id="@+id/etLastName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_medium"
+                    android:textStyle="bold"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -110,7 +110,7 @@
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/dm_sans_medium"
+                android:textStyle="bold"
                 android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -131,7 +131,7 @@
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/dm_sans_medium"
+                android:textStyle="bold"
                 android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -152,7 +152,7 @@
                 android:id="@+id/etConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/dm_sans_medium"
+                android:textStyle="bold"
                 android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -164,7 +164,7 @@
             android:layout_marginHorizontal="@dimen/medium_margin"
             android:layout_marginVertical="@dimen/medium_margin"
             android:backgroundTint="@color/main_cq_purple"
-            android:fontFamily="@font/dm_sans_medium"
+            android:textStyle="bold"
             android:padding="@dimen/button_padding"
             android:text="@string/field_signup"
             android:textColor="@color/button_text_color"

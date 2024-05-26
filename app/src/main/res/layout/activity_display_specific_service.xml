@@ -60,7 +60,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:navigationIcon="@drawable/ic_back" />
+                    app:navigationIcon="@drawable/ic_back_alt" />
 
 
                 <androidx.cardview.widget.CardView
@@ -86,7 +86,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
-                            android:fontFamily="sans-serif-black"
+                            android:textStyle="bold"
                             android:text="Name, age"
                             android:textSize="18sp"
                             app:layout_constraintBottom_toTopOf="@+id/userRating_acitivityDisplaySpecificService"
@@ -163,7 +163,7 @@
                             android:id="@+id/textView24"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-black"
+                            android:textStyle="bold"
                             android:text="SERVICE DESCRIPTION"
                             android:textSize="24sp"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -175,7 +175,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:fontFamily="sans-serif-black"
+                            android:textStyle="bold"
                             android:gravity="center|left"
                             android:text="Title"
                             android:textSize="14sp"
@@ -201,7 +201,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:drawableLeft="@drawable/ic_money"
-                            android:fontFamily="sans-serif-black"
+                            android:textStyle="bold"
                             android:gravity="center|left"
                             android:text="TextView"
                             android:textColor="#3B8804"
@@ -217,7 +217,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:drawableLeft="@drawable/ic_category"
-                            android:fontFamily="sans-serif"
                             android:gravity="center|left"
                             android:text="TextView"
                             android:textSize="14sp"

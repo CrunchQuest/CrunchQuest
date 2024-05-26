@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/large_margin"
-        android:fontFamily="@font/dm_sans_bold"
+        android:textStyle="bold"
         android:text="@string/field_forgot_password"
         android:textAlignment="center"
         android:textColor="@color/text_color"
@@ -26,7 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_margin"
-        android:fontFamily="@font/dm_sans_regular"
         android:padding="@dimen/small_padding"
         android:text="@string/forget_pass_fragment_sub_heading"
         android:textAlignment="center"
@@ -72,7 +71,7 @@
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/dm_sans_medium"
+                android:fontFamily="@font/montserrat_medium"
                 android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -83,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/medium_margin"
             android:backgroundTint="@color/button_color"
-            android:fontFamily="@font/dm_sans_medium"
+            android:fontFamily="@font/montserrat_medium"
             android:padding="@dimen/button_padding"
             android:text="@string/field_reset_password"
             android:textColor="@color/button_text_color"
@@ -97,7 +96,7 @@
             android:layout_marginHorizontal="@dimen/medium_margin"
             android:layout_marginVertical="@dimen/extra_small_margin"
             android:backgroundTint="@color/button_tint_color"
-            android:fontFamily="@font/dm_sans_medium"
+            android:fontFamily="@font/montserrat_medium"
             android:padding="@dimen/button_padding"
             android:text="@string/field_back_to_login"
             android:textColor="@color/button_tint_text_color"

@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -22,10 +23,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -34,8 +38,8 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.ServiceRequest
+import com.example.crunchquest.data.model.User
 import com.example.crunchquest.data.model.UserLocation
-import com.example.crunchquest.data.model.UserPerformance
 import com.example.crunchquest.data.model.convertToServiceRequest
 import com.example.crunchquest.data.network.ApiConfig
 import com.example.crunchquest.data.network.ApiService
@@ -63,6 +67,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.coroutines.launch
@@ -76,7 +81,7 @@ class HomeFragment : Fragment() {
     private lateinit var subFab2: FloatingActionButton
     private lateinit var subFab3: FloatingActionButton
     private lateinit var fabHandler: Handler
-    private lateinit var longClickRunnable: Runnable
+//    private lateinit var longClickRunnable: Runnable
     private var isExpanded = false
 
     // Maps
@@ -93,7 +98,7 @@ class HomeFragment : Fragment() {
     var clickedServiceRequestItem: ServiceRequestItem? = null
 
     private lateinit var v: View
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var categoryRecyclerView: RecyclerView
     val adapterCategory = GroupAdapter<ViewHolder>().apply {
         spanCount = 2
     }
@@ -161,82 +166,27 @@ class HomeFragment : Fragment() {
             popupMenu.show()
         }
 
-        val images = listOf(
-            R.drawable.food1,
-            R.drawable.food2,
-            R.drawable.food3,
-            R.drawable.food4,
-            R.drawable.food5
-        )
-        val viewPager = v.findViewById<ViewPager2>(R.id.viewPager)
-        viewPager.adapter = SliderAdapter(images)
-
-        val tabLayout = v.findViewById<TabLayout>(R.id.tab_layout)
-        TabLayoutMediator(tabLayout, viewPager) { _, _ -> }.attach()
+        setupBanner()
 
         // Get the user ID
         val userId = FirebaseAuth.getInstance().currentUser?.uid
-        // Check if userId is not null
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$userId")
+
         if (userId != null) {
-            // Get the reference to the image in Firebase Storage
-            val storageReference =
-                FirebaseStorage.getInstance().reference.child("profileImages/${userId}")
+            ref.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(p0: DataSnapshot) {
+                    val user = p0.getValue(User::class.java)
+                    Picasso.get().load(user!!.profileImageUrl).into(circleImageView)
+                }
 
-            // Load the image into the CircleImageView
-            storageReference.downloadUrl.addOnSuccessListener { uri ->
-                Glide.with(this)
-                    .load(uri)
-                    .placeholder(R.drawable.ic_person)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: com.bumptech.glide.request.target.Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            Log.e("TAG", "Load failed", e)
-                            // You can also log the individual causes:
-                            for (cause in e!!.rootCauses) {
-                                Log.e("TAG", "Caused by", cause)
-                            }
-                            // Or, to log all individual causes locally, you can use:
-                            e.logRootCauses("TAG")
-                            return false // Allow calling onLoadFailed on the Target.
-                        }
-
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: com.bumptech.glide.request.target.Target<Drawable>?,
-                            dataSource: DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            return false
-                        }
-                    })
-                    .into(circleImageView)
-            }
-                .addOnFailureListener { exception ->
-                    // Handle any errors here, such as displaying a Toast or loading a default image
-                    Log.e("TAG", "Failed to download image", exception)
+                override fun onCancelled(p0: DatabaseError) {
                     circleImageView.setImageResource(R.drawable.ic_person)
                 }
-        } else {
-            // If userId is null, load the default image
-            circleImageView.setImageResource(R.drawable.ic_person)
+            })
         }
-
 
         //Map everything here
-        recyclerView = v.findViewById(R.id.recyclerView_fragmentHome)
-        recyclerView.apply {
-            layoutManager = GridLayoutManager(v.context, 5).apply {
-                spanSizeLookup = adapterCategory.spanSizeLookup
-            }
-            adapter = adapterCategory
-        }
-
-        recyclerView.addItemDecoration(CustomItemDecoration(-50))
+        setupCategoryRv()
 
         val btn = v.findViewById<Button>(R.id.searchBtn)
         //Button onclick listener
@@ -252,20 +202,8 @@ class HomeFragment : Fragment() {
         serviceRequestArrayList = ArrayList()
 
         //Floating action button
-        mainFab = v.findViewById(R.id.mainFab)
-        subFab1 = v.findViewById(R.id.subFab1)
-        subFab2 = v.findViewById(R.id.subFab2)
-        subFab3 = v.findViewById(R.id.subFab3)
-        fabHandler = Handler()
+        setupFab()
 
-        longClickRunnable = Runnable {
-            expandSubFabs()
-        }
-
-        mainFab.setOnLongClickListener {
-            fabHandler.postDelayed(longClickRunnable, 1000)
-            true
-        }
 
         checkUserLocation()
 
@@ -295,22 +233,7 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        mainFab.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
-                // Cancel the long click handler if the button is released before 3 seconds
-                fabHandler.removeCallbacks(longClickRunnable)
-            }
-            false
-        }
-        subFab1.setOnClickListener {
-            Toast.makeText(context, "Example of sub fab 1", Toast.LENGTH_SHORT).show()
-        }
-        subFab2.setOnClickListener {
-            Toast.makeText(context, "Example of sub fab 2", Toast.LENGTH_SHORT).show()
-        }
-        subFab3.setOnClickListener {
-            Toast.makeText(context, "Example of sub fab 3", Toast.LENGTH_SHORT).show()
-        }
+
 
         fetchServiceCategory()
         //Gets all the Service Requests available
@@ -321,6 +244,57 @@ class HomeFragment : Fragment() {
 
         fetchServiceRequests()
         return v
+    }
+
+    private fun setupBanner() {
+        val images = listOf(
+            R.drawable.banner_1,
+            R.drawable.banner_2
+        )
+        val viewPager = v.findViewById<ViewPager2>(R.id.viewPager)
+        viewPager.adapter = SliderAdapter(images)
+
+        val tabLayout = v.findViewById<TabLayout>(R.id.tab_layout)
+        TabLayoutMediator(tabLayout, viewPager) { _, _ -> }.attach()
+    }
+
+    private fun setupFab() {
+        mainFab = v.findViewById(R.id.mainFab)
+//        subFab1 = v.findViewById(R.id.subFab1)
+//        subFab2 = v.findViewById(R.id.subFab2)
+//        subFab3 = v.findViewById(R.id.subFab3)
+        fabHandler = Handler()
+        mainFab.elevation = 8f
+        val animation = AnimationUtils.loadAnimation(requireActivity(), R.anim.fab_scale_up)
+        mainFab.startAnimation(animation)
+
+//        longClickRunnable = Runnable {
+//            expandSubFabs()
+//        }
+//
+        mainFab.setOnLongClickListener {
+//            fabHandler.postDelayed(longClickRunnable, 1000)
+            TooltipCompat.setTooltipText(mainFab, "Add a new request")
+            true
+        }
+
+        mainFab.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
+                // Cancel the long click handler if the button is released before 3 seconds
+//                fabHandler.removeCallbacks(longClickRunnable)
+            }
+            false
+        }
+
+//        subFab1.setOnClickListener {
+//            Toast.makeText(context, "Example of sub fab 1", Toast.LENGTH_SHORT).show()
+//        }
+//        subFab2.setOnClickListener {
+//            Toast.makeText(context, "Example of sub fab 2", Toast.LENGTH_SHORT).show()
+//        }
+//        subFab3.setOnClickListener {
+//            Toast.makeText(context, "Example of sub fab 3", Toast.LENGTH_SHORT).show()
+//        }
     }
 
     //Check if user has allow the location fror pushing the last/current location to database
@@ -471,17 +445,17 @@ class HomeFragment : Fragment() {
         //Get the array of service category
         val arrayList = ArrayList(listOf(*resources.getStringArray(R.array.services_category)))
         //Add the different categories to the adapter
-        adapterCategory.add(ServiceCategoryItem(arrayList[0], R.drawable.services_computer))
-        adapterCategory.add(ServiceCategoryItem(arrayList[1], R.drawable.services_homecleaning))
-        adapterCategory.add(ServiceCategoryItem(arrayList[2], R.drawable.services_plumbing))
-        adapterCategory.add(ServiceCategoryItem(arrayList[3], R.drawable.services_electrical))
-        adapterCategory.add(ServiceCategoryItem(arrayList[4], R.drawable.services_moving))
-        adapterCategory.add(ServiceCategoryItem(arrayList[5], R.drawable.services_delivery))
-        adapterCategory.add(ServiceCategoryItem(arrayList[6], R.drawable.services_aircon))
-        adapterCategory.add(ServiceCategoryItem(arrayList[7], R.drawable.services_homerepair))
-        adapterCategory.add(ServiceCategoryItem(arrayList[8], R.drawable.services_auto))
+        adapterCategory.add(ServiceCategoryItem(arrayList[0], R.drawable.services_computer_alt))
+        adapterCategory.add(ServiceCategoryItem(arrayList[1], R.drawable.services_homecleaning_alt))
+        adapterCategory.add(ServiceCategoryItem(arrayList[2], R.drawable.services_plumbing_alt))
+        adapterCategory.add(ServiceCategoryItem(arrayList[3], R.drawable.services_electrical_alt))
+        adapterCategory.add(ServiceCategoryItem(arrayList[4], R.drawable.services_moving_alt))
+        adapterCategory.add(ServiceCategoryItem(arrayList[5], R.drawable.services_delivery_alt))
+        adapterCategory.add(ServiceCategoryItem(arrayList[6], R.drawable.services_aircon_alt))
+        adapterCategory.add(ServiceCategoryItem(arrayList[7], R.drawable.services_homerepair_alt))
+        adapterCategory.add(ServiceCategoryItem(arrayList[8], R.drawable.services_auto_alt))
         //Attach the adapter to the recycler view
-        recyclerView.adapter = adapterCategory
+        categoryRecyclerView.adapter = adapterCategory
 
         adapterCategory.setOnItemClickListener { item, _ ->
             val intent = Intent(v.context, ServiceCategoryActivity::class.java)
@@ -491,6 +465,13 @@ class HomeFragment : Fragment() {
             startActivity(intent)
 
         }
+    }
+
+    private fun setupCategoryRv() {
+        categoryRecyclerView = v.findViewById(R.id.recyclerView_fragmentHome)
+        val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        categoryRecyclerView.layoutManager = layoutManager
+        categoryRecyclerView.addItemDecoration(CustomItemDecoration(8))
     }
 
     override fun onResume() {
@@ -504,7 +485,7 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         // Remove callbacks to prevent memory leaks
-        fabHandler.removeCallbacks(longClickRunnable)
+//        fabHandler.removeCallbacks(longClickRunnable)
 
         (activity as AppCompatActivity).supportActionBar?.show()
     }

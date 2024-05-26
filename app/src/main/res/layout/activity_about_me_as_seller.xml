@@ -73,7 +73,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:navigationIcon="@drawable/ic_back" />
+                    app:navigationIcon="@drawable/ic_back_alt" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/skillsContainer"
@@ -143,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="8dp"
-                    android:fontFamily="sans-serif-black"
+                    android:textStyle="bold"
                     android:text="Why are you offering your service?"
                     android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -177,9 +177,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:fontFamily="sans-serif-black"
                     android:text="Skills"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.136"
                     app:layout_constraintStart_toStartOf="parent"
@@ -191,7 +191,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="8dp"
-                    android:fontFamily="sans-serif-black"
+                    android:textStyle="bold"
                     android:text="Education"
                     android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -219,7 +219,7 @@
                     android:layout_marginBottom="8dp"
                     android:clickable="true"
                     android:enabled="false"
-                    android:fontFamily="sans-serif-black"
+                    android:textStyle="bold"
                     android:padding="0dp"
                     android:text="Add New"
                     android:textColor="#000532"

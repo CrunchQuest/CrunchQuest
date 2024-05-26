@@ -3,7 +3,7 @@
     <color name="ic_launcher_background">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="backGroundShadow">#f2f2f2</color>
+    <color name="backGroundShadow">#f7f7f7</color>
     <color name="lightBlue">#63E5C5</color>
     <color name="darkBlue">#14366F</color>
     <color name ="anotherLightBlue">#38A2D6</color>
