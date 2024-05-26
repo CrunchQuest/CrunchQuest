@@ -119,36 +119,66 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         dialogBuilder.setMessage("Do you want to cancel this order?")
             .setCancelable(true)
             .setPositiveButton("Confirm") { _, _ ->
-                val bookedBy = order.userUid
-                val bookedTo = order.service_provider_uid
-                val orderUid = order.uid
+                val bookedBy = order.bookedBy
+                val bookedTo = order.bookedTo
+                val orderUid = order.service_booked_uid
                 val orderUid2 = order.uid
 
-                if (bookedBy != null && orderUid != null) {
-                    val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}")
-                    ref.removeValue().addOnSuccessListener {
-                        Log.d("CancelOrder", "Order removed from booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}")
-                    }.addOnFailureListener { e ->
-                        Log.e("CancelOrder", "Failed to remove order from booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}", e)
+                // IF Assist Cancel Assisting
+                val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+                if (currentUserUid == order.bookedTo) {
+                    val bookedByRef = order.bookedBy
+                    val assistConfirmation = order.assistConfirmation
+                    if (bookedByRef != null && assistConfirmation != "FALSE") {
+                        if (assistConfirmation == "TRUE") {
+                            val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/$currentUserUid")
+                            ref.removeValue().addOnSuccessListener {
+                                Log.d("CancelOrder", "Assist order removed from booked_by/$bookedBy/$orderUid/$currentUserUid")
+                            }.addOnFailureListener { e ->
+                                Log.e("CancelOrder", "Failed to remove assist order from booked_by/$bookedBy/$orderUid/$currentUserUid", e)
+                            }
+
+                            val anotherRef = FirebaseDatabase.getInstance().getReference("booked_to/$currentUserUid/$orderUid")
+                            anotherRef.removeValue().addOnSuccessListener {
+                                Log.d("CancelOrder", "Assist order removed from booked_to/$currentUserUid/$orderUid/$currentUserUid")
+                            }.addOnFailureListener { e ->
+                                Log.e("CancelOrder", "Failed to remove assist order from booked_to/$currentUserUid/$orderUid/$currentUserUid", e)
+                            }
+
+                            Toast.makeText(v.context, "Assist order cancelled.", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Log.d("CancelOrder", "assistUser or assistConfirmation is null. bookedBy: $bookedByRef, assistConfirmation: $assistConfirmation")
                     }
 
-                    val anotherRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$orderUid")
-                    anotherRef.removeValue().addOnSuccessListener {
-                        Log.d("CancelOrder", "Order removed from booked_to/$bookedTo/$orderUid")
-                    }.addOnFailureListener { e ->
-                        Log.e("CancelOrder", "Failed to remove order from booked_to/$bookedTo/$orderUid", e)
+                    // Request Cancel Requesting
+                    if (currentUserUid == order.bookedBy) {
+                        val ref = FirebaseDatabase.getInstance().getReference("booked_by")
+                        ref.removeValue().addOnSuccessListener {
+                            Log.d("Cancel All Order", "Order removed from booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}")
+                        }.addOnFailureListener { e ->
+                            Log.e("Cancel All Order", "Failed to remove order from booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}", e)
+                        }
+
+                        val anotherRef = FirebaseDatabase.getInstance().getReference("booked_to")
+                        anotherRef.removeValue().addOnSuccessListener {
+                            Log.d("Cancel All Order", "Order removed from booked_to/$bookedTo/$orderUid")
+                        }.addOnFailureListener { e ->
+                            Log.e("Cancel All Order", "Failed to remove order from booked_to/$bookedTo/$orderUid", e)
+                        }
+
+                        val anotherAnotherRef = FirebaseDatabase.getInstance().getReference("service_requests/$orderUid2")
+                        anotherAnotherRef.removeValue().addOnSuccessListener {
+                            Log.d("Cancel All Order", "Order removed from service_requests/$orderUid2")
+                        }.addOnFailureListener { e ->
+                            Log.e("Cancel All Order", "Failed to remove order from service_requests/$orderUid2", e)
+                        }
+
+                        Toast.makeText(v.context, "Order cancelled.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.d("Cancel All Order", "bookedBy, bookedTo, or orderUid is null. bookedBy: $bookedBy, bookedTo: $bookedTo, orderUid: $orderUid")
                     }
 
-                    val anotherAnotherRef = FirebaseDatabase.getInstance().getReference("service_requests/$orderUid2")
-                    anotherAnotherRef.removeValue().addOnSuccessListener {
-                        Log.d("CancelOrder", "Order removed from service_requests/$orderUid2")
-                    }.addOnFailureListener { e ->
-                        Log.e("CancelOrder", "Failed to remove order from service_requests/$orderUid2", e)
-                    }
-
-                    Toast.makeText(v.context, "Order cancelled.", Toast.LENGTH_SHORT).show()
-                } else {
-                    Log.d("CancelOrder", "bookedBy, bookedTo, or orderUid is null. bookedBy: $bookedBy, bookedTo: $bookedTo, orderUid: $orderUid")
                 }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
