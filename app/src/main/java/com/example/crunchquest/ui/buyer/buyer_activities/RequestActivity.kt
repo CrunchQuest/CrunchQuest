@@ -24,9 +24,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
-import androidx.core.view.isGone
 import com.example.crunchquest.R
 import com.example.crunchquest.R.array
 import com.example.crunchquest.R.id
@@ -448,7 +446,6 @@ class RequestActivity : AppCompatActivity() {
                     modeOfPayment = modeEditText.text.toString(),
                     name = currentUserName,
                     paymentUrl = "",
-//                    createdBy = "${user?.firstName} ${user?.lastName}",
                     bookedTo = "",
                     bookedBy = currentUserUid,
                     assistConfirmation = "FALSE"
@@ -457,39 +454,50 @@ class RequestActivity : AppCompatActivity() {
                 // Check if service request was successfully created
                 if (serviceRequestHandler.createServiceRequest(serviceRequest)) {
                     // Save the service request to the database
+                    val selectedPaymentMode = modeEditText.text.toString()
+                    if (selectedPaymentMode.isEmpty()) {
+                        modeEditText.error = "Mode of payment is required."
+                        modeEditText.requestFocus()
+                        return
+                    }
+
                     bookedByRef.child(serviceRequest.uid!!)
                         .child(currentUserUid)
                         .setValue(serviceRequest)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 // Service request saved successfully, now get the payment link
-                                val apiService = ApiConfig.retrofitPayment.create(ApiService::class.java)
-                                val orderUserCombo = OrderUserCombo(serviceRequest, user!!)
-                                val call = apiService.getPaymentLink(orderUserCombo)
-                                call.enqueue(object : Callback<PaymentResponse> {
-                                    override fun onResponse(call: Call<PaymentResponse>, response: Response<PaymentResponse>) {
-                                        if (response.isSuccessful) {
-                                            val paymentResponse = response.body()
-                                            if (paymentResponse != null) {
-                                                val checkoutUrl = paymentResponse.paymentUrl
-                                                // Open PaymentActivity with the checkout URL
-                                                val intent = Intent(this@RequestActivity, PaymentActivity::class.java)
-                                                intent.putExtra("checkoutUrl", checkoutUrl)
-                                                Log.d("RequestActivity", "Checkout URL: $checkoutUrl")
-                                                startActivity(intent)
-                                                Log.d("RequestActivity", "Starting PaymentActivity with URL: $checkoutUrl")
+                                if(selectedPaymentMode == "Mobile Payments") {
+                                    val apiService = ApiConfig.retrofitPayment.create(ApiService::class.java)
+                                    val orderUserCombo = OrderUserCombo(serviceRequest, user!!)
+                                    val call = apiService.getPaymentLink(orderUserCombo)
+                                    call.enqueue(object : Callback<PaymentResponse> {
+                                        override fun onResponse(call: Call<PaymentResponse>, response: Response<PaymentResponse>) {
+                                            if (response.isSuccessful) {
+                                                val paymentResponse = response.body()
+                                                if (paymentResponse != null) {
+                                                    val checkoutUrl = paymentResponse.paymentUrl
+                                                    // Open PaymentActivity with the checkout URL
+                                                    val intent = Intent(this@RequestActivity, PaymentActivity::class.java)
+                                                    intent.putExtra("checkoutUrl", checkoutUrl)
+                                                    Log.d("RequestActivity", "Checkout URL: $checkoutUrl")
+                                                    startActivity(intent)
+                                                    Log.d("RequestActivity", "Starting PaymentActivity with URL: $checkoutUrl")
+                                                } else {
+                                                    Toast.makeText(applicationContext, "Failed to get payment link.", Toast.LENGTH_SHORT).show()
+                                                }
                                             } else {
                                                 Toast.makeText(applicationContext, "Failed to get payment link.", Toast.LENGTH_SHORT).show()
                                             }
-                                        } else {
-                                            Toast.makeText(applicationContext, "Failed to get payment link.", Toast.LENGTH_SHORT).show()
                                         }
-                                    }
 
-                                    override fun onFailure(call: Call<PaymentResponse>, t: Throwable) {
-                                        Toast.makeText(applicationContext, "Failed to get payment link: ${t.message}", Toast.LENGTH_SHORT).show()
-                                    }
-                                })
+                                        override fun onFailure(call: Call<PaymentResponse>, t: Throwable) {
+                                            Toast.makeText(applicationContext, "Failed to get payment link: ${t.message}", Toast.LENGTH_SHORT).show()
+                                        }
+                                    })
+                                } else if (selectedPaymentMode == "Cash" ) {
+                                    Toast.makeText(applicationContext, "Service request created successfully.", Toast.LENGTH_SHORT).show()
+                                }
                             } else {
                                 Log.d("RequestActivity", "Failed to save service request: ${task.exception?.message}")
                                 Toast.makeText(applicationContext, "Failed to post request.", Toast.LENGTH_SHORT).show()

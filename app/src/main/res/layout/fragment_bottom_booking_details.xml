@@ -134,7 +134,7 @@
           android:layout_marginTop="16dp"
           app:layout_constraintHorizontal_bias="0.6"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/maps_orderDetails" />
+          app:layout_constraintTop_toBottomOf="@+id/mode_orderDetails" />
 
       <TextView
           android:id="@+id/number_orderDetails"
@@ -165,21 +165,13 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/number_orderDetails" />
 
-      <fragment
-          android:id="@+id/maps_orderDetails"
-          android:name="com.google.android.gms.maps.SupportMapFragment"
-          android:layout_width="match_parent"
-          android:layout_height="200dp"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/mode_orderDetails" />
 
       <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/anotherButton_orderDetails"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_marginTop="8dp"
-   android:fontFamily="@font/montserrat_medium"
+          android:fontFamily="@font/montserrat_medium"
           android:background="@drawable/rounded_buttons"
           android:text="Button"
           android:textColor="#FFFFFF"

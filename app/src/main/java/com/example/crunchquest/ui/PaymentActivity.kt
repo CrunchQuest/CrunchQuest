@@ -1,5 +1,6 @@
 package com.example.crunchquest.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -8,7 +9,7 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.crunchquest.R
-import com.example.crunchquest.ui.buyer.buyer_fragments.HomeFragment
+import com.example.crunchquest.ui.buyer.BuyerActivity
 
 class PaymentActivity : AppCompatActivity() {
     private lateinit var webView: WebView
@@ -55,8 +56,9 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun navigateToHomeFragment() {
         // Replace the current fragment with HomeFragment
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_home, HomeFragment())
-            .commit()
+        // Create an Intent to navigate back to BuyerActivity
+        val intent = Intent(this, BuyerActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

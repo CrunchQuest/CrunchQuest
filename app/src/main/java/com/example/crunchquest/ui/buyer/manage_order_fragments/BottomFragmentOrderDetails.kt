@@ -20,12 +20,6 @@ import com.example.crunchquest.data.model.User
 import com.example.crunchquest.ui.buyer.buyer_activities.OrderDetailsActivity
 import com.example.crunchquest.ui.dialogs.ReviewDialog
 import com.example.crunchquest.ui.messages.ChatLogActivity
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -38,7 +32,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 
-class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment(), OnMapReadyCallback {
+class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment() {
     private lateinit var v: View
     private var orderClicked = orderPassed
     private lateinit var date: TextView
@@ -144,11 +138,6 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
                 fetchUserAndGoToChatLogActivity()
             }
         }
-
-
-        // Initialize the map fragment
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(this)
 
         return v
     }
@@ -266,28 +255,6 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
                     if (order != null && order.buyerConfirmation == "CONFIRMED" && order.sellerConfirmation == "CONFIRMED") {
                         ref.child("/status").setValue("COMPLETED")
 
-                        // Initialize the map fragment
-                        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-                        mapFragment?.getMapAsync { googleMap ->
-                            // Configure your map here
-                            googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-
-                            // Get latitude and longitude from the fetched Order object
-                            val latitude = order.latitude ?: 0.0
-                            val longitude = order.longitude ?: 0.0
-
-                            // Check if both latitude and longitude are not 0.0
-                            if (latitude != 0.0 || longitude != 0.0) {
-                                // Create a LatLng object using the latitude and longitude
-                                val userLocation = LatLng(latitude, longitude)
-
-                                // Add a marker at the user's location and move the camera
-                                googleMap.addMarker(MarkerOptions().position(userLocation).title("Marker in User Location"))
-
-                                val zoomLevel = 16.0f
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, zoomLevel))
-                            }
-                        }
                     }
                 }
 
@@ -467,44 +434,6 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         }
 
         return returnValue
-    }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        // Configure your map here
-        googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-
-        // Fetch the order data and set the map location
-        fetchOrderDataAndSetMapLocation(googleMap)
-    }
-
-    private fun fetchOrderDataAndSetMapLocation(googleMap: GoogleMap) {
-        val ref = FirebaseDatabase.getInstance().getReference("/orders/${order.service_booked_uid}")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val fetchedOrder = snapshot.getValue(Order::class.java)
-                if (fetchedOrder != null) {
-                    // Get latitude and longitude from the fetched Order object
-                    val latitude = fetchedOrder.latitude ?: 0.0
-                    val longitude = fetchedOrder.longitude ?: 0.0
-
-                    // Check if both latitude and longitude are not 0.0
-                    if (latitude != 0.0 || longitude != 0.0) {
-                        // Create a LatLng object using the latitude and longitude
-                        val userLocation = LatLng(latitude, longitude)
-
-                        // Add a marker at the user's location and move the camera
-                        googleMap.addMarker(MarkerOptions().position(userLocation).title("Marker in User Location"))
-
-                        val zoomLevel = 16.0f // this is up to you
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, zoomLevel))
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error here
-            }
-        })
     }
 
 

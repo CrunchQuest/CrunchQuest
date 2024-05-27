@@ -171,20 +171,6 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
 //        userRating = findViewById(R.id.tvRatingService)
 //        totalJobs = findViewById(R.id.tvJobsAccomplishedService)
 
-
-        //Temporary Comments
-//        dateTextView.text = "${dateTextView.text} ${order.date}"
-//        timePicker.text = "${timePicker.text} ${order.time}"
-//        priceTextView.text = "${priceTextView.text} ${order.price.toString()}"
-//        serviceCategoryTextView.text = "${serviceCategoryTextView.text} ${order.category}"
-//        serviceTitleTextView.text = "${serviceTitleTextView.text} ${order.title}"
-//        serviceDescriptionTextView.text = "${serviceDescriptionTextView.text} ${order.description}"
-//        dateAndTimeTextView.text = "Date and Time Booked: ${convertLongToDate(order.dateOrdered)}"
-//        addressTextView.text = "${addressTextView.text} ${order.address}"
-//        modeOfPayment.text = "Mode of Payment: ${order.modeOfPayment}"
-
-
-
 //        userReviewButton.setOnClickListener {
 //            val intent = Intent(this, DisplayReviewsActivity::class.java)
 //            intent.putExtra("userUid", userUid)

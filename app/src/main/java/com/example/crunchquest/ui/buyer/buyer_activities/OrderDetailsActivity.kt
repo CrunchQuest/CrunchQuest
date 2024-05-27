@@ -13,12 +13,7 @@ import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Order
 import com.example.crunchquest.data.model.User
 import com.example.crunchquest.ui.messages.ChatLogActivity
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,7 +23,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class OrderDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
+class OrderDetailsActivity : AppCompatActivity() {
     private lateinit var date: TextView
     private lateinit var time: TextView
     private lateinit var price: TextView
@@ -36,7 +31,6 @@ class OrderDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var title: TextView
     private lateinit var description: TextView
     private lateinit var dateOrdered: TextView
-    private lateinit var contactNum: TextView
     private lateinit var address: TextView
     private lateinit var mode: TextView
     private lateinit var googleMap: GoogleMap
@@ -46,7 +40,7 @@ class OrderDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var order: Order
 
     companion object {
-        const val CONFIRM_TEXT = "CONFIRM BOOKING"
+        const val CONFIRM_TEXT = "CONFIRM ORDER"
         const val ADD_REVIEW_TEXT = "ADD A REVIEW"
     }
 
@@ -63,7 +57,6 @@ class OrderDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
         title = findViewById(R.id.title_orderDetails)
         description = findViewById(R.id.description_orderDetails)
         dateOrdered = findViewById(R.id.dateAndTimeOrdered_orderDetails)
-        contactNum = findViewById(R.id.number_orderDetails)
         address = findViewById(R.id.address_fragmentBottomBookingDetails)
         messageButton = findViewById(R.id.button_orderDetails)
         anotherButton = findViewById(R.id.anotherButton_orderDetails)
@@ -83,13 +76,6 @@ class OrderDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
         dateOrdered.text = convertLongToDate(order.dateOrdered)
         address.text = order.address
         mode.text = "Mode of Payment: ${order.modeOfPayment}"
-
-        // Fetch contact number
-        order.service_provider_uid?.let { fetchContactNumber(it) }
-
-        // Initialize the map fragment
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
-        mapFragment?.getMapAsync(this)
 
         anotherButton.setOnClickListener {
             if (anotherButton.text == CONFIRM_TEXT) {
@@ -117,43 +103,10 @@ class OrderDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
         checkStatus()
     }
 
-    private fun fetchContactNumber(serviceProviderUid: String) {
-        val ref = FirebaseDatabase.getInstance().getReference("users/$serviceProviderUid")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val serviceProvider = snapshot.getValue(User::class.java)
-                contactNum.text = serviceProvider?.mobileNumber ?: "N/A"
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                contactNum.text = "N/A"
-            }
-        })
-    }
-
     private fun convertLongToDate(long: Long): String {
         val resultDate = Date(long)
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         return format.format(resultDate)
-    }
-
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-        // Configure your map here
-
-        // Fetch the order data and set the map location
-        setMapLocation()
-    }
-
-    private fun setMapLocation() {
-        val latitude = order.latitude ?: 0.0
-        val longitude = order.longitude ?: 0.0
-
-        if (latitude != 0.0 || longitude != 0.0) {
-            val userLocation = LatLng(latitude, longitude)
-            googleMap.addMarker(MarkerOptions().position(userLocation).title("Marker in User Location"))
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16.0f))
-        }
     }
 
     private fun checkStatus() {

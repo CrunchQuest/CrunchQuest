@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".ui.buyer.buyer_activities.OrderDetailsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -112,25 +113,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_buttons"
-            android:text="Message Service Provider"
+            android:text="Message"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
             app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/maps_orderDetails" />
-
-        <TextView
-            android:id="@+id/number_orderDetails"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_contact_number"
-            android:gravity="start|left"
-            android:text="Contact Number: "
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dateAndTimeOrdered_orderDetails" />
+            app:layout_constraintTop_toBottomOf="@+id/mode_orderDetails" />
 
         <TextView
             android:id="@+id/mode_orderDetails"
@@ -143,16 +132,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/number_orderDetails" />
-
-        <fragment
-            android:id="@+id/maps_orderDetails"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mode_orderDetails" />
+            app:layout_constraintTop_toBottomOf="@+id/dateAndTimeOrdered_orderDetails" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/anotherButton_orderDetails"
