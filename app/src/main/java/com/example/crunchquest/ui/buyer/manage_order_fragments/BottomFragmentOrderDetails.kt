@@ -56,7 +56,6 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
     private lateinit var cancelButton: Button
     val order = orderPassed
 
-
     override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
 
     companion object {
@@ -73,21 +72,18 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         bottomSheetInternal?.let {
             val layoutParams = it.layoutParams
             if (layoutParams is CoordinatorLayout.LayoutParams) {
-                val behavior = layoutParams.behavior as BottomSheetBehavior?
-                behavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                val behavior = layoutParams.behavior as BottomSheetBehavior<*>?
+                behavior?.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                     override fun onStateChanged(bottomSheet: View, newState: Int) {
                         if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                            // Start your new activity here
                             val intent = Intent(context, OrderDetailsActivity::class.java)
-                            intent.putExtra("order_id", order.service_booked_uid) // Pass the order ID to the new activity
+                            intent.putExtra("order", order)
                             startActivity(intent)
-                            dismiss() // Close the bottom sheet
+                            dismiss()
                         }
                     }
 
-                    override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                        // Handle the slide offset if needed
-                    }
+                    override fun onSlide(bottomSheet: View, slideOffset: Float) {}
                 })
             }
         }
@@ -110,7 +106,6 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         anotherButton = v.findViewById(R.id.anotherButton_orderDetails)
         address = v.findViewById(R.id.address_fragmentBottomBookingDetails)
         cancelButton= v.findViewById(R.id.cancelButton_orderDetails)
-
 
 
         date.text = "${order.date}"
