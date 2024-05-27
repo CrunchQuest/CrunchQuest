@@ -450,7 +450,9 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
 
             // Add a marker at the user's location and move the camera
             mMap.addMarker(MarkerOptions().position(userLocation).title("Marker in User Location"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation))
+
+            val zoomLevel = 16.0f
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, zoomLevel))
         }
     }
 }

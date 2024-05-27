@@ -22,13 +22,16 @@ class Order(var uid: String? = null,
             var userUid: String? = null,
             var buyerConfirmation: String = "",
             var sellerConfirmation: String = "",
+            var latitude: Double? = null,
+            var longitude: Double? = null,
             var reviewed: Boolean = false,
             var modeOfPayment: String? = "",
             var bookedBy: String? = "",
             var bookedTo: String? = "",
             var buyerReview: String? = "",
             var assistUser: String? = "",
-            var assistConfirmation: String? = "FALSE"
+            var assistConfirmation: String? = "FALSE",
+            var mobileNumber: String? = ""
 ) : Parcelable {
     override fun toString(): String {
         return "Order Title: $title " +

@@ -19,7 +19,7 @@ interface ApiService {
     @GET("/service_requests")
     suspend fun getServiceRequests(@Query("user_id") userId: String): List<ServiceRequestResponse>
 
-    @POST("/payment/generate_payment_url")
+    @POST("/api/getPaymentLink")
     @Headers("Content-Type: application/json")
     fun getPaymentLink(@Body orderUserCombo: OrderUserCombo): Call<PaymentResponse>
 }
