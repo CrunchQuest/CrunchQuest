@@ -1,7 +1,9 @@
 package com.example.crunchquest.ui.components.groupie_views
 
+import android.content.Context
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.User
@@ -16,7 +18,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 
-class ServiceRequestItem(val serviceRequest: ServiceRequest) : Item<ViewHolder>() {
+class ServiceRequestItem(val serviceRequest: ServiceRequest, val distance: Double, val c: Context) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.title_serviceRowRequest).text = serviceRequest.title!!.toUpperCase()
         viewHolder.itemView.findViewById<TextView>(R.id.descriptionTextView_serviceRowRequest).text = serviceRequest.description
@@ -58,7 +60,33 @@ class ServiceRequestItem(val serviceRequest: ServiceRequest) : Item<ViewHolder>(
             }
         })
 
+// Assume you have a reference to your TextView
+        val locationTextView = viewHolder.itemView.findViewById<TextView>(R.id.location_tv_serviceRowRequest)
+
+// Assuming 'distance' is the distance value you want to check
+// Change these values according to your distance threshold
+        val nearDistanceThreshold = 1000 // Adjust this threshold as needed
+        val mediumDistanceThreshold = 5000 // Adjust this threshold as needed
+
+// Assuming 'distance' is the distance value you want to check
+        if (distance < nearDistanceThreshold) {
+            // Change text color and drawable tint to green for "Very Near"
+            locationTextView.setTextColor(ContextCompat.getColor(c, R.color.cool_green))
+//            locationTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_location_green, 0, 0, 0)
+            locationTextView.text = "Very Near"
+        } else if (distance < mediumDistanceThreshold) {
+            // Change text color and drawable tint to yellow for "Near"
+            locationTextView.setTextColor(ContextCompat.getColor(c, R.color.cool_orange))
+//            locationTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_location_yellow, 0, 0, 0)
+            locationTextView.text = "Near"
+        } else {
+            // Change text color and drawable tint to red for "Far"
+            locationTextView.setTextColor(ContextCompat.getColor(c, R.color.cool_red))
+//            locationTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_location_red, 0, 0, 0)
+            locationTextView.text = "Far"
+        }
     }
+
 
     override fun getLayout(): Int {
         return R.layout.row_service_requests

@@ -1,5 +1,7 @@
 package com.example.crunchquest.data.network
 
+import com.example.crunchquest.data.model.PriceRequest
+import com.example.crunchquest.data.model.PriceResponse
 import com.example.crunchquest.data.model.payment.OrderUserCombo
 import com.example.crunchquest.data.network.response.PaymentResponse
 import com.example.crunchquest.data.network.response.ServiceRequestResponse
@@ -22,4 +24,11 @@ interface ApiService {
     @POST("/payment/generate_payment_url")
     @Headers("Content-Type: application/json")
     fun getPaymentLink(@Body orderUserCombo: OrderUserCombo): Call<PaymentResponse>
+
+    @POST("price/predict")
+    fun getPredictedPrice(@Body request: PriceRequest): Call<PriceResponse>
+
+    @POST("retrain")
+    fun postRetrain(): Call<Void>
+
 }

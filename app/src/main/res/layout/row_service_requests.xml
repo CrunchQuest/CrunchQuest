@@ -20,6 +20,7 @@
         android:id="@+id/imageView_serviceRowRequest"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
         android:scaleType="centerCrop"
         android:visibility="visible"
         app:civ_circle_background_color="@color/white"
@@ -43,7 +44,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.codesgood.views.JustifiedTextView
+    <TextView
         android:id="@+id/descriptionTextView_serviceRowRequest"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -74,11 +75,40 @@
         android:id="@+id/categoryImageView_serviceRowRequests"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:scaleType="centerInside"
         android:src="@drawable/services_computer"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/priceTextView_serviceRowRequest" />
+
+    <TextView
+        android:id="@+id/location_tv_serviceRowRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginTop="16dp"
+        android:drawableTint="@color/cool_green"
+        android:drawableStart="@drawable/ic_location"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="Very Near"
+        android:textColor="@color/cool_black"
+        app:layout_constraintStart_toStartOf="@+id/priceTextView_serviceRowRequest"
+        app:layout_constraintTop_toBottomOf="@+id/priceTextView_serviceRowRequest" />
+
+    <TextView
+        android:id="@+id/similarity_tv_serviceRowRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginStart="36dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textColor="@color/cool_black"
+        android:text="Compatible"
+        app:layout_constraintEnd_toStartOf="@+id/categoryImageView_serviceRowRequests"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/location_tv_serviceRowRequest" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -1,9 +1,12 @@
 package com.example.crunchquest.data.network.response
 
+import com.example.crunchquest.data.model.ServiceRequest
+
 data class ServiceRequestResponse(
     val uid: String,
-    val request_data: RequestData,
-    val similarity_score: Int
+    val request_data: ServiceRequest,
+    val similarity_score: Int,
+    val distance: Double
 )
 
 data class RequestData(

@@ -14,12 +14,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.crunchquest.R
+import com.example.crunchquest.data.model.PriceRequest
+import com.example.crunchquest.data.model.PriceResponse
 import com.example.crunchquest.data.model.Service
+import com.example.crunchquest.data.network.ApiConfig
+import com.example.crunchquest.data.network.ApiService
 import com.example.crunchquest.ui.serviceprovider.seller_fragments.SellerServicesFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import retrofit2.Call
 import java.util.*
 
 class CreateServicesActivity : AppCompatActivity() {
@@ -76,10 +81,38 @@ class CreateServicesActivity : AppCompatActivity() {
                     spinner.adapter = adapter
                 }
         val arrayList = resources.getStringArray(R.array.services_category)
+        Log.d("Categories", arrayList.toString())
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(arg0: AdapterView<*>?, arg1: View,
                                         arg2: Int, arg3: Long) {
-                categoryEditText.setText(arrayList[arg2])
+                val selectedCategory = arrayList[arg2]
+                categoryEditText.setText(selectedCategory)
+                Log.d("Selected Category", selectedCategory)
+
+                // Make the API request
+                val request = PriceRequest(category = selectedCategory)
+
+                val apiService = ApiConfig.retrofitPayment.create(ApiService::class.java)
+                apiService.getPredictedPrice(request).enqueue(object : retrofit2.Callback<PriceResponse> {
+                    override fun onResponse(call: Call<PriceResponse>, response: retrofit2.Response<PriceResponse>) {
+                        if (response.isSuccessful) {
+                            val predictedPrice = response.body()?.predicted_price
+                            Log.d("API_RESPONSE", "Predicted Price: $predictedPrice")
+                            if (predictedPrice != null) {
+                                // Update the UI with the predicted price
+                                priceEditText.setHint(predictedPrice)
+                            }
+                        } else {
+                            // Handle the error
+                            Log.e("API_ERROR", "Error: ${response.errorBody()?.string()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<PriceResponse>, t: Throwable) {
+                        // Handle the failure
+                        Log.e("API_ERROR", "Failure: ${t.message}")
+                    }
+                })
             }
 
             override fun onNothingSelected(arg0: AdapterView<*>?) {

@@ -249,9 +249,9 @@ class HomeFragment : Fragment() {
         serviceRequestRecyclerView.adapter = adapterRequest
 
         // TO USE THE API vvv
-//        fetchUserPreferencesAndServiceRequests()
+        fetchServiceRequestsApi()
 
-        fetchServiceRequests()
+//        fetchServiceRequests()
         return v
     }
 
@@ -377,46 +377,46 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun fetchServiceRequests() {
-        serviceRequestHandler.serviceRequestRef.addListenerForSingleValueEvent(object :
-            ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot) {
-                adapterRequest.clear()
-                p0.children.forEach {
-                    val serviceRequest = it.getValue(ServiceRequest::class.java)
-                    if (serviceRequest!!.userUid != currentUserUid) {
-                        adapterRequest.add(ServiceRequestItem(serviceRequest))
-                    }
-                }
-                serviceRequestRecyclerView.adapter = adapterRequest
+//    private fun fetchServiceRequests() {
+//        serviceRequestHandler.serviceRequestRef.addListenerForSingleValueEvent(object :
+//            ValueEventListener {
+//            override fun onDataChange(p0: DataSnapshot) {
+//                adapterRequest.clear()
+//                p0.children.forEach {
+//                    val serviceRequest = it.getValue(ServiceRequest::class.java)
+//                    if (serviceRequest!!.userUid != currentUserUid) {
+//                        adapterRequest.add(ServiceRequestItem(serviceRequest))
+//                    }
+//                }
+//                serviceRequestRecyclerView.adapter = adapterRequest
+//
+//                // Modify the ServiceRequestItem click listener
+//                adapterRequest.setOnItemClickListener { item, view ->
+//                    val serviceRequestItem = item as ServiceRequestItem
+//                    clickedServiceRequestItem = serviceRequestItem
+//                    val intent = Intent(view.context, DisplaySpecificRequestActivity::class.java)
+//                    intent.putExtra("ServiceRequest", serviceRequestItem.serviceRequest)
+//                    startActivityForResult(intent, REQUEST_CODE)
+//
+//                    // Add a log message
+//                    Log.d("ServiceRequest", "Clicked on service request: ${serviceRequestItem.serviceRequest}")
+//
+//
+//                }
 
-                // Modify the ServiceRequestItem click listener
-                adapterRequest.setOnItemClickListener { item, view ->
-                    val serviceRequestItem = item as ServiceRequestItem
-                    clickedServiceRequestItem = serviceRequestItem
-                    val intent = Intent(view.context, DisplaySpecificRequestActivity::class.java)
-                    intent.putExtra("ServiceRequest", serviceRequestItem.serviceRequest)
-                    startActivityForResult(intent, REQUEST_CODE)
-
-                    // Add a log message
-                    Log.d("ServiceRequest", "Clicked on service request: ${serviceRequestItem.serviceRequest}")
-
-
-                }
-
-                // Add a method to add an OrderItem to the adapter
-                fun addOrderItem(orderItem: OrderItem) {
-                    adapterRequest.add(orderItem)
-                }
-
-//                hideOrShowViews()
-            }
-
-            override fun onCancelled(p0: DatabaseError) {
-
-            }
-        })
-    }
+//                // Add a method to add an OrderItem to the adapter
+//                fun addOrderItem(orderItem: OrderItem) {
+//                    adapterRequest.add(orderItem)
+//                }
+//
+////                hideOrShowViews()
+//            }
+//
+//            override fun onCancelled(p0: DatabaseError) {
+//
+//            }
+//        })
+////    }
 
 
     private fun showDialogFun() {
@@ -514,15 +514,16 @@ class HomeFragment : Fragment() {
     }
 
     // REQUEST FROM API
-    private fun fetchUserPreferencesAndServiceRequests() {
+    private fun fetchServiceRequestsApi() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
         if (userId != null) {
             lifecycleScope.launch {
                 try {
-                    // Fetch ranked service requests
+                    // Fetch ranked service requests with distances
                     val serviceRequestsResponse = apiService.getServiceRequests(userId)
                     val serviceRequests = serviceRequestsResponse.map { convertToServiceRequest(it) }
-                    updateRecyclerView(serviceRequests)
+                    val distances = serviceRequestsResponse.map { it.distance } // Assuming 'distance' is a property in ServiceRequestResponse
+                    updateRecyclerView(serviceRequests, distances)
                 } catch (e: HttpException) {
                     Log.e("HomeFragment", "HTTP error: ${e.message()}")
                 } catch (e: Exception) {
@@ -534,16 +535,19 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun updateRecyclerView(serviceRequests: List<ServiceRequest>) {
+
+    private fun updateRecyclerView(serviceRequests: List<ServiceRequest>, distances: List<Double>) {
         adapterRequest.clear()
-        serviceRequests.forEach {
-            adapterRequest.add(ServiceRequestItem(it))
-            Log.d("ServiceRequest", "ServiceRequest from fetchServiceRequest: $it")
+        serviceRequests.forEachIndexed { index, serviceRequest ->
+            val distance = distances.getOrNull(index) ?: Double.MAX_VALUE
+            adapterRequest.add(ServiceRequestItem(serviceRequest, distance, requireContext()))
+            Log.d("ServiceRequest", "ServiceRequest from fetchServiceRequest: $serviceRequest")
         }
         serviceRequestRecyclerView.adapter = adapterRequest
 
         // Modify the ServiceRequestItem click listener
         adapterRequest.setOnItemClickListener { item, view ->
+            // Handle item click as before
             val serviceRequestItem = item as ServiceRequestItem
             clickedServiceRequestItem = serviceRequestItem
             val intent = Intent(view.context, DisplaySpecificRequestActivity::class.java)
@@ -559,6 +563,7 @@ class HomeFragment : Fragment() {
             adapterRequest.add(orderItem)
         }
     }
+
 }
 
 class CustomItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {

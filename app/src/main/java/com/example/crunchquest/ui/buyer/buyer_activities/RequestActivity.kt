@@ -29,6 +29,8 @@ import com.example.crunchquest.R
 import com.example.crunchquest.R.array
 import com.example.crunchquest.R.id
 import com.example.crunchquest.R.layout
+import com.example.crunchquest.data.model.PriceRequest
+import com.example.crunchquest.data.model.PriceResponse
 import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.User
 import com.example.crunchquest.data.model.payment.OrderUserCombo
@@ -167,13 +169,43 @@ class RequestActivity : AppCompatActivity() {
             }
         val arrayList = resources.getStringArray(R.array.services_category)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(arg0: AdapterView<*>?, arg1: View, arg2: Int, arg3: Long) {
-                categoryEditText.setText(arrayList[arg2])
-                selectedCategoryIndex = arg2 // Store the selected index
+            override fun onItemSelected(arg0: AdapterView<*>?, arg1: View,
+                                        arg2: Int, arg3: Long) {
+                val selectedCategory = arrayList[arg2]
+                categoryEditText.setText(selectedCategory)
+                Log.d("Selected Category", selectedCategory)
+
+                // Make the API request
+                val request = PriceRequest(category = selectedCategory)
+
+                val apiService = ApiConfig.retrofit.create(ApiService::class.java)
+                apiService.getPredictedPrice(request).enqueue(object : Callback<PriceResponse> {
+                    override fun onResponse(call: Call<PriceResponse>, response: Response<PriceResponse>) {
+                        Log.d("API_RESPONSE", "Response: $response")
+                        if (response.isSuccessful) {
+                            val predictedPrice = response.body()?.predicted_price
+                            Log.d("API_RESPONSE", "Predicted Price: $predictedPrice")
+                            if (predictedPrice != null) {
+                                // Update the UI with the predicted price
+                                priceEditText.hint = predictedPrice.toString()
+                            }
+                        } else {
+                            // Handle the error
+                            Log.e("API_ERROR", "Error: ${response.errorBody()?.string()}")
+                            priceEditText.hint = 0.toString()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<PriceResponse>, t: Throwable) {
+                        // Handle the failure
+                        Log.e("API_ERROR", "Failure: ${t.message}")
+                        priceEditText.hint = 0.toString()
+                    }
+                })
             }
 
             override fun onNothingSelected(arg0: AdapterView<*>?) {
-                // TODO Auto-generated method stub
+
             }
         }
 
@@ -508,6 +540,24 @@ class RequestActivity : AppCompatActivity() {
                 }
 
                 Log.d("RequestActivity", "Service request data: $serviceRequest")
+                val apiService = ApiConfig.retrofit.create(ApiService::class.java)
+                apiService.postRetrain().enqueue(object : retrofit2.Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
+                        if (response.isSuccessful) {
+                            // Handle the successful response
+                            Log.d("API_RESPONSE", "Retrain triggered successfully")
+                        } else {
+                            // Handle the error response
+                            Log.e("API_ERROR", "Error: ${response.errorBody()?.string()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        // Handle the failure
+                        Log.e("API_ERROR", "Failure: ${t.message}")
+                    }
+                })
+
                 finish()
             }
 

@@ -73,7 +73,7 @@ class BuyersRequestActivity : AppCompatActivity() {
                 p0.children.forEach {
                     val serviceRequest = it.getValue(ServiceRequest::class.java)
                     if (serviceRequest!!.userUid != currentUserUid) {
-                        adapter.add(ServiceRequestItem(serviceRequest))
+//                        adapter.add(ServiceRequestItem(serviceRequest))
                     }
                 }
                 serviceRequestRecyclerView.adapter = adapter
