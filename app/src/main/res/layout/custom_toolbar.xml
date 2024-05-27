@@ -15,22 +15,42 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/searchBtn"
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--            android:id="@+id/searchBtn"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="42dp"-->
+<!--            android:layout_marginStart="2dp"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@drawable/rounded_button"-->
+<!--            android:drawableLeft="@drawable/ic_black_search"-->
+<!--            android:gravity="center|fill"-->
+<!--            android:paddingLeft="10dp"-->
+<!--            android:text="What are you looking for?"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="@color/dark_grey"-->
+<!--            android:textSize="14sp" />-->
+        <ImageView
             android:layout_width="0dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="2dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="2"
+            app:srcCompat="@drawable/logo_text" />
+
+        <ImageView
+            android:id="@+id/message_iv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_button"
-            android:drawableLeft="@drawable/ic_black_search"
-            android:gravity="center|fill"
-            android:paddingLeft="10dp"
-            android:text="What are you looking for?"
-            android:textAllCaps="false"
-            android:textColor="@color/dark_grey"
-            android:textSize="14sp" />
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="12dp"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/message_ic"
+            />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/circleImageView"
@@ -39,11 +59,15 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="4dp"
+
             android:scaleType="centerCrop"
-            app:civ_border_color="@color/backGroundShadow"
+            android:layout_gravity="center_vertical"
+            app:civ_border_color="@color/main_cq_purple"
             app:civ_border_width="2dp"
             app:civ_circle_background_color="@color/white"
             tools:srcCompat="@tools:sample/avatars" />
+
+
 
     </LinearLayout>
 

@@ -157,9 +157,9 @@ class BuyerActivity : AppCompatActivity() {
                 startActivity(intent)
 
             }
-            R.id.search -> {
-                makeCurrentFragment(searchFragment)
-            }
+//            R.id.search -> {
+//                makeCurrentFragment(searchFragment)
+//            }
             R.id.profileSettings -> {
                 val intent = Intent(this, ProfileSettingsActivity::class.java)
                 intent.putExtra("intent", "buyer")

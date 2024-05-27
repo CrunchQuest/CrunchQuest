@@ -8,12 +8,12 @@
         app:showAsAction="always"
         android:title=""
         />
-    <item
-        android:id="@+id/search"
-        android:title="Search"
-        android:icon="@drawable/ic_black_search"
-        app:showAsAction="always"
-        />
+<!--    <item-->
+<!--        android:id="@+id/search"-->
+<!--        android:title="Search"-->
+<!--        android:icon="@drawable/ic_black_search"-->
+<!--        app:showAsAction="always"-->
+<!--        />-->
 
     <item
         android:id="@+id/message"

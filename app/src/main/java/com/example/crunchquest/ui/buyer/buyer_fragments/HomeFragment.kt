@@ -55,6 +55,7 @@ import com.example.crunchquest.ui.components.groupie_views.ServiceCategoryItem
 import com.example.crunchquest.ui.components.groupie_views.ServiceRequestItem
 import com.example.crunchquest.ui.general.LoginActivity
 import com.example.crunchquest.ui.general.ProfileSettingsActivity
+import com.example.crunchquest.ui.messages.MessagesActivity
 import com.example.crunchquest.utility.handlers.ServiceRequestHandler
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -144,7 +145,7 @@ class HomeFragment : Fragment() {
 
             // Remove unnecessary items
             popupMenu.menu.removeItem(R.id.addService)
-            popupMenu.menu.removeItem(R.id.search)
+//            popupMenu.menu.removeItem(R.id.search)
             popupMenu.menu.removeItem(R.id.message)
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
@@ -165,6 +166,14 @@ class HomeFragment : Fragment() {
             }
             popupMenu.show()
         }
+
+        val messageIv = toolbar.findViewById<ImageView>(R.id.message_iv)
+
+        messageIv.setOnClickListener {
+            val intent = Intent(requireContext(), MessagesActivity::class.java)
+            startActivity(intent)
+        }
+
 
         setupBanner()
 
@@ -188,13 +197,13 @@ class HomeFragment : Fragment() {
         //Map everything here
         setupCategoryRv()
 
-        val btn = v.findViewById<Button>(R.id.searchBtn)
-        //Button onclick listener
-        btn.setOnClickListener {
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.replace(R.id.wrapper, searchFragment)
-            transaction?.commit()
-        }
+//        val btn = v.findViewById<Button>(R.id.searchBtn)
+//        //Button onclick listener
+//        btn.setOnClickListener {
+//            val transaction = activity?.supportFragmentManager?.beginTransaction()
+//            transaction?.replace(R.id.wrapper, searchFragment)
+//            transaction?.commit()
+//        }
 
         // Quest RecycleView
         serviceRequestRecyclerView =

@@ -8,6 +8,7 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import java.util.*
 import com.xwray.groupie.ViewHolder
+import java.text.SimpleDateFormat
 
 class ChatToItem(val text: String, val user: User, val long: Long) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -23,8 +24,9 @@ class ChatToItem(val text: String, val user: User, val long: Long) : Item<ViewHo
     }
 
     fun convertLongToDate(long: Long): String {
-        val resultdate = Date(long)
-        return resultdate.toString()
+        val date = Date(long)
+        val format = SimpleDateFormat("MMM d HH:mm", Locale.getDefault())
+        return format.format(date)
     }
 
 }

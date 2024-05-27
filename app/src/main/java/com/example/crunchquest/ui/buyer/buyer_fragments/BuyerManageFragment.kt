@@ -48,7 +48,7 @@ class BuyerManageFragment : Fragment() {
         val fragManager = myContext!!.supportFragmentManager
         val viewPagerAdapter: ViewPagerAdapter = ViewPagerAdapter(fragManager, 0)
         viewPagerAdapter.addFragment(ordersFragment, "ORDERS")
-        viewPagerAdapter.addFragment(onGoingFragment, "ACCEPTED")
+        viewPagerAdapter.addFragment(onGoingFragment, "ON GOING")
         viewPagerAdapter.addFragment(finishedFragment, "FINISHED")
         viewPager.adapter = viewPagerAdapter
         return v

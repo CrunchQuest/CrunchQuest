@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.CrunchQuest"
+    android:fitsSystemWindows="true"
     tools:context=".ui.messages.ChatLogActivity">
 
     <EditText
@@ -15,8 +17,8 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_edit_text"
         android:ems="10"
-        android:hint="Enter messsage"
-        android:inputType="textMultiLine"
+        android:hint="Write your response..."
+        android:textSize="16sp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,16 +27,18 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_activityChatLog"
-        android:layout_width="100dp"
+        android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_buttons"
-        android:text="send"
+        android:drawableStart="@drawable/small_send"
+        android:paddingStart="15dp"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
+        android:fontFamily="@font/montserrat_medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_activityChatLog"

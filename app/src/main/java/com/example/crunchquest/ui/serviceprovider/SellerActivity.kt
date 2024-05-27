@@ -105,8 +105,10 @@ class SellerActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu_main, menu)
-        menuItem = menu!!.findItem(R.id.search)
-        menuToHide = menu.findItem(R.id.addService)
+//        menuItem = menu!!.findItem(R.id.search)
+        if (menu != null) {
+            menuToHide = menu.findItem(R.id.addService)
+        }
         menuItem.isVisible = false
         menuToHide?.isVisible = false
 

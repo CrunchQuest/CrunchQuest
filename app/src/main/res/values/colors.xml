@@ -123,6 +123,11 @@
     <color name="gray_stroke">#E0E0E0</color>
     <color name="gray_guide">#E2E2E2</color>
 
+    <color name="cq_purple_light">#faecfd</color>
+    <color name="message_background">#F4F6FA</color>
+
+
+
 
 
 </resources>

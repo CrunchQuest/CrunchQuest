@@ -7,7 +7,9 @@ import com.example.crunchquest.data.model.User
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 class ChatFromItem(val text: String, val user: User, val timeStamp: Long) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -25,8 +27,8 @@ class ChatFromItem(val text: String, val user: User, val timeStamp: Long) : Item
     }
 
     fun convertLongToDate(long: Long): String {
-        val resultdate = Date(long)
-        return resultdate.toString()
+        val date = Date(long)
+        val format = SimpleDateFormat("MMM d HH:mm", Locale.getDefault())
+        return format.format(date)
     }
-
 }
