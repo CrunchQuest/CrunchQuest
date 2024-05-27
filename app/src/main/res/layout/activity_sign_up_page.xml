@@ -66,7 +66,7 @@
                     android:id="@+id/etFirstName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/montserrat_medium"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -87,7 +87,7 @@
                     android:id="@+id/etLastName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/montserrat_medium"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -110,7 +110,7 @@
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:fontFamily="@font/montserrat_medium"
                 android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -131,7 +131,7 @@
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:fontFamily="@font/montserrat_medium"
                 android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -152,7 +152,7 @@
                 android:id="@+id/etConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:fontFamily="@font/montserrat_medium"
                 android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -164,7 +164,7 @@
             android:layout_marginHorizontal="@dimen/medium_margin"
             android:layout_marginVertical="@dimen/medium_margin"
             android:backgroundTint="@color/main_cq_purple"
-            android:textStyle="bold"
+            android:fontFamily="@font/montserrat_medium"
             android:padding="@dimen/button_padding"
             android:text="@string/field_signup"
             android:textColor="@color/button_text_color"

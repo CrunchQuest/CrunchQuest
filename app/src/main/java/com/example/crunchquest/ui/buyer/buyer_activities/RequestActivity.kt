@@ -64,9 +64,6 @@ class RequestActivity : AppCompatActivity() {
     var serviceRequestHandler = ServiceRequestHandler()
     var currentUserUid = FirebaseAuth.getInstance().uid
     lateinit var counterTextView: TextView
-    lateinit var goneTextView: TextView
-    lateinit var goneView: View
-    lateinit var goneCardView: CardView
     lateinit var toolbar: Toolbar
     lateinit var spinner: Spinner
     lateinit var categoryEditText: EditText
@@ -103,9 +100,6 @@ class RequestActivity : AppCompatActivity() {
         priceEditText = findViewById(id.price_activityRequest)
         counterTextView = findViewById(id.counter_activityRequest)
         button = findViewById(id.button_requestActivity)
-        goneTextView = findViewById(id.gotItTextView_activityRequest)
-        goneView = findViewById(id.goneView_activityRequest)
-        goneCardView = findViewById(id.howCardView_activityRequest)
         toolbar = findViewById(id.toolBar_activityRequest)
         spinner = findViewById(id.spinnerCategory_activityRequest)
         categoryEditText = findViewById(id.category_activityRequest)
@@ -164,7 +158,6 @@ class RequestActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable) {}
         })
-        checkHint()
         toolbar.setNavigationOnClickListener {
             finish()
         }
@@ -293,22 +286,6 @@ class RequestActivity : AppCompatActivity() {
                 modeEditText.text = null
 
             }
-        }
-    }
-
-    private fun checkHint() {
-        if (isHintGone == true) {
-            goneTextView.isGone = true
-            goneView.isGone = true
-            goneCardView.isGone = true
-        }
-
-        goneTextView.setOnClickListener {
-            goneTextView.isGone = true
-            goneView.isGone = true
-            goneCardView.isGone = true
-            isHintGone = true
-
         }
     }
 
@@ -441,6 +418,7 @@ class RequestActivity : AppCompatActivity() {
 
     private fun createRequest(location: Location?) {
         val currentUserUid = FirebaseAuth.getInstance().uid
+        val currentUserName = FirebaseAuth.getInstance().currentUser?.displayName
         if (currentUserUid == null) {
             Toast.makeText(applicationContext, "User not authenticated.", Toast.LENGTH_SHORT).show()
             return
@@ -468,7 +446,9 @@ class RequestActivity : AppCompatActivity() {
                     time = "${timePicker.hour}:${timePicker.minute}",
                     address = addressEditText.text.toString(),
                     modeOfPayment = modeEditText.text.toString(),
+                    name = currentUserName,
                     paymentUrl = "",
+//                    createdBy = "${user?.firstName} ${user?.lastName}",
                     bookedTo = "",
                     bookedBy = currentUserUid,
                     assistConfirmation = "FALSE"

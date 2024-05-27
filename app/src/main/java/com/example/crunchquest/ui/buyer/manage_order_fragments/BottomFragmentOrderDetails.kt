@@ -75,14 +75,14 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
 
 
 
-        date.text = "${date.text} ${order.date}"
-        time.text = "${time.text} ${order.time}"
-        price.text = "${price.text} ${order.price.toString()}"
-        category.text = "${category.text} ${order.category}"
-        title.text = "${title.text} ${order.title}"
-        description.text = "${description.text} ${order.description}"
-        dateOrdered.text = "Date and Time Booked: ${convertLongToDate(order.dateOrdered)}"
-        address.text = "${address.text} ${order.address}"
+        date.text = "${order.date}"
+        time.text = "${order.time}"
+        price.text = "${order.price.toString()}"
+        category.text = "${order.category}"
+        title.text = "${order.title}"
+        description.text = "${order.description}"
+        dateOrdered.text = "${convertLongToDate(order.dateOrdered)}"
+        address.text = "${order.address}"
         mode.text = "Mode of Payment: ${order.modeOfPayment}"
 
         fetchNumber()
@@ -339,7 +339,8 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
                     if (serviceProvider != null) {
                         contactNum.text = "${contactNum.text} ${serviceProvider.mobileNumber}"
                     } else {
-                        contactNum.text = "${contactNum.text} Account Deleted"
+                        contactNum.visibility = View.GONE
+//                        contactNum.text = "${contactNum.text} Account Deleted"
                     }
                 }
 

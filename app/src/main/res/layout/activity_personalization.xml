@@ -84,7 +84,7 @@
         android:layout_marginVertical="@dimen/medium_margin"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/main_cq_purple"
-        android:textStyle="bold"
+        android:fontFamily="@font/montserrat_medium"
         android:padding="@dimen/button_padding"
         android:text="@string/field_next"
         android:textColor="@color/button_text_color"

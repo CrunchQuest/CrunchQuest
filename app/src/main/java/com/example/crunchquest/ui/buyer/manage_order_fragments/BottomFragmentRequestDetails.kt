@@ -34,16 +34,17 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
     private lateinit var address: TextView
     private lateinit var price: TextView
     private lateinit var name: TextView
-    private lateinit var contactNumber: TextView
+//    private lateinit var contactNumber: TextView
     private lateinit var category: TextView
     private lateinit var title: TextView
     private lateinit var description: TextView
-    private lateinit var dandtbooked: TextView
+//    private lateinit var dandtbooked: TextView
     private lateinit var messageButton: Button
     private lateinit var markButton: Button
     private lateinit var completeButton: Button
-    private lateinit var modeEditText: TextView
+//    private lateinit var modeEditText: TextView
     private lateinit var reviewButton: Button
+    private lateinit var declineButton: Button
 
 
     override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
@@ -60,20 +61,21 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.fragment_bottom_booking_details_seller, container, false)
-        modeEditText = v.findViewById(R.id.mode_fragmentBottomBookingDetailsSeller)
+//        modeEditText = v.findViewById(R.id.mode_fragmentBottomBookingDetailsSeller)
         time = v.findViewById(R.id.time_fragmentBottomBookingDetailsSeller)
         address = v.findViewById(R.id.address_fragmentBottomBookingDetailsSeller)
         price = v.findViewById(R.id.price_fragmentBottomBookingDetailsSelle)
         name = v.findViewById(R.id.name_fragmentBottomBookingDetailsSeller)
-        contactNumber = v.findViewById(R.id.number_fragmentBottomBookingDetailsSeller)
+//        contactNumber = v.findViewById(R.id.number_fragmentBottomBookingDetailsSeller)
         category = v.findViewById(R.id.category_fragmentBottomBookingDetailsSeller)
         title = v.findViewById(R.id.title_fragmentBottomBookingDetailsSeller)
         description = v.findViewById(R.id.description_fragmentBottomBookingDetailsSeller)
-        dandtbooked = v.findViewById(R.id.dandt_fragmentBottomBookingDetailsSeller)
+//        dandtbooked = v.findViewById(R.id.dandt_fragmentBottomBookingDetailsSeller)
         messageButton = v.findViewById(R.id.button_fragmentBottomBookingDetailsSeller)
         date = v.findViewById(R.id.date_fragmentBottomBookingDetailsSeller)
         markButton = v.findViewById(R.id.marButton_fragmentBottomBookingDetailsSeller)
         completeButton = v.findViewById(R.id.complete_fragmentBottomBookingDetailsSeller)
+        declineButton = v.findViewById(R.id.declineButton_fragmentBottomBookingDetailsSeller)
 
         checkStatus()
 
@@ -83,9 +85,9 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
         category.text = "Category: ${orderClicked.category}"
         title.text = "Title: ${orderClicked.title}"
         description.text = "Description: ${orderClicked.description}"
-        dandtbooked.text = "Date and Time Booked: ${convertLongToDate(orderClicked.dateOrdered)}"
+//        dandtbooked.text = "Date and Time Booked: ${convertLongToDate(orderClicked.dateOrdered)}"
         date.text = "Date: ${orderClicked.date}"
-        modeEditText.text = "Mode of Payment: ${orderClicked.modeOfPayment}"
+//        modeEditText.text = "Mode of Payment: ${orderClicked.modeOfPayment}"
         fetchNameAndNumber()
 
         messageButton.setOnClickListener {
@@ -93,7 +95,11 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
         }
 
         markButton.setOnClickListener {
-            acceptOrDeclineOrder()
+//            acceptOrDeclineOrder()
+            acceptOrder()
+        }
+        declineButton.setOnClickListener {
+            declineOrder()
         }
 
         completeButton.setOnClickListener {
@@ -109,6 +115,76 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
 
 
         return v
+    }
+
+    private fun declineOrder() {
+        val bookingUid = orderClicked.service_booked_uid
+        val bookedBy = orderClicked.bookedBy
+        val bookedTo = orderClicked.bookedTo
+        val orderUid = orderClicked.service_booked_uid
+        val orderUid2 = orderClicked.uid
+//                if (bookedBy != null && bookedTo != null && bookingUid != null) {
+//                    val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid")
+//                    val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
+//                    bookedByRef.removeValue()
+//                    bookedToRef.removeValue()
+//                    dialog.cancel()
+//                } else {
+//                    // Handle the case where bookedBy, bookedTo, or bookingUid is null
+//                    Toast.makeText(context, "Error: Missing order information.", Toast.LENGTH_SHORT).show()
+//                }
+
+        // IF Request Decline Assist
+        val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+        if (currentUserUid != orderClicked.bookedTo) {
+            val bookedByRef = orderClicked.bookedBy
+            val bookedToRef = orderClicked.bookedTo
+            val assistConfirmation = orderClicked.assistConfirmation
+            if (bookedToRef != null && assistConfirmation != "FALSE") {
+                if (assistConfirmation == "TRUE") {
+                    val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedTo}")
+                    ref.removeValue().addOnSuccessListener {
+                        Log.d("DeclineOrder", "Assist order removed from booked_by/$bookedBy/$orderUid/${orderClicked.bookedTo}")
+                    }.addOnFailureListener { e ->
+                        Log.e("DeclineOrder", "Failed to remove assist order from booked_by/$bookedBy/$orderUid/${orderClicked.bookedTo}", e)
+                    }
+
+                    val anotherRef = FirebaseDatabase.getInstance().getReference("booked_to/${bookedTo}/$orderUid")
+                    anotherRef.removeValue().addOnSuccessListener {
+                        Log.d("DeclineOrder", "Assist order removed from booked_to/${bookedTo}/$orderUid")
+                    }.addOnFailureListener { e ->
+                        Log.e("DeclineOrder", "Failed to remove assist order from booked_to/${bookedTo}/$orderUid", e)
+                    }
+
+                    Toast.makeText(v.context, "Assist Order Declined.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Log.d("CancelOrder", "assistUser or assistConfirmation is null. bookedBy: $bookedByRef, assistConfirmation: $assistConfirmation")
+            }
+
+        }
+
+        dismissBottomSheet()
+    }
+
+    private fun acceptOrder() {
+        val bookedBy = orderClicked.bookedBy
+        val bookedTo = orderClicked.bookedTo
+        val bookingUid = orderClicked.service_booked_uid
+        if (bookedBy != null && bookedTo != null && bookingUid != null) {
+            val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid/${orderClicked.bookedTo}") // Guide To Set Value Inside booked_by
+            bookedByRef.child("status").setValue("ACCEPTED")
+            val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/${bookedTo}/$bookingUid")
+            bookedToRef.child("status").setValue("ACCEPTED")
+        } else {
+            // Handle the case where bookedBy, bookedTo, or bookingUid is null
+            Toast.makeText(context, "Error: Missing order information.", Toast.LENGTH_SHORT).show()
+            Log.d("bookedBy", bookedBy.toString())
+            Log.d("bookedTo", bookedTo.toString())
+            Log.d("bookingUid", bookingUid.toString())
+        }
+
+        dismissBottomSheet()
     }
 
     private fun addAReview() {
@@ -363,11 +439,11 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
                 Log.d("fetchNameAndNumber", "DataSnapshot: $snapshot") // Log the data snapshot
                 val user = snapshot.getValue(User::class.java)
                 if (user != null) {
-                    name.text = "Name: ${user.firstName} ${user.lastName}"
-                    contactNumber.text = "Contact Number: ${user.mobileNumber}"
+                    name.text = "${user.firstName} ${user.lastName}"
+//                    contactNumber.text = "Contact Number: ${user.mobileNumber}"
                 } else {
-                    name.text = "Name: Account Deleted"
-                    contactNumber.text = "Contact Number: Account Deleted"
+                    name.text = ""
+//                    contactNumber.text = "Contact Number: Account Deleted"
                 }
             }
 

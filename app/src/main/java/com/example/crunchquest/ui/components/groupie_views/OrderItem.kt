@@ -3,11 +3,25 @@
 package com.example.crunchquest.ui.components.groupie_views
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.util.Log
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Order
+import com.example.crunchquest.data.model.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
+import java.text.NumberFormat
+import java.util.Locale
 
 class OrderItem(val order: Order, val c: Context) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -16,16 +30,27 @@ class OrderItem(val order: Order, val c: Context) : Item<ViewHolder>() {
         val title = viewHolder.itemView.findViewById<TextView>(R.id.title_rowBookings)!!
         val category = viewHolder.itemView.findViewById<TextView>(R.id.category_rowBookings)!!
         val time = viewHolder.itemView.findViewById<TextView>(R.id.time_rowBookings)!!
+        val description = viewHolder.itemView.findViewById<TextView>(R.id.tv_description_rowBookings)!!
+        val person = viewHolder.itemView.findViewById<TextView>(R.id.tv_person)!!
+        val price = viewHolder.itemView.findViewById<TextView>(R.id.tv_price)!!
+        val layout = viewHolder.itemView.findViewById<ConstraintLayout>(R.id.layout_rowBookings)
 
-        if (order.status == "NEW") {
-            val color = c.resources.getColor(R.color.new_order)
-            status.setBackgroundColor(color)
-        } else if (order.status == "ACCEPTED") {
-            val color = c.resources.getColor(R.color.on_going_order)
-            status.setBackgroundColor(color)
-        } else if (order.status == "COMPLETE") {
-            val color = c.resources.getColor(R.color.complete_order)
-            status.setBackgroundColor(color)
+        when (order.status) {
+            "NEW" -> {
+                val background: Drawable? = ContextCompat.getDrawable(c, R.drawable.status_background_new)
+                status.background = background
+                status.setTextColor(ContextCompat.getColor(c, R.color.dark_washed_blue)) // Set desired text color for NEW status
+            }
+            "ACCEPTED" -> {
+                val background: Drawable? = ContextCompat.getDrawable(c, R.drawable.status_background_ongoing)
+                status.background = background
+                status.setTextColor(ContextCompat.getColor(c, R.color.dark_orange)) // Set desired text color for ON_GOING status
+            }
+            "COMPLETE" -> {
+                val background: Drawable? = ContextCompat.getDrawable(c, R.drawable.status_background_finished)
+                status.background = background
+                status.setTextColor(ContextCompat.getColor(c, R.color.dark_green)) // Set desired text color for FINISHED status
+            }
         }
 
         status.text = order.status
@@ -33,6 +58,48 @@ class OrderItem(val order: Order, val c: Context) : Item<ViewHolder>() {
         title.text = order.title
         category.text = order.category
         time.text = order.time
+        description.text = order.description
+
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        val createdByRef = FirebaseDatabase.getInstance().getReference("/users/${order.bookedBy}")
+
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                val user = p0.getValue(User::class.java)
+                val userDisplayName = "${user?.firstName} ${user?.lastName}"
+                Log.d("UserDisplayName", userDisplayName)
+                order.bookedTo?.let { Log.d("BookedTo", it) }
+                if (order.bookedTo == "") {
+                    person.text = "You"
+                    person.setTextColor(ContextCompat.getColor(c, R.color.dark_cq_purple))
+                    layout.setBackgroundResource(R.drawable.order_current_user)
+                }
+
+                else if (order.name == userDisplayName) {
+                    createdByRef.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val createdBy = snapshot.getValue(User::class.java)
+                            person.text = "${createdBy?.firstName} ${createdBy?.lastName} "
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+                    })
+                    person.setTextColor(ContextCompat.getColor(c, R.color.dark_cq_purple))
+                    layout.setBackgroundResource(R.drawable.order_current_user)
+                }
+                else {
+                    person.text = order.name
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+            }
+        })
+
+        val formattedPrice = NumberFormat.getNumberInstance(Locale("id", "ID")).format(order.price)
+        price.text = "Rp$formattedPrice"
 
 
     }

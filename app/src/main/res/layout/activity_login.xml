@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
+    android:theme="@style/Theme.CrunchQuest"
     tools:context=".ui.general.LoginActivity">
 
     <TextView
@@ -12,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:textStyle="bold"
+        android:fontFamily="@font/montserrat_medium"
         android:text="@string/login_heading"
         android:textColor="#2B2B2B"
         android:textSize="20sp"
@@ -22,11 +23,14 @@
 
     <TextView
         android:id="@+id/tvLoginSubHeading"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
         android:text="@string/login_sub_heading"
         android:textAlignment="center"
+        android:fontFamily="@font/montserrat_medium"
         android:textColor="@color/subheading_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/tvLoginHeading"
@@ -40,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:orientation="vertical"
-        android:padding="@dimen/medium_margin"
+        android:layout_margin="24dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvLoginSubHeading">
@@ -51,9 +55,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/field_email"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
             app:boxStrokeColor="@color/box_stroke_color"
             app:errorEnabled="true"
-            app:hintTextColor="@color/text_color"
+            app:hintTextColor="@color/gray_hint"
             app:placeholderText="user@gmail.com"
             app:startIconDrawable="@drawable/ic_email">
 
@@ -61,7 +69,7 @@
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:fontFamily="@font/montserrat_medium"
                 android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -73,17 +81,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/field_password"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
             app:boxStrokeColor="@color/box_stroke_color"
             app:endIconMode="password_toggle"
             app:errorEnabled="true"
-            app:hintTextColor="@color/text_color"
+            app:hintTextColor="@color/gray_hint"
             app:startIconDrawable="@drawable/ic_password">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:fontFamily="@font/montserrat_medium"
                 android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -93,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:fontFamily="@font/montserrat_medium"
             android:text="@string/field_forgot_password"
             android:textColor="@color/main_cq_purple"
             android:textSize="14sp" />
@@ -109,6 +122,7 @@
         android:text="@string/sign_up_prompt_alt"
         android:textColor="@color/coolBlack"
         android:textSize="14sp"
+        android:fontFamily="@font/montserrat_medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
@@ -131,13 +145,15 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/medium_margin"
         android:layout_marginVertical="@dimen/medium_margin"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/main_cq_purple"
-        android:textStyle="bold"
+        android:fontFamily="@font/montserrat_semibold"
         android:padding="@dimen/button_padding"
         android:text="@string/field_login"
         android:textColor="@color/button_text_color"

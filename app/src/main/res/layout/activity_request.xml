@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.CrunchQuest"
     tools:context=".ui.buyer.buyer_activities.RequestActivity">
 
     <TextView
@@ -31,7 +32,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
                 <EditText
                     android:id="@+id/title_activityRequest"
                     android:layout_width="match_parent"
@@ -40,11 +40,15 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="50dp"
                     android:background="@drawable/rounded_edit_text"
-                    android:hint="Title of the Request"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:hint="@string/enter_a_request_name"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:selectAllOnFocus="true"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +65,11 @@
                     android:background="@drawable/rounded_edit_text"
                     android:drawableLeft="@drawable/ic_category"
                     android:enabled="false"
-                    android:hint="Category"
+                    android:textSize="14sp"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:hint="@string/choose_category"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
@@ -105,7 +113,8 @@
                     android:background="@drawable/rounded_edit_text"
                     android:enabled="false"
                     android:padding="15dp"
-                    android:textColor="@color/text_color"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/btnDate"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -113,89 +122,55 @@
                     app:layout_constraintTop_toTopOf="@+id/btnDate" />
 
                 <!-- Bound -->
-                <View
-                    android:id="@+id/view14"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/category_activityRequest" />
-
-                <View
-                    android:id="@+id/view15"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnDate" />
-
-                <View
-                    android:id="@+id/view16"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/timePicker" />
-
-                <View
-                    android:id="@+id/view17"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etAddress" />
 
                 <TextView
                     android:id="@+id/textView32"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:drawableLeft="@drawable/ic_calendar"
-                    android:text="DATE NEEDED"
+                    android:text="@string/date"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view14" />
+                    app:layout_constraintTop_toBottomOf="@+id/category_activityRequest" />
 
                 <TextView
                     android:id="@+id/textView33"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:drawableLeft="@drawable/ic_time"
-                    android:text="TIME NEEDED"
+                    android:text="@string/time"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/textView32"
-                    app:layout_constraintTop_toBottomOf="@+id/view15" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
                 <TextView
                     android:id="@+id/textView34"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:drawableLeft="@drawable/ic_address"
-                    android:text="COMPLETE ADDRESS"
+                    android:text="@string/address"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/timePicker"
-                    app:layout_constraintTop_toBottomOf="@+id/view16" />
+                    app:layout_constraintTop_toBottomOf="@+id/timePicker" />
 
                 <TextView
                     android:id="@+id/textView27"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:drawableLeft="@drawable/ic_mode"
-                    android:text="MODE OF PAYMENT"
+                    android:text="@string/payment"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/etAddress"
-                    app:layout_constraintTop_toBottomOf="@+id/view17" />
+                    app:layout_constraintTop_toBottomOf="@+id/etAddress" />
 
                 <EditText
                     android:id="@+id/etAddress"
@@ -203,7 +178,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/rounded_edit_text"
-                    android:hint="Street name, building"
+                    android:hint="@string/street_name"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
                     android:padding="15dp"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@+id/timePicker"
@@ -215,11 +193,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
                     android:background="@drawable/rounded_edit_text"
                     android:enabled="false"
-                    android:hint="Mode"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:hint="Choose method (e.g., Cash)"
                     android:padding="15dp"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
                     android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/timePicker"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/textView27"
@@ -233,11 +216,15 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="50dp"
                     android:background="@drawable/rounded_edit_text"
-                    android:hint="Min. Rp 10000"
+                    android:hint="@string/price_body"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
+                    android:fontFamily="@font/montserrat_medium"
                     android:inputType="number"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:selectAllOnFocus="true"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -252,61 +239,22 @@
                     android:layout_marginEnd="50dp"
                     android:background="@drawable/rounded_edit_text"
                     android:gravity="clip_horizontal"
-                    android:hint="Max 300 Characters."
+                    android:hint="@string/request_description_body"
                     android:inputType="textMultiLine"
+                    android:fontFamily="@font/montserrat_medium"
                     android:lines="4"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
                     android:padding="15dp"
                     android:scrollHorizontally="true"
                     android:selectAllOnFocus="true"
                     android:singleLine="false"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
-                <View
-                    android:id="@+id/goneView_activityRequest"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/gotItTextView_activityRequest" />
-
-                <View
-                    android:id="@+id/view2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_activityRequest" />
-
-                <View
-                    android:id="@+id/view3"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/description_activityRequest" />
-
-                <View
-                    android:id="@+id/view5"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/price_activityRequest" />
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolBar_activityRequest"
@@ -321,90 +269,41 @@
                     app:navigationIcon="@drawable/ic_back_alt"
                     app:title="Post a Request" />
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/howCardView_activityRequest"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:visibility="visible"
-                    app:cardBackgroundColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/toolBar_activityRequest">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:id="@+id/textView13"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:textStyle="bold"
-                            android:text="How does Service Request work?"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.codesgood.views.JustifiedTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:justificationMode="inter_word"
-                            android:text="If the service you're looking for isn't available or listed on the services category, you could create a service request instead. In this request, you could describe the service you're looking to purchase. Please be as detailed as possible when filling up details. When the service you're looking for is noticed by a service provider, they could message you and create the request for you."
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView13" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
-
                 <TextView
                     android:id="@+id/textView17"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Add a description"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/request_description"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view2" />
+                    app:layout_constraintTop_toBottomOf="@+id/title_activityRequest" />
 
                 <TextView
                     android:id="@+id/textView15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Add a title"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/request_name"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/goneView_activityRequest" />
+                    app:layout_constraintTop_toBottomOf="@id/toolBar_activityRequest" />
 
                 <TextView
                     android:id="@+id/textView19"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
-                    android:layout_marginTop="8dp"
-                    android:text="What's your budget?"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/price"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view3" />
-
-                <TextView
-                    android:id="@+id/gotItTextView_activityRequest"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="10dp"
-                    android:clickable="true"
-                    android:text="GOT IT"
-                    android:textColor="@color/dark_cq_purple"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/howCardView_activityRequest" />
+                    app:layout_constraintTop_toBottomOf="@+id/description_activityRequest" />
 
                 <TextView
                     android:id="@+id/counter_activityRequest"
@@ -438,10 +337,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Choose the Category"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/request_category"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view5" />
+                    app:layout_constraintTop_toBottomOf="@+id/price_activityRequest" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -457,7 +358,8 @@
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_buttons"
-        android:text="SUBMIT YOUR REQUEST"
+        android:text="Submit Request"
+        android:fontFamily="@font/montserrat_semibold"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

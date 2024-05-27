@@ -32,15 +32,15 @@ class BottomFragmentSellerOrderDetails(order: Order) : BottomSheetDialogFragment
     private lateinit var address: TextView
     private lateinit var price: TextView
     private lateinit var name: TextView
-    private lateinit var contactNumber: TextView
+//    private lateinit var contactNumber: TextView
     private lateinit var category: TextView
     private lateinit var title: TextView
     private lateinit var description: TextView
-    private lateinit var dandtbooked: TextView
+//    private lateinit var dandtbooked: TextView
     private lateinit var messageButton: Button
     private lateinit var markButton: Button
     private lateinit var completeButton: Button
-    private lateinit var modeEditText: TextView
+//    private lateinit var modeEditText: TextView
 
 
     override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
@@ -51,16 +51,16 @@ class BottomFragmentSellerOrderDetails(order: Order) : BottomSheetDialogFragment
             savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.fragment_bottom_booking_details_seller, container, false)
-        modeEditText = v.findViewById(R.id.mode_fragmentBottomBookingDetailsSeller)
+//        modeEditText = v.findViewById(R.id.mode_fragmentBottomBookingDetailsSeller)
         time = v.findViewById(R.id.time_fragmentBottomBookingDetailsSeller)
         address = v.findViewById(R.id.address_fragmentBottomBookingDetailsSeller)
         price = v.findViewById(R.id.price_fragmentBottomBookingDetailsSelle)
         name = v.findViewById(R.id.name_fragmentBottomBookingDetailsSeller)
-        contactNumber = v.findViewById(R.id.number_fragmentBottomBookingDetailsSeller)
+//        contactNumber = v.findViewById(R.id.number_fragmentBottomBookingDetailsSeller)
         category = v.findViewById(R.id.category_fragmentBottomBookingDetailsSeller)
         title = v.findViewById(R.id.title_fragmentBottomBookingDetailsSeller)
         description = v.findViewById(R.id.description_fragmentBottomBookingDetailsSeller)
-        dandtbooked = v.findViewById(R.id.dandt_fragmentBottomBookingDetailsSeller)
+//        dandtbooked = v.findViewById(R.id.dandt_fragmentBottomBookingDetailsSeller)
         messageButton = v.findViewById(R.id.button_fragmentBottomBookingDetailsSeller)
         date = v.findViewById(R.id.date_fragmentBottomBookingDetailsSeller)
         markButton = v.findViewById(R.id.marButton_fragmentBottomBookingDetailsSeller)
@@ -74,9 +74,9 @@ class BottomFragmentSellerOrderDetails(order: Order) : BottomSheetDialogFragment
         category.text = "Category: ${orderClicked.category}"
         title.text = "Title: ${orderClicked.title}"
         description.text = "Description: ${orderClicked.description}"
-        dandtbooked.text = "Date and Time Booked: ${convertLongToDate(orderClicked.dateOrdered)}"
+//        dandtbooked.text = "Date and Time Booked: ${convertLongToDate(orderClicked.dateOrdered)}"
         date.text = "Date: ${orderClicked.date}"
-        modeEditText.text = "Mode of Payment: ${orderClicked.modeOfPayment}"
+//        modeEditText.text = "Mode of Payment: ${orderClicked.modeOfPayment}"
         fetchNameAndNumber()
 
         messageButton.setOnClickListener {
@@ -275,10 +275,10 @@ class BottomFragmentSellerOrderDetails(order: Order) : BottomSheetDialogFragment
                 val user = snapshot.getValue(User::class.java)
                 if (user != null) {
                     name.text = "Name: ${user.firstName} ${user.lastName}"
-                    contactNumber.text = "Contact Number: ${user.mobileNumber}"
+//                    contactNumber.text = "Contact Number: ${user.mobileNumber}"
                 } else {
                     name.text = "Name: Account Deleted"
-                    contactNumber.text = "Contact Number: Account Deleted"
+//                    contactNumber.text = "Contact Number: Account Deleted"
                 }
             }
 

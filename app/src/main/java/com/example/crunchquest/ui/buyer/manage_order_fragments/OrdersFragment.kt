@@ -9,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Order
+import com.example.crunchquest.ui.buyer.buyer_fragments.CustomItemDecoration
 import com.example.crunchquest.ui.components.groupie_views.OrderItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -43,26 +45,30 @@ class OrdersFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_manage_orders, container, false)
-        recyclerViewRequest = v.findViewById<RecyclerView>(R.id.recyclerView_manage_request)
-        recyclerViewRequest.apply {
-            layoutManager = GridLayoutManager(v.context, 2).apply {
-                spanSizeLookup = iRequest
-            }
-        }
+        savedInstanceState: Bundle?): View? {
 
-        recyclerViewAssist = v.findViewById<RecyclerView>(R.id.recyclerView_manage_assist)
-        recyclerViewAssist.apply {
-            layoutManager = GridLayoutManager(v.context, 2).apply {
-                spanSizeLookup = iAssist
-            }
-        }
+        v = inflater.inflate(R.layout.fragment_manage_orders, container, false)
+        setupRequestRv()
+
+        setupAssistRv()
 
         fetchOrdersRequest()
         fetchOrdersAssist()
         return v
+    }
+
+    private fun setupAssistRv() {
+        recyclerViewAssist = v.findViewById(R.id.recyclerView_manage_assist)
+        val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+        recyclerViewAssist.layoutManager = layoutManager
+        recyclerViewAssist.addItemDecoration(CustomItemDecoration(8))
+    }
+
+    private fun setupRequestRv() {
+        recyclerViewRequest = v.findViewById(R.id.recyclerView_manage_request)
+        val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+        recyclerViewRequest.layoutManager = layoutManager
+        recyclerViewRequest.addItemDecoration(CustomItemDecoration(8))
     }
 
     override fun onResume() {

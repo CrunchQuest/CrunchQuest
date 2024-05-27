@@ -162,5 +162,19 @@
     <string name="personalization_heading">Personalize</string>
     <string name="personalization_sub_heading">"Select what interest you"</string>
     <string name="personalization_heading_2">Your Experience!</string>
+    <string name="request_name">Request Title</string>
+    <string name="enter_a_request_name">Provide a brief title for your request</string>
+    <string name="request_description">Description</string>
+    <string name="request_description_body">Describe the details of your request.</string>
+    <string name="request_category">Category</string>
+    <string name="price">Price</string>
+    <string name="price_body">Enter the price (minimum IDR 10,000)</string>
+    <string name="choose_category">Choose category</string>
+    <string name="date">Date</string>
+    <string name="street_name">Street name, building</string>
+    <string name="time">Time</string>
+    <string name="address">Address</string>
+    <string name="payment">Payment</string>
+
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
