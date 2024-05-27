@@ -12,16 +12,12 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isGone
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.Order
 import com.example.crunchquest.data.model.User
-import com.example.crunchquest.ui.buyer.buyer_activities.OrderDetailsActivity
 import com.example.crunchquest.ui.dialogs.ReviewDialog
 import com.example.crunchquest.ui.messages.ChatLogActivity
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -58,30 +54,30 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
 
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        val bottomSheetDialog = dialog as BottomSheetDialog?
-        val bottomSheetInternal = bottomSheetDialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-        bottomSheetInternal?.let {
-            val layoutParams = it.layoutParams
-            if (layoutParams is CoordinatorLayout.LayoutParams) {
-                val behavior = layoutParams.behavior as BottomSheetBehavior<*>?
-                behavior?.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-                    override fun onStateChanged(bottomSheet: View, newState: Int) {
-                        if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                            val intent = Intent(context, OrderDetailsActivity::class.java)
-                            intent.putExtra("order", order)
-                            startActivity(intent)
-                            dismiss()
-                        }
-                    }
-
-                    override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-                })
-            }
-        }
-    }
+//    override fun onStart() {
+//        super.onStart()
+//
+//        val bottomSheetDialog = dialog as BottomSheetDialog?
+//        val bottomSheetInternal = bottomSheetDialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+//        bottomSheetInternal?.let {
+//            val layoutParams = it.layoutParams
+//            if (layoutParams is CoordinatorLayout.LayoutParams) {
+//                val behavior = layoutParams.behavior as BottomSheetBehavior<*>?
+//                behavior?.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+//                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+//                        if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+//                            val intent = Intent(context, OrderDetailsActivity::class.java)
+//                            intent.putExtra("order", order)
+//                            startActivity(intent)
+//                            dismiss()
+//                        }
+//                    }
+//
+//                    override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+//                })
+//            }
+//        }
+//    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -152,8 +148,12 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
                 val orderUid = order.service_booked_uid
                 val orderUid2 = order.uid
 
+
+
                 // IF Assist Cancel Assisting
                 val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+                Log.d("CancelOrder", "Current User UID: $currentUserUid")
+                Log.d("CancelOrder", "Order Details: bookedBy: $bookedBy, bookedTo: $bookedTo, orderUid: $orderUid, orderUid2: $orderUid2")
                 if (currentUserUid == order.bookedTo) {
                     val bookedByRef = order.bookedBy
                     val assistConfirmation = order.assistConfirmation
@@ -207,6 +207,28 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
                         Log.d("Cancel All Order", "Log Request Cancel: bookedBy, bookedTo, or orderUid. bookedBy: $bookedBy, bookedTo: $bookedTo, orderUid: $orderUid")
                     }
 
+                    // Request Not Yet Assisted
+                    if (currentUserUid == order.bookedBy) {
+                        Log.d("CancelOrder", "Request not yet assisted conditions met")
+                        val bookedByRefer = FirebaseDatabase.getInstance().getReference("booked_by/${order.bookedBy}/$orderUid")
+                        bookedByRefer.removeValue().addOnSuccessListener {
+                            Log.d("Cancel Request Order", "Order removed from booked_by/$bookedBy/$orderUid")
+                        }.addOnFailureListener { e ->
+                            Log.e("Cancel Request Order", "Failed to remove order from booked_by/$bookedBy/$orderUid", e)
+                        }
+
+                        val serviceRequestsRef = FirebaseDatabase.getInstance().getReference("service_requests/${currentUserUid}/$orderUid2")
+                        serviceRequestsRef.removeValue().addOnSuccessListener {
+                            Log.d("Cancel Request Order", "Order removed from service_requests/$orderUid2")
+                        }.addOnFailureListener { e ->
+                            Log.e("Cancel Request Order", "Failed to remove order from service_requests/$orderUid2", e)
+                        }
+
+                        Toast.makeText(v.context, "Order cancelled.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.d("Cancel Request Order", "Conditions not met for cancelling: bookedBy: $bookedBy, bookedTo: $bookedTo, orderUid: $orderUid")
+                    }
+
                 }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
@@ -222,7 +244,7 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
     private fun statusListenerRequest() {
         val bookedBy = order.bookedBy
         val bookedTo = order.bookedTo
-        val orderUid = order.service_booked_uid
+        val orderUid = orderClicked.uid
 
         if (bookedBy != null && bookedTo != null && orderUid != null) {
             val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}")

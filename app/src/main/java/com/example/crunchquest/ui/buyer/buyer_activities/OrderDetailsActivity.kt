@@ -149,14 +149,13 @@ class OrderDetailsActivity : AppCompatActivity() {
     }
 
     private fun cancelOrder() {
-        Log.d("OrderDetailsActivity", "cancelOrder() called")
         val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage("Do you want to cancel this order?")
             .setCancelable(true)
             .setPositiveButton("Confirm") { _, _ ->
                 val bookedBy = order.bookedBy
                 val bookedTo = order.bookedTo
-                val orderUid = order.service_booked_uid
+                val orderUid = order.uid
                 val orderUid2 = order.uid
 
                 // IF Assist Cancel Assisting
@@ -202,23 +201,49 @@ class OrderDetailsActivity : AppCompatActivity() {
                             Log.e("Cancel All Order", "Failed to remove order from booked_to/$bookedTo/$orderUid", e)
                         }
 
-                        Toast.makeText(this, "Request order cancelled.", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                        val anotherAnotherRef = FirebaseDatabase.getInstance().getReference("service_requests/${order.uid}/$orderUid2")
+                        anotherAnotherRef.removeValue().addOnSuccessListener {
+                            Log.d("Cancel All Order", "Order removed from service_requests/$orderUid2")
+                        }.addOnFailureListener { e ->
+                            Log.e("Cancel All Order", "Failed to remove order from service_requests/$orderUid2", e)
+                        }
 
-                // Update order status in Firebase
-                val ref = FirebaseDatabase.getInstance().getReference("booked_services/$orderUid2")
-                ref.child("status").setValue("CANCELLED")
-                finish()
+                        Toast.makeText(this, "Order cancelled.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.d("Cancel All Order", "Log Request Cancel: bookedBy, bookedTo, or orderUid. bookedBy: $bookedBy, bookedTo: $bookedTo, orderUid: $orderUid")
+                    }
+
+                    // Request Not Yet Assisted
+                    if (currentUserUid == order.bookedBy && order.bookedTo == null && order.uid != null) {
+                        val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid")
+                        ref.removeValue().addOnSuccessListener {
+                            Log.d("Cancel Request Order", "Order removed from booked_by/$bookedBy/$orderUid/${order.bookedBy}")
+                        }.addOnFailureListener { e ->
+                            Log.e("Cancel Request Order", "Failed to remove order from booked_by/$bookedBy/$orderUid/${order.bookedBy}", e)
+                        }
+
+                        val anotherAnotherRef = FirebaseDatabase.getInstance().getReference("service_requests/${order.uid}/$orderUid2")
+                        anotherAnotherRef.removeValue().addOnSuccessListener {
+                            Log.d("Cancel Request Order", "Order removed from service_requests/$orderUid2")
+                        }.addOnFailureListener { e ->
+                            Log.e("Cancel Request Order", "Failed to remove order from service_requests/$orderUid2", e)
+                        }
+
+                        Toast.makeText(this, "Order cancelled.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.d("Cancel Request Order", "Log Request Cancel: bookedBy, bookedTo, or orderUid. bookedBy: $bookedBy, bookedTo: $bookedTo, orderUid: $orderUid")
+                    }
+
+                }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.cancel()
             }
-
         val alert = dialogBuilder.create()
         alert.setTitle("Cancel Order")
         alert.show()
     }
+
 
     private fun confirmTheOrder() {
         Log.d("OrderDetailsActivity", "confirmOrder() called")
