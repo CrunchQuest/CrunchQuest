@@ -1,6 +1,7 @@
 package com.example.crunchquest.ui.components.groupie_views
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -18,7 +19,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 
-class ServiceRequestItem(val serviceRequest: ServiceRequest, val distance: Double, val c: Context) : Item<ViewHolder>() {
+class ServiceRequestItem(val serviceRequest: ServiceRequest, val distance: Double, val similarity: Int, val c: Context) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.title_serviceRowRequest).text = serviceRequest.title!!.toUpperCase()
         viewHolder.itemView.findViewById<TextView>(R.id.descriptionTextView_serviceRowRequest).text = serviceRequest.description
@@ -65,8 +66,8 @@ class ServiceRequestItem(val serviceRequest: ServiceRequest, val distance: Doubl
 
 // Assuming 'distance' is the distance value you want to check
 // Change these values according to your distance threshold
-        val nearDistanceThreshold = 1000 // Adjust this threshold as needed
-        val mediumDistanceThreshold = 5000 // Adjust this threshold as needed
+        val nearDistanceThreshold = 5 // Adjust this threshold as needed
+        val mediumDistanceThreshold = 10 // Adjust this threshold as needed
 
 // Assuming 'distance' is the distance value you want to check
         if (distance < nearDistanceThreshold) {
@@ -84,6 +85,13 @@ class ServiceRequestItem(val serviceRequest: ServiceRequest, val distance: Doubl
             locationTextView.setTextColor(ContextCompat.getColor(c, R.color.cool_red))
 //            locationTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_location_red, 0, 0, 0)
             locationTextView.text = "Far"
+        }
+
+        if (similarity > 6) {
+            viewHolder.itemView.findViewById<TextView>(R.id.similarity_tv_serviceRowRequest).text = "Compatible"
+        } else {
+//            viewHolder.itemView.findViewById<TextView>(R.id.similarity_tv_serviceRowRequest).text = "No similarity"
+            viewHolder.itemView.findViewById<TextView>(R.id.similarity_tv_serviceRowRequest).visibility = View.GONE
         }
     }
 

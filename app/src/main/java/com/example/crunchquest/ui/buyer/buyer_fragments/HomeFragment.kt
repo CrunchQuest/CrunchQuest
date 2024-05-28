@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
-import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
@@ -16,7 +15,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -27,15 +25,9 @@ import androidx.appcompat.widget.TooltipCompat
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.example.crunchquest.R
 import com.example.crunchquest.data.model.ServiceRequest
 import com.example.crunchquest.data.model.User
@@ -67,7 +59,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -523,7 +514,8 @@ class HomeFragment : Fragment() {
                     val serviceRequestsResponse = apiService.getServiceRequests(userId)
                     val serviceRequests = serviceRequestsResponse.map { convertToServiceRequest(it) }
                     val distances = serviceRequestsResponse.map { it.distance } // Assuming 'distance' is a property in ServiceRequestResponse
-                    updateRecyclerView(serviceRequests, distances)
+                    val similarity = serviceRequestsResponse.map { it.similarity_score }
+                    updateRecyclerView(serviceRequests, distances, similarity)
                 } catch (e: HttpException) {
                     Log.e("HomeFragment", "HTTP error: ${e.message()}")
                 } catch (e: Exception) {
@@ -536,11 +528,14 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun updateRecyclerView(serviceRequests: List<ServiceRequest>, distances: List<Double>) {
+    private fun updateRecyclerView(serviceRequests: List<ServiceRequest>, distances: List<Double>, similarity_scores: List<Int>) {
         adapterRequest.clear()
         serviceRequests.forEachIndexed { index, serviceRequest ->
             val distance = distances.getOrNull(index) ?: Double.MAX_VALUE
-            adapterRequest.add(ServiceRequestItem(serviceRequest, distance, requireContext()))
+            val similarity = similarity_scores.getOrNull(index) ?: 0
+            Log.d("ServiceRequest", "Distance: $distance")
+            Log.d("ServiceRequest", "Similarity: $similarity")
+            adapterRequest.add(ServiceRequestItem(serviceRequest, distance, similarity, requireContext()))
             Log.d("ServiceRequest", "ServiceRequest from fetchServiceRequest: $serviceRequest")
         }
         serviceRequestRecyclerView.adapter = adapterRequest
