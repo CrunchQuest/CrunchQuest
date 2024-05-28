@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
-    private const val BASE_URL = "https://crunchquest-api-87d9eed66c3d.herokuapp.com/"
+    private const val BASE_URL = "https://crunchquest-api-e8fa3c3bab7e.herokuapp.com/"
     private const val PAYMENT_URL = "https://cq-payment-1425524eb51a.herokuapp.com/"
 
 
