@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--<FrameLayout xmlns:com.crunchquest.android="http://schemas.android.com/apk/res/android"-->
 <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
 <!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    android:stateListAnimator="@anim/nav_default_enter_anim">-->
+<!--    com.crunchquest.android:layout_width="match_parent"-->
+<!--    com.crunchquest.android:layout_height="match_parent"-->
+<!--    com.crunchquest.android:stateListAnimator="@anim/nav_default_enter_anim">-->
 <!--&lt;!&ndash;    tools:context=".ui.general.ProfileSettingsActivity">&ndash;&gt;-->
 
 <!--    &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
 
 
 <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:background="@color/backGroundShadow">-->
+<!--        com.crunchquest.android:layout_width="match_parent"-->
+<!--        com.crunchquest.android:layout_height="match_parent"-->
+<!--        com.crunchquest.android:background="@color/backGroundShadow">-->
 
 <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/UpperPart"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="220dp"-->
-<!--            android:background="@drawable/rounded_bot_leftright_seller"-->
+<!--            com.crunchquest.android:id="@+id/UpperPart"-->
+<!--            com.crunchquest.android:layout_width="match_parent"-->
+<!--            com.crunchquest.android:layout_height="220dp"-->
+<!--            com.crunchquest.android:background="@drawable/rounded_bot_leftright_seller"-->
 <!--            app:layout_constraintStart_toStartOf="parent"-->
 <!--            app:layout_constraintTop_toBottomOf="@+id/toolbar">-->
 
 
 <!--            <de.hdodenhof.circleimageview.CircleImageView-->
-<!--                android:id="@+id/profileImage_fragmentSellerProfile"-->
-<!--                android:layout_width="140dp"-->
-<!--                android:layout_height="140dp"-->
-<!--                android:layout_marginTop="12dp"-->
-<!--                android:scaleType="centerCrop"-->
+<!--                com.crunchquest.android:id="@+id/profileImage_fragmentSellerProfile"-->
+<!--                com.crunchquest.android:layout_width="140dp"-->
+<!--                com.crunchquest.android:layout_height="140dp"-->
+<!--                com.crunchquest.android:layout_marginTop="12dp"-->
+<!--                com.crunchquest.android:scaleType="centerCrop"-->
 <!--                app:civ_circle_background_color="@color/white"-->
 <!--                app:layout_constraintBottom_toTopOf="@+id/userName_fragmentSellerProfile"-->
 <!--                app:layout_constraintEnd_toEndOf="parent"-->
@@ -40,11 +40,11 @@
 
 
 <!--            <TextView-->
-<!--                android:id="@+id/userName_fragmentSellerProfile"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="User Name"-->
-<!--                android:textSize="24sp"-->
+<!--                com.crunchquest.android:id="@+id/userName_fragmentSellerProfile"-->
+<!--                com.crunchquest.android:layout_width="wrap_content"-->
+<!--                com.crunchquest.android:layout_height="wrap_content"-->
+<!--                com.crunchquest.android:text="User Name"-->
+<!--                com.crunchquest.android:textSize="24sp"-->
 <!--                app:layout_constraintEnd_toEndOf="parent"-->
 <!--                app:layout_constraintHorizontal_bias="0.498"-->
 <!--                app:layout_constraintStart_toStartOf="parent"-->
@@ -53,23 +53,23 @@
 <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/constraintLayout2"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_marginStart="40dp"-->
-<!--            android:layout_marginEnd="40dp"-->
-<!--            android:background="@drawable/rounded_edit_text"-->
+<!--            com.crunchquest.android:id="@+id/constraintLayout2"-->
+<!--            com.crunchquest.android:layout_width="match_parent"-->
+<!--            com.crunchquest.android:layout_height="50dp"-->
+<!--            com.crunchquest.android:layout_marginStart="40dp"-->
+<!--            com.crunchquest.android:layout_marginEnd="40dp"-->
+<!--            com.crunchquest.android:background="@drawable/rounded_edit_text"-->
 <!--            app:layout_constraintBottom_toBottomOf="@+id/UpperPart"-->
 <!--            app:layout_constraintEnd_toEndOf="parent"-->
 <!--            app:layout_constraintStart_toEndOf="@+id/UpperPart"-->
 <!--            app:layout_constraintTop_toBottomOf="@+id/UpperPart">-->
 
 <!--            <TextView-->
-<!--                android:id="@+id/textView14"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="SERVICE PROVIDER MODE"-->
-<!--                android:textSize="18sp"-->
+<!--                com.crunchquest.android:id="@+id/textView14"-->
+<!--                com.crunchquest.android:layout_width="wrap_content"-->
+<!--                com.crunchquest.android:layout_height="wrap_content"-->
+<!--                com.crunchquest.android:text="SERVICE PROVIDER MODE"-->
+<!--                com.crunchquest.android:textSize="18sp"-->
 <!--                app:layout_constraintBottom_toBottomOf="parent"-->
 <!--                app:layout_constraintEnd_toEndOf="parent"-->
 <!--                app:layout_constraintStart_toStartOf="parent"-->
@@ -77,12 +77,12 @@
 <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 <!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/seller_myServicesCardView"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_marginEnd="15dp"-->
-<!--            android:clickable="true"-->
-<!--            android:elevation="2dp"-->
+<!--            com.crunchquest.android:id="@+id/seller_myServicesCardView"-->
+<!--            com.crunchquest.android:layout_width="0dp"-->
+<!--            com.crunchquest.android:layout_height="0dp"-->
+<!--            com.crunchquest.android:layout_marginEnd="15dp"-->
+<!--            com.crunchquest.android:clickable="true"-->
+<!--            com.crunchquest.android:elevation="2dp"-->
 <!--            app:cardBackgroundColor="@color/white"-->
 <!--            app:cardCornerRadius="7dp"-->
 <!--            app:cardElevation="2dp"-->
@@ -94,31 +94,31 @@
 <!--            app:layout_constraintTop_toTopOf="@+id/seller_aboutMeCardView">-->
 
 <!--            <ImageView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:padding="30dp"-->
-<!--                android:src="@drawable/ic_services" />-->
+<!--                com.crunchquest.android:layout_width="match_parent"-->
+<!--                com.crunchquest.android:layout_height="match_parent"-->
+<!--                com.crunchquest.android:layout_gravity="center"-->
+<!--                com.crunchquest.android:padding="30dp"-->
+<!--                com.crunchquest.android:src="@drawable/ic_services" />-->
 
 <!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="bottom|center"-->
-<!--                android:padding="10dp"-->
-<!--                android:text="My Services" />-->
+<!--                com.crunchquest.android:layout_width="wrap_content"-->
+<!--                com.crunchquest.android:layout_height="wrap_content"-->
+<!--                com.crunchquest.android:layout_gravity="bottom|center"-->
+<!--                com.crunchquest.android:padding="10dp"-->
+<!--                com.crunchquest.android:text="My Services" />-->
 <!--        </androidx.cardview.widget.CardView>-->
 
 <!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/seller_aboutMeCardView"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_marginStart="15dp"-->
-<!--            android:layout_marginTop="15dp"-->
-<!--            android:layout_marginEnd="15dp"-->
-<!--            android:layout_marginBottom="15dp"-->
-<!--            android:background="#FFFFFF"-->
-<!--            android:clickable="true"-->
-<!--            android:elevation="2dp"-->
+<!--            com.crunchquest.android:id="@+id/seller_aboutMeCardView"-->
+<!--            com.crunchquest.android:layout_width="0dp"-->
+<!--            com.crunchquest.android:layout_height="0dp"-->
+<!--            com.crunchquest.android:layout_marginStart="15dp"-->
+<!--            com.crunchquest.android:layout_marginTop="15dp"-->
+<!--            com.crunchquest.android:layout_marginEnd="15dp"-->
+<!--            com.crunchquest.android:layout_marginBottom="15dp"-->
+<!--            com.crunchquest.android:background="#FFFFFF"-->
+<!--            com.crunchquest.android:clickable="true"-->
+<!--            com.crunchquest.android:elevation="2dp"-->
 <!--            app:cardBackgroundColor="@color/white"-->
 <!--            app:cardCornerRadius="7dp"-->
 <!--            app:cardElevation="2dp"-->
@@ -130,27 +130,27 @@
 <!--            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">-->
 
 <!--            <ImageView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:padding="30dp"-->
-<!--                android:src="@drawable/ic_about_me" />-->
+<!--                com.crunchquest.android:layout_width="match_parent"-->
+<!--                com.crunchquest.android:layout_height="match_parent"-->
+<!--                com.crunchquest.android:layout_gravity="center"-->
+<!--                com.crunchquest.android:padding="30dp"-->
+<!--                com.crunchquest.android:src="@drawable/ic_about_me" />-->
 
 <!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="bottom|center"-->
-<!--                android:padding="10dp"-->
-<!--                android:text="About Me" />-->
+<!--                com.crunchquest.android:layout_width="wrap_content"-->
+<!--                com.crunchquest.android:layout_height="wrap_content"-->
+<!--                com.crunchquest.android:layout_gravity="bottom|center"-->
+<!--                com.crunchquest.android:padding="10dp"-->
+<!--                com.crunchquest.android:text="About Me" />-->
 <!--        </androidx.cardview.widget.CardView>-->
 
 <!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/buyersRequestCardView_fragmentSellerProfile"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_marginBottom="15dp"-->
-<!--            android:clickable="true"-->
-<!--            android:elevation="2dp"-->
+<!--            com.crunchquest.android:id="@+id/buyersRequestCardView_fragmentSellerProfile"-->
+<!--            com.crunchquest.android:layout_width="0dp"-->
+<!--            com.crunchquest.android:layout_height="0dp"-->
+<!--            com.crunchquest.android:layout_marginBottom="15dp"-->
+<!--            com.crunchquest.android:clickable="true"-->
+<!--            com.crunchquest.android:elevation="2dp"-->
 <!--            app:cardBackgroundColor="@color/white"-->
 <!--            app:cardCornerRadius="7dp"-->
 <!--            app:cardElevation="2dp"-->
@@ -161,28 +161,28 @@
 <!--            app:layout_constraintTop_toBottomOf="@+id/seller_aboutMeCardView">-->
 
 <!--            <ImageView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:padding="30dp"-->
-<!--                android:src="@drawable/ic_buyers_request" />-->
+<!--                com.crunchquest.android:layout_width="match_parent"-->
+<!--                com.crunchquest.android:layout_height="match_parent"-->
+<!--                com.crunchquest.android:layout_gravity="center"-->
+<!--                com.crunchquest.android:padding="30dp"-->
+<!--                com.crunchquest.android:src="@drawable/ic_buyers_request" />-->
 
 <!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="bottom|clip_horizontal|center|clip_vertical"-->
-<!--                android:padding="10dp"-->
-<!--                android:text="Client Request"-->
-<!--                android:textAlignment="center" />-->
+<!--                com.crunchquest.android:layout_width="wrap_content"-->
+<!--                com.crunchquest.android:layout_height="wrap_content"-->
+<!--                com.crunchquest.android:layout_gravity="bottom|clip_horizontal|center|clip_vertical"-->
+<!--                com.crunchquest.android:padding="10dp"-->
+<!--                com.crunchquest.android:text="Client Request"-->
+<!--                com.crunchquest.android:textAlignment="center" />-->
 <!--        </androidx.cardview.widget.CardView>-->
 
 <!--        <androidx.appcompat.widget.Toolbar-->
-<!--            android:id="@+id/toolbar"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="?attr/actionBarSize"-->
-<!--            android:background="?attr/colorPrimary"-->
-<!--            android:minHeight="?attr/actionBarSize"-->
-<!--            android:theme="?attr/actionBarTheme"-->
+<!--            com.crunchquest.android:id="@+id/toolbar"-->
+<!--            com.crunchquest.android:layout_width="match_parent"-->
+<!--            com.crunchquest.android:layout_height="?attr/actionBarSize"-->
+<!--            com.crunchquest.android:background="?attr/colorPrimary"-->
+<!--            com.crunchquest.android:minHeight="?attr/actionBarSize"-->
+<!--            com.crunchquest.android:theme="?attr/actionBarTheme"-->
 <!--            app:layout_constraintEnd_toEndOf="parent"-->
 <!--            app:layout_constraintStart_toStartOf="parent"-->
 <!--            app:layout_constraintTop_toTopOf="parent" />-->
@@ -408,12 +408,12 @@
     </LinearLayout>
 
     <!--    <androidx.appcompat.widget.Toolbar-->
-    <!--        android:id="@+id/toolbar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="?attr/actionBarSize"-->
-    <!--        android:background="?attr/colorPrimary"-->
-    <!--        android:minHeight="?attr/actionBarSize"-->
-    <!--        android:theme="?attr/actionBarTheme"-->
+    <!--        com.crunchquest.android:id="@+id/toolbar"-->
+    <!--        com.crunchquest.android:layout_width="match_parent"-->
+    <!--        com.crunchquest.android:layout_height="?attr/actionBarSize"-->
+    <!--        com.crunchquest.android:background="?attr/colorPrimary"-->
+    <!--        com.crunchquest.android:minHeight="?attr/actionBarSize"-->
+    <!--        com.crunchquest.android:theme="?attr/actionBarTheme"-->
     <!--        app:layout_constraintEnd_toEndOf="parent"-->
     <!--        app:layout_constraintStart_toStartOf="parent"-->
     <!--        app:layout_constraintTop_toTopOf="parent" />-->

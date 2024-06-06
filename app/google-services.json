@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:549371382667:android:952443bfd2107425723d8e",
         "android_client_info": {
-          "package_name": "com.example.crunchquest"
+          "package_name": "com.crunchquest.android"
         }
       },
       "oauth_client": [],

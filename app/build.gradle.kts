@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.crunchquest"
+    namespace = "com.crunchquest.android"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.crunchquest"
+        applicationId = "com.crunchquest.android"
         minSdk = 24
         //noinspection EditedTargetSdkVersion
         targetSdk = 34

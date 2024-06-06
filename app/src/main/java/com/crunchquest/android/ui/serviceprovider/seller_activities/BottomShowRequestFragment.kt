@@ -1,0 +1,116 @@
+package com.crunchquest.android.ui.serviceprovider.seller_activities
+
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import com.crunchquest.android.R
+import com.crunchquest.android.data.model.ServiceRequest
+import com.crunchquest.android.data.model.User
+import com.crunchquest.android.ui.messages.RequestChatLogActivity
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Picasso
+
+class BottomShowRequestFragment : BottomSheetDialogFragment() {
+
+    lateinit var v: View
+    private lateinit var imageView: ImageView
+    private lateinit var textView: TextView
+    private lateinit var floatButton: FloatingActionButton
+    override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
+
+    var request: ServiceRequest = BuyersRequestActivity.serviceRequestToBeViewed!!
+
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+
+        // Inflate the layout for this fragment
+        v = inflater.inflate(R.layout.fragment_bottom_show_request, container, false)
+        imageView = v.findViewById(R.id.imageVIew_fragmentBottomShowRequest)
+        textView = v.findViewById(R.id.textView_fragmentBottomShowRequest)
+        floatButton = v.findViewById(R.id.floatingActionButton_fragmentBottomShowRequest)
+
+        val ref = FirebaseDatabase.getInstance().getReference("users/${BuyersRequestActivity.serviceRequestToBeViewed!!.userUid}")
+        ref.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val userData = snapshot.getValue(User::class.java)
+                Picasso.get().load(userData!!.profileImageUrl).into(imageView)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+
+        textView.text = "${BuyersRequestActivity.serviceRequestToBeViewed!!.description}"
+
+        floatButton.setOnClickListener {
+            goToRequestChatLog()
+
+
+        }
+
+
+
+
+
+
+        return v
+    }
+
+    private fun goToRequestChatLog() {
+
+        //fetch the Model from Firebase
+        val ref = FirebaseDatabase.getInstance().getReference("users/${BuyersRequestActivity.serviceRequestToBeViewed!!.userUid}")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(User::class.java)
+                val intent = Intent(v.context, RequestChatLogActivity::class.java)
+                intent.putExtra(RequestChatLogActivity.USER_EXTRA_TAG, user)
+                intent.putExtra(RequestChatLogActivity.REQUEST_EXTRA_TAG, request)
+                startActivity(intent)
+                Log.i("NOTHINGSAMPLEONLY", "onDataChange: $user")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+
+
+
+
+
+    }
+
+//    private fun fetchTheUserWhoPostedTheRequest() {
+//        val ref = FirebaseDatabase.getInstance().getReference("users/${BuyersRequestActivity.serviceRequestToBeViewed!!.userUid}")
+//        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                val toUser = snapshot.getValue(User::class.java)
+//                val intent = Intent(v.context, ChatLogActivity::class.java)
+//                intent.putExtra("user", toUser)
+//                startActivity(intent)
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//
+//            }
+//
+//        })
+//
+//    }
+
+
+}
+

@@ -16,21 +16,21 @@
         android:orientation="horizontal">
 
 <!--        <androidx.appcompat.widget.AppCompatButton-->
-<!--            android:id="@+id/searchBtn"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="42dp"-->
-<!--            android:layout_marginStart="2dp"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:background="@drawable/rounded_button"-->
-<!--            android:drawableLeft="@drawable/ic_black_search"-->
-<!--            android:gravity="center|fill"-->
-<!--            android:paddingLeft="10dp"-->
-<!--            android:text="What are you looking for?"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:textColor="@color/dark_grey"-->
-<!--            android:textSize="14sp" />-->
+<!--            com.crunchquest.android:id="@+id/searchBtn"-->
+<!--            com.crunchquest.android:layout_width="0dp"-->
+<!--            com.crunchquest.android:layout_height="42dp"-->
+<!--            com.crunchquest.android:layout_marginStart="2dp"-->
+<!--            com.crunchquest.android:layout_marginTop="8dp"-->
+<!--            com.crunchquest.android:layout_marginEnd="16dp"-->
+<!--            com.crunchquest.android:layout_weight="1"-->
+<!--            com.crunchquest.android:background="@drawable/rounded_button"-->
+<!--            com.crunchquest.android:drawableLeft="@drawable/ic_black_search"-->
+<!--            com.crunchquest.android:gravity="center|fill"-->
+<!--            com.crunchquest.android:paddingLeft="10dp"-->
+<!--            com.crunchquest.android:text="What are you looking for?"-->
+<!--            com.crunchquest.android:textAllCaps="false"-->
+<!--            com.crunchquest.android:textColor="@color/dark_grey"-->
+<!--            com.crunchquest.android:textSize="14sp" />-->
         <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -44,7 +44,7 @@
     <string name="login_fragment_heading">Welcome Back</string>
     <string name="login_fragment_sub_heading">Let’s Login. Fill in your details to apply for jobs!</string>
     <string name="signup_fragment_heading">Create a Crunchquest Account</string>
-    <string name="signup_fragment_sub_heading">Unlock all features to conquer quest as much as you can.</string>
+    <string name="signup_fragment_sub_heading">Sign up to conquer quest as much as you can.</string>
     <string name="forget_pass_fragment_sub_heading">To reset your password, you need your email or mobile number that can be authenticated</string>
     <string name="email_fragment_heading">Check Your Email</string>
     <string name="email_fragment_sub_heading">We have sent the reset password to the email address brandonelouis@gmial.com</string>
