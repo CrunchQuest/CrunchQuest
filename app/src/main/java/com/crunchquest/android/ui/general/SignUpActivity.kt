@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.util.Patterns
 import android.widget.EditText
@@ -27,9 +28,8 @@ import com.crunchquest.android.utility.handlers.UserHandler
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
-import java.util.UUID
+import java.io.IOException
 
 
 class SignUpActivity : AppCompatActivity() {
@@ -283,33 +283,26 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun uploadIdToFirebaseDatabase() {
         capturedIdUri?.let { uri ->
-            // Get a reference to Firebase Storage location to upload the image
-            val fileName = UUID.randomUUID().toString()
-            val ref = FirebaseStorage.getInstance().getReference("/users/$fileName")
+            try {
+                // Convert image to bitmap
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
 
-            Log.d("Upload ID Image", "Starting upload: $uri")
+                // Convert bitmap to Base64 string
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+                val byteArray = byteArrayOutputStream.toByteArray()
+                val base64Image = Base64.encodeToString(byteArray, Base64.DEFAULT)
 
-            // Upload the image file directly from the URI
-            ref.putFile(uri)
-                .addOnSuccessListener { _ ->
-                    // Once upload is successful, get the download URL and save it to Firebase Database
-                    ref.downloadUrl.addOnSuccessListener { idImageUrl ->
-                        Log.d("Upload ID Image", "ID image uploaded successfully: $idImageUrl")
-                        saveUserToFirebaseDatabase(idImageUrl.toString())
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    // If upload fails, log the error and notify the user
-                    Log.e("Upload ID Image", "Upload failed: $exception")
-                    Toast.makeText(this, "Failed to upload ID image", Toast.LENGTH_SHORT).show()
-                    // Fall back to the default image URL if the upload fails
-                    saveUserToFirebaseDatabase(DEFAULT_IMG_URL)
-                }
+                // Save the Base64 string to Firebase Database
+                saveUserToFirebaseDatabase(base64Image)
+            } catch (e: IOException) {
+                Log.e("Upload ID Image", "Error converting image to Base64: $e")
+                saveUserToFirebaseDatabase(DEFAULT_IMG_URL)
+            }
         } ?: run {
-            // If capturedIdUri is null, log the error and notify the user
+            // If capturedIdUri is null, log the error and proceed with default image URL
             Log.d("Upload ID Image", "ID image URI is null")
-            Toast.makeText(this, "ID image URI is null", Toast.LENGTH_SHORT).show()
-            loadingDialog.dismissDialog()
+            saveUserToFirebaseDatabase(DEFAULT_IMG_URL)
         }
     }
 
