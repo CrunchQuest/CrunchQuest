@@ -302,7 +302,7 @@ class SignUpActivity : AppCompatActivity() {
         } ?: run {
             // If capturedIdUri is null, log the error and proceed with default image URL
             Log.d("Upload ID Image", "ID image URI is null")
-            saveUserToFirebaseDatabase(DEFAULT_IMG_URL)
+            saveUserToFirebaseDatabase("")
         }
     }
 

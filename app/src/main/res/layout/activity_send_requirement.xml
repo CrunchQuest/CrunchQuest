@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backGroundShadow"
-    tools:context=".UserInterface.General.SendRequirementActivity">
+    tools:context=".ui.general.SendRequirementActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_sendRequirementsActivity"
@@ -36,47 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/certification_activitySendRequirements" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/selfieActivitySendRequirements"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        app:cardBackgroundColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/validId_activitySendRequirements"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_sendRequirementsActivity">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="40dp"
-            app:srcCompat="@drawable/ic_selfie" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:padding="20dp"
-            android:text="SELFIE"
-            android:textSize="18sp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/imageViewselfieImageView_activitySendRequirements"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:clickable="true"
-            app:backgroundTint="@color/pause"
-            app:srcCompat="@drawable/ic_check" />
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toBottomOf="@+id/validId_activitySendRequirements" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/validId_activitySendRequirements"
@@ -85,11 +45,11 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         app:cardBackgroundColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/certification_activitySendRequirements"
+        app:layout_constraintBottom_toTopOf="@+id/submitButton_activitySendRequirements"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selfieActivitySendRequirements">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_sendRequirementsActivity">
 
         <ImageView
             android:layout_width="match_parent"
@@ -116,44 +76,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/certification_activitySendRequirements"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        app:cardBackgroundColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/submitButton_activitySendRequirements"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/validId_activitySendRequirements">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="40dp"
-            app:srcCompat="@drawable/ic_document" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:padding="5dp"
-            android:text="CERTIFICATION OR \nBUSINESS CERFICATE"
-            android:textAlignment="center"
-            android:textSize="18sp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/imageViewdocu__activitySendRequirements"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:clickable="true"
-            app:backgroundTint="@color/pause"
-            app:srcCompat="@drawable/ic_check" />
-    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

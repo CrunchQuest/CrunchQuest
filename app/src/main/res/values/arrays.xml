@@ -29,7 +29,7 @@
 
     <string-array name="modeOfPayment">
         <item>Cash</item>
-        <item>Mobile Payments</item>
+<!--        <item>Mobile Payments</item>-->
     </string-array>
 
     <string-array name="gender">

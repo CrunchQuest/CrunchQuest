@@ -24,7 +24,7 @@ class LoadingDialog(activity: Activity, textMessage: String) {
     }
 
     fun dismissDialog() {
-        dialog!!.dismiss()
+        dialog?.dismiss()
     }
 
 }

@@ -150,17 +150,20 @@
         app:tint="@null" />
 
     <!-- Sub Floating Action Buttons -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/subFab1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_calendar"
+        app:icon="@drawable/ic_document"
+        app:iconTint="@color/white"
         android:layout_marginBottom="@dimen/small_margin"
         app:layout_constraintEnd_toEndOf="@id/mainFab"
         app:layout_constraintBottom_toTopOf="@id/mainFab"
         android:visibility="invisible"
         app:backgroundTint="@color/main_cq_purple"
-        android:contentDescription="Calendar"/>
+        android:contentDescription="Verify"
+        android:text="Click To Verify"
+        android:textColor="@color/white"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/subFab2"

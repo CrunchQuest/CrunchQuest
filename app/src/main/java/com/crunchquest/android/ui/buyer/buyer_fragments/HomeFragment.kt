@@ -39,18 +39,20 @@ import com.crunchquest.android.data.network.response.ServiceRequestResponse
 import com.crunchquest.android.ui.adapter.SliderAdapter
 import com.crunchquest.android.ui.buyer.BuyerActivity
 import com.crunchquest.android.ui.buyer.bottomNavigationBuyer
-import com.crunchquest.android.ui.general.LoginActivity
-import com.crunchquest.android.ui.general.ProfileSettingsActivity
 import com.crunchquest.android.ui.buyer.buyer_activities.DisplaySpecificRequestActivity
 import com.crunchquest.android.ui.buyer.buyer_activities.RequestActivity
 import com.crunchquest.android.ui.buyer.buyer_activities.ServiceCategoryActivity
 import com.crunchquest.android.ui.components.groupie_views.OrderItem
 import com.crunchquest.android.ui.components.groupie_views.ServiceCategoryItem
 import com.crunchquest.android.ui.components.groupie_views.ServiceRequestItem
+import com.crunchquest.android.ui.general.LoginActivity
+import com.crunchquest.android.ui.general.ProfileSettingsActivity
+import com.crunchquest.android.ui.general.SendRequirementActivity
 import com.crunchquest.android.ui.messages.MessagesActivity
 import com.crunchquest.android.utility.handlers.ServiceRequestHandler
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -69,7 +71,7 @@ import retrofit2.HttpException
 class HomeFragment : Fragment() {
 
     private lateinit var mainFab: FloatingActionButton
-    private lateinit var subFab1: FloatingActionButton
+    private lateinit var subFab1: ExtendedFloatingActionButton
     private lateinit var subFab2: FloatingActionButton
     private lateinit var subFab3: FloatingActionButton
     private lateinit var fabHandler: Handler
@@ -208,30 +210,56 @@ class HomeFragment : Fragment() {
         checkUserLocation()
 
         mainFab.setOnClickListener {
-            if (isExpanded) {
-                collapseSubFabs()
-            } else {
-                // Check if the location permission has been granted
-                if (ActivityCompat.checkSelfPermission(
-                        v.context,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                        v.context,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    // Permission is not granted, request it
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        LOCATION_PERMISSION_REQUEST_CODE
-                    )
-                } else {
-                    // Navigate to RequestActivity
-                    val intent = Intent(v.context, RequestActivity::class.java)
-                    startActivity(intent)
+            ref.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val verifiedClient =
+                        snapshot.child("verifiedClient").getValue(String::class.java)
+                    if (verifiedClient == "NOT_VERIFIED") {
+                        if (isExpanded) {
+                            collapseSubFabs()
+                        } else {
+                            Toast.makeText(
+                                v.context,
+                                "Please verify your account to proceed",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            expandSubFabs()
+                        }
+
+                    } else if (verifiedClient == "VERIFIED") {
+                        collapseSubFabs()
+                        // Check if the location permission has been granted
+                        if (ActivityCompat.checkSelfPermission(
+                                v.context,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                v.context,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            // Permission is not granted, request it
+                            ActivityCompat.requestPermissions(
+                                requireActivity(),
+                                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                                LOCATION_PERMISSION_REQUEST_CODE
+                            )
+                        } else {
+                            // Navigate to RequestActivity
+                            val intent = Intent(v.context, RequestActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
                 }
-            }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle the error
+                }
+            })
+        }
+
+        subFab1.setOnClickListener {
+            val intent = Intent(v.context, SendRequirementActivity::class.java)
+            startActivity(intent)
         }
 
 
@@ -260,7 +288,7 @@ class HomeFragment : Fragment() {
 
     private fun setupFab() {
         mainFab = v.findViewById(R.id.mainFab)
-//        subFab1 = v.findViewById(R.id.subFab1)
+        subFab1 = v.findViewById(R.id.subFab1)
 //        subFab2 = v.findViewById(R.id.subFab2)
 //        subFab3 = v.findViewById(R.id.subFab3)
         fabHandler = Handler()
@@ -271,7 +299,7 @@ class HomeFragment : Fragment() {
 //        longClickRunnable = Runnable {
 //            expandSubFabs()
 //        }
-//
+
         mainFab.setOnLongClickListener {
 //            fabHandler.postDelayed(longClickRunnable, 1000)
             TooltipCompat.setTooltipText(mainFab, "Add a new request")
@@ -492,15 +520,15 @@ class HomeFragment : Fragment() {
 
     private fun expandSubFabs() {
         subFab1.visibility = View.VISIBLE
-        subFab2.visibility = View.VISIBLE
-        subFab3.visibility = View.VISIBLE
+//        subFab2.visibility = View.VISIBLE
+//        subFab3.visibility = View.VISIBLE
         isExpanded = true
     }
 
     private fun collapseSubFabs() {
         subFab1.visibility = View.GONE
-        subFab2.visibility = View.GONE
-        subFab3.visibility = View.GONE
+//        subFab2.visibility = View.GONE
+//        subFab3.visibility = View.GONE
         isExpanded = false
     }
 
