@@ -286,10 +286,6 @@ class SendRequirementActivity : AppCompatActivity() {
     }
 
     private fun saveUserToFirebaseDatabase(idImageUrl: String) {
-        // Initialize loadingDialog if it hasn't been initialized
-        if (!::loadingDialog.isInitialized) {
-            loadingDialog = LoadingDialog(this, "Submitting requirements...")
-        }
 
         val user = FirebaseAuth.getInstance().currentUser
         user?.let { currentUser ->
@@ -299,12 +295,10 @@ class SendRequirementActivity : AppCompatActivity() {
             val childUpdates = hashMapOf<String, Any>("idImageUrl" to idImageUrl)
             ref.updateChildren(childUpdates)
 
-            loadingDialog.dismissDialog()
             startActivity(Intent(applicationContext, BuyerActivity::class.java))
             finish()
         } ?: run {
             Log.e("Current User", "Current user is null")
-            loadingDialog.dismissDialog()
         }
     }
 }
