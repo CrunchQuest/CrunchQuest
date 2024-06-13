@@ -2,29 +2,21 @@ package com.crunchquest.android.ui.dialogs
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.widget.TextView
 import com.crunchquest.android.R
 
-class LoadingDialog(activity: Activity, textMessage: String) {
-    private val activity: Activity? = activity
-    private var dialog: AlertDialog? = null
-    private val message: String = textMessage
+class LoadingDialog(private val activity: Activity, private val message: String) {
+    private lateinit var dialog: AlertDialog
 
     fun startLoadingAnimation() {
         val builder = AlertDialog.Builder(activity)
-        val inflater = activity!!.layoutInflater
-        val view = inflater.inflate(R.layout.dialog_custom, null)
-        builder.setView(view)
-        val textView = view.findViewById<TextView>(R.id.textView_customDialog)
+        val inflater = activity.layoutInflater
+        builder.setView(inflater.inflate(R.layout.dialog_custom, null))
         builder.setCancelable(false)
-        textView.text = message
         dialog = builder.create()
-        dialog!!.show()
-
+        dialog.show()
     }
 
     fun dismissDialog() {
-        dialog?.dismiss()
+        dialog.dismiss()
     }
-
 }

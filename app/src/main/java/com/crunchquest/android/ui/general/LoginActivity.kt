@@ -1,53 +1,45 @@
 package com.crunchquest.android.ui.general
 
-
 import android.content.Intent
 import android.os.Bundle
+<<<<<<< HEAD:app/src/main/java/com/crunchquest/android/ui/general/LoginActivity.kt
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+=======
+>>>>>>> 4c87e12 ([Auth] Migrate SignUp and Login To MVVM):androidApp/src/main/java/com/crunchquest/android/ui/general/LoginActivity.kt
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.crunchquest.android.R
-import com.crunchquest.android.data.model.User
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.crunchquest.android.databinding.ActivityLoginBinding
+import com.crunchquest.android.repository.UserRepository
 import com.crunchquest.android.ui.buyer.BuyerActivity
 import com.crunchquest.android.ui.dialogs.ResetPassword
+<<<<<<< HEAD:app/src/main/java/com/crunchquest/android/ui/general/LoginActivity.kt
 import com.google.android.material.textfield.TextInputLayout
+=======
+import com.crunchquest.android.utility.buttonAlphaEnabledListener
+import com.crunchquest.android.viewmodel.LoginViewModel
+import com.crunchquest.android.viewmodel.ViewModelFactory
+>>>>>>> 4c87e12 ([Auth] Migrate SignUp and Login To MVVM):androidApp/src/main/java/com/crunchquest/android/ui/general/LoginActivity.kt
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-
 
 class LoginActivity : AppCompatActivity() {
-    private var _binding: ActivityLoginBinding? = null
-    private val binding get() = _binding!!
 
-
-    lateinit var tvLoginHeading: TextView
-    lateinit var tvLoginSubHeading: TextView
-    lateinit var emailEditText: EditText
-    lateinit var passwordEditText: EditText
-    lateinit var logInBtn: Button
-
-    companion object {
-        var currentUser: User? = null
-    }
-
-
-    private lateinit var auth: FirebaseAuth
+    private lateinit var binding: ActivityLoginBinding
+    private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+<<<<<<< HEAD:app/src/main/java/com/crunchquest/android/ui/general/LoginActivity.kt
         auth = FirebaseAuth.getInstance()
         //Map the views from the layout file
         tvLoginHeading = findViewById<TextView>(R.id.tvLoginHeading)
@@ -77,150 +69,87 @@ class LoginActivity : AppCompatActivity() {
         checkIfAnAccountIsLoggedIn()
         buttonAlphaEnabledListener()
 
+=======
+        val auth = FirebaseAuth.getInstance()
+        val database = FirebaseDatabase.getInstance()
+        val userRepository = UserRepository(auth, database)
 
+        val viewModelFactory = ViewModelFactory(userRepository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
+>>>>>>> 4c87e12 ([Auth] Migrate SignUp and Login To MVVM):androidApp/src/main/java/com/crunchquest/android/ui/general/LoginActivity.kt
+
+        setupViews()
+        observeLoginResult()
     }
 
-    private fun numberOrEmail() {
-        val intent = Intent(this, SignUpActivity::class.java)
-        startActivity(intent)
+    private fun setupViews() {
+        binding.btnLogin.setOnClickListener { doLogin() }
+        binding.tvSignup.setOnClickListener { navigateToSignUp() }
+        binding.tvForgotPassword.setOnClickListener { showResetPasswordDialog() }
+
+        buttonAlphaEnabledListener(binding.etEmailContainer.editText!!, binding.etPasswordContainer.editText!!, binding.btnLogin)
     }
 
-    private fun buttonAlphaEnabledListener() {
-        if (emailEditText.text.toString().isEmpty() || passwordEditText.text.toString().isEmpty()) {
-            logInBtn.alpha = 0.4f
-            logInBtn.isEnabled = false
-        } else {
-            logInBtn.alpha = 1f
-            logInBtn.isEnabled = true
-        }
-        emailEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (emailEditText.text.toString().isEmpty() || passwordEditText.text.toString().isEmpty()) {
-                    logInBtn.alpha = 0.4f
-                    logInBtn.isEnabled = false
+    private fun observeLoginResult() {
+        viewModel.loginResult.observe(this, Observer { success ->
+            if (success) {
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                if (currentUser != null) {
+                    if (currentUser.isEmailVerified) {
+                        checkUserPreferences(currentUser.uid)
+                    } else {
+                        showErrorToast("Please verify your email address.")
+                        FirebaseAuth.getInstance().signOut()
+                    }
                 } else {
-                    logInBtn.alpha = 1f
-                    logInBtn.isEnabled = true
+                    showErrorToast("Incorrect email or password.")
                 }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-        passwordEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (emailEditText.text.toString().isEmpty() || passwordEditText.text.toString().isEmpty()) {
-                    logInBtn.alpha = 0.4f
-                    logInBtn.isEnabled = false
-                } else {
-                    logInBtn.alpha = 1f
-                    logInBtn.isEnabled = true
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-
-        })
-
-    }
-
-    private fun checkIfAnAccountIsLoggedIn() {
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user == null) {
-        } else {
-            updateUI(user)
-        }
-    }
-
-    //Updates the UI if there is an account that is logged in.
-    private fun updateUI(currentUser: FirebaseUser?) {
-        if (currentUser != null) {
-            if (currentUser.isEmailVerified) {
-                //check if user has do the personalization survey first
-                checkUserPreferences(currentUser.uid)
-//                val intent = Intent(this, BuyerActivity::class.java)
-//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                startActivity(intent)
-                Toast.makeText(baseContext, "Signed in",
-                        Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(baseContext, "Please verify your email address.",
-                        Toast.LENGTH_LONG).show()
-                FirebaseAuth.getInstance().signOut()
+                showErrorToast("Login failed. Please check your credentials.")
             }
-        } else {
-            Toast.makeText(baseContext, "Incorrect email or password.",
-                    Toast.LENGTH_LONG).show()
+        })
+    }
+
+    private fun doLogin() {
+        val email = binding.etEmailContainer.editText?.text.toString()
+        val password = binding.etPasswordContainer.editText?.text.toString()
+
+        if (email.isEmpty() || password.isEmpty()) {
+            showErrorToast("Please enter email and password")
+            return
         }
+
+        viewModel.loginUser(email, password)
+    }
+
+    private fun navigateToSignUp() {
+        startActivity(Intent(this, SignUpActivity::class.java))
+    }
+
+    private fun showResetPasswordDialog() {
+        val dialog = ResetPassword(this)
+        dialog.startLoadingAnimation()
     }
 
     private fun checkUserPreferences(uid: String) {
-        val preferencesRef = FirebaseDatabase.getInstance().getReference("/users/$uid/preferences")
-        preferencesRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // Preferences exist, navigate to BuyerActivity or any other activity
-                    val intent = Intent(this@LoginActivity, BuyerActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                    finish()
-                } else {
-                    // Preferences don't exist, redirect to PreferencesActivity
-                    val intent = Intent(this@LoginActivity, PersonalizationActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                    finish()
-                }
+        viewModel.checkUserPreferences(uid).observe(this, Observer { preferencesExist ->
+            val intent = if (preferencesExist) {
+                Intent(this@LoginActivity, BuyerActivity::class.java)
+            } else {
+                Intent(this@LoginActivity, PersonalizationActivity::class.java)
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle errors
-            }
+            startActivity(intent)
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
         })
     }
 
-    //log in function. Checks first if the views are filled. If yes, check first if the account info is correct. If correct, checks if it is verified.
-    //If everything is okay, call the Update UI function to finally go to the next activity.
-    fun doLogin() {
-        if (emailEditText.text.toString().isEmpty()) {
-            emailEditText.error = "Please enter email"
-            emailEditText.requestFocus()
-            return
-        }
-        if (!Patterns.EMAIL_ADDRESS.matcher(emailEditText.text.toString()).matches()) {
-            emailEditText.error = "Please enter valid email"
-            emailEditText.requestFocus()
-            return
-        }
-
-        if (passwordEditText.text.toString().isEmpty()) {
-            passwordEditText.error = "Please enter password"
-            passwordEditText.requestFocus()
-            return
-        }
-
-        auth.signInWithEmailAndPassword(emailEditText.text.toString(), passwordEditText.text.toString())
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        val user = auth.currentUser
-                        updateUI(user)
-                    } else {
-                        updateUI(null)
-                    }
-                }
+    private fun showErrorToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroy() {
-        _binding = null
         super.onDestroy()
+        // No need to unbind here
     }
 }
