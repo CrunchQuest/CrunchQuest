@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.crunchquest.android.R
 import com.crunchquest.android.data.model.Order
-import com.crunchquest.android.ui.buyer.buyer_fragments.CustomItemDecoration
+import com.crunchquest.android.ui.buyer.buyer_fragments.HomeFragment
 import com.crunchquest.android.ui.components.groupie_views.OrderItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -60,14 +60,14 @@ class FinishedFragment : Fragment() {
         recyclerViewAssist = v.findViewById(R.id.recyclerView_manage_assist)
         val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         recyclerViewAssist.layoutManager = layoutManager
-        recyclerViewAssist.addItemDecoration(CustomItemDecoration(8))
+        recyclerViewAssist.addItemDecoration(HomeFragment.CustomItemDecoration(8))
     }
 
     private fun setupRequestRv() {
         recyclerViewRequest = v.findViewById(R.id.recyclerView_manage_request)
         val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         recyclerViewRequest.layoutManager = layoutManager
-        recyclerViewRequest.addItemDecoration(CustomItemDecoration(8))
+        recyclerViewRequest.addItemDecoration(HomeFragment.CustomItemDecoration(8))
     }
 
 
