@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.crunchquest.android.R
 import com.crunchquest.android.data.model.Order
-import com.crunchquest.android.ui.buyer.buyer_fragments.CustomItemDecoration
+import com.crunchquest.android.ui.buyer.buyer_fragments.HomeFragment.CustomItemDecoration
 import com.crunchquest.android.ui.components.groupie_views.OrderItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot

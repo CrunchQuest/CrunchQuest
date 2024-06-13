@@ -22,13 +22,12 @@ import androidx.work.WorkManager
 import com.crunchquest.android.R
 import com.crunchquest.android.background.NotificationsWorker
 import com.crunchquest.android.data.model.User
-import com.crunchquest.android.ui.general.LoginActivity
-import com.crunchquest.android.ui.general.ProfileSettingsActivity
 import com.crunchquest.android.ui.buyer.buyer_activities.BottomFragmentCreateOrder
 import com.crunchquest.android.ui.buyer.buyer_fragments.BuyerManageFragment
 import com.crunchquest.android.ui.buyer.buyer_fragments.HomeFragment
 import com.crunchquest.android.ui.buyer.buyer_fragments.ProfileFragment
-import com.crunchquest.android.ui.buyer.buyer_fragments.SearchFragment
+import com.crunchquest.android.ui.general.LoginActivity
+import com.crunchquest.android.ui.general.ProfileSettingsActivity
 import com.crunchquest.android.ui.messages.MessagesActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -41,7 +40,6 @@ class BuyerActivity : AppCompatActivity() {
 
     private val homeFragment = HomeFragment()
     private val buyerManageFragment = BuyerManageFragment()
-    private val searchFragment = SearchFragment()
     private val profileFragment = ProfileFragment()
     private lateinit var menuItem: MenuItem
 
@@ -95,9 +93,6 @@ class BuyerActivity : AppCompatActivity() {
                 R.id.homePage -> {
                     makeCurrentFragment(homeFragment)
                 }
-//                R.id.search -> {
-//                    makeCurrentFragment(searchFragment)
-//                }
                 R.id.notifications -> {
                     makeCurrentFragment(buyerManageFragment)
                 }
@@ -157,9 +152,6 @@ class BuyerActivity : AppCompatActivity() {
                 startActivity(intent)
 
             }
-//            R.id.search -> {
-//                makeCurrentFragment(searchFragment)
-//            }
             R.id.profileSettings -> {
                 val intent = Intent(this, ProfileSettingsActivity::class.java)
                 intent.putExtra("intent", "buyer")
@@ -168,9 +160,6 @@ class BuyerActivity : AppCompatActivity() {
             R.id.logOut -> {
                 showDialogFun()
             }
-//            R.id.changeMode -> {
-//                startActivity(Intent(this, ChooseActivity::class.java))
-//            }
 
         }
         return super.onOptionsItemSelected(item)
