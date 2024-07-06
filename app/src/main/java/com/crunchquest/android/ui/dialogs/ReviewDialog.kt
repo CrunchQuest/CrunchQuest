@@ -11,7 +11,6 @@ import com.crunchquest.android.R
 import com.crunchquest.android.data.model.Order
 import com.crunchquest.android.data.model.UserPerformance
 import com.crunchquest.android.data.model.UserReview
-import com.crunchquest.android.data.model.UserSellerInfo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -50,11 +49,8 @@ class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategor
         }
 
 
-
-
         dialog = builder.create()
         dialog!!.show()
-
 
     }
 
@@ -72,28 +68,14 @@ class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategor
         )
         ref.child(id).setValue(review)
 
-        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/${order.bookedBy}/${order.service_booked_uid}")
+        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/${order.bookedBy}/${order.service_booked_uid}/${order.bookedBy}")
         bookedByRef.child("/reviewed").setValue(true)
 
+        val bookedToInByRef = FirebaseDatabase.getInstance().getReference("booked_by/${order.bookedBy}/${order.service_booked_uid}/${order.bookedTo}")
+        bookedToInByRef.child("/reviewed").setValue(true)
+        
         val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/${order.bookedTo}/${order.service_booked_uid}")
         bookedToRef.child("/reviewed").setValue(true)
-
-        val refToTheSeller = FirebaseDatabase.getInstance().getReference("user_seller_info/${order.bookedTo}")
-        refToTheSeller.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val sellerInfo = snapshot.getValue(UserSellerInfo::class.java)!!
-                val count = sellerInfo.count!!
-                val totalRating = sellerInfo.totalRating!!
-
-                refToTheSeller.child("count").setValue(count + 1)
-                refToTheSeller.child("totalRating").setValue(totalRating + ratingBar.rating.toInt())
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-        })
 
         // Set buyer review
         val bookedTo = order.bookedTo
@@ -117,7 +99,6 @@ class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategor
 
         Toast.makeText(v.context, "Thank you for the review!", Toast.LENGTH_SHORT).show()
         dismissDialog()
-
 
     }
 

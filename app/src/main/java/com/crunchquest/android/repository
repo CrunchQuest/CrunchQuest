@@ -2,6 +2,7 @@ package com.crunchquest.android.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.crunchquest.android.data.model.Order
 import com.crunchquest.android.data.model.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -56,6 +57,54 @@ class UserRepository(private val auth: FirebaseAuth, private val database: Fireb
     fun initializeUserNotifications(uid: String, callback: (Task<Void>) -> Unit) {
         val notificationsRef = database.getReference("notifications/$uid")
         notificationsRef.setValue(0).addOnCompleteListener(callback)
+    }
+
+    // Fetch orders booked by a user
+    fun fetchOrdersByUser(userId: String, status: String, callback: (List<Order>) -> Unit) {
+        val bookedByRef = database.getReference("booked_by/$userId")
+        bookedByRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val orders = mutableListOf<Order>()
+                for (serviceSnapshot in snapshot.children) {
+                    val serviceUid = serviceSnapshot.key ?: continue
+                    val serviceOrdersRef = database.getReference("booked_by/$userId/$serviceUid")
+                    serviceOrdersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(serviceSnapshot: DataSnapshot) {
+                            for (orderSnapshot in serviceSnapshot.children) {
+                                val order = orderSnapshot.getValue(Order::class.java)
+                                if (order != null && order.status == status) {
+                                    orders.add(order)
+                                }
+                            }
+                            callback(orders)
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {}
+                    })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    // Fetch orders assigned to a user
+    fun fetchOrdersToUser(userId: String, status: String, callback: (List<Order>) -> Unit) {
+        val bookedToRef = database.getReference("booked_to/$userId")
+        bookedToRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val orders = mutableListOf<Order>()
+                for (orderSnapshot in snapshot.children) {
+                    val order = orderSnapshot.getValue(Order::class.java)
+                    if (order != null && order.status == status) {
+                        orders.add(order)
+                    }
+                }
+                callback(orders)
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
 }

@@ -42,7 +42,6 @@ class DisplayReviewsActivity : AppCompatActivity() {
 
         fetchReviews(userUid)
 
-
     }
 
     private fun showOrHide(count: Int) {

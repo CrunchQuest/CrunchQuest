@@ -257,7 +257,7 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         val orderUid = orderClicked.uid
 
         if (bookedBy != null && bookedTo != null && orderUid != null) {
-            val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}")
+            val ref = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedTo}")
             ref.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val order = snapshot.getValue(Order::class.java)
@@ -428,19 +428,26 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         return resultdate.toString()
     }
 
-    private fun checkDate(date: String): Boolean{
-        val values = date.split(" ").toTypedArray()
-        val month = convertMonth(values[0])
-        val day = values[1].substring(0,2)
-        val year = values[2]
-        val longDate = "$year$month$day".toLong()
-        val currentDate = convertLongToTime(System.currentTimeMillis()).toLong()
-        Log.d("INeedThisValue", "Month: ${values[0]}")
-        Log.d("INeedThisValue", "Day: ${values[1]}")
-        Log.d("INeedThisValue", "Year: ${values[2]}")
-        Log.d("INeedThisValue", "Date Needed: $longDate")
-        Log.d("INeedThisValue", "Current Date: $currentDate")
-        return currentDate < longDate
+    private fun checkDate(date: String): Boolean {
+        try {
+            val values = date.split(" ").toTypedArray()
+            val month = convertMonth(values[0])
+            val day = values[1].substring(0, 2).replace(",", "").trim()
+            val year = values[2].replace(",", "").trim()
+            val longDate = "$year$month$day".toLong()
+            val currentDate = convertLongToTime(System.currentTimeMillis()).toLong()
+
+            Log.d("INeedThisValue", "Month: ${values[0]}")
+            Log.d("INeedThisValue", "Day: ${values[1]}")
+            Log.d("INeedThisValue", "Year: ${values[2]}")
+            Log.d("INeedThisValue", "Date Needed: $longDate")
+            Log.d("INeedThisValue", "Current Date: $currentDate")
+
+            return currentDate < longDate
+        } catch (e: Exception) {
+            Log.e("checkDate", "Error parsing date: ${e.message}")
+            return false
+        }
     }
 
     fun convertLongToTime(time: Long): String {

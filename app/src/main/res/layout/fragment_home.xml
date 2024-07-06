@@ -61,31 +61,31 @@
                     app:layout_constraintEnd_toEndOf="@id/viewPager"
                     app:layout_constraintStart_toStartOf="@id/viewPager" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/categoriesTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="24dp"
-                    android:text="Quest Category"
-                    android:textColor="@color/black"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/viewPager" />
+<!--                <androidx.appcompat.widget.AppCompatTextView-->
+<!--                    android:id="@+id/categoriesTextView"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginTop="24dp"-->
+<!--                    android:text="Quest Category"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="22sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/viewPager" />-->
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView_fragmentHome"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/categoriesTextView"
-                    app:spanCount="5"
-                    tools:itemCount="8" />
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/recyclerView_fragmentHome"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/categoriesTextView"-->
+<!--                    app:spanCount="5"-->
+<!--                    tools:itemCount="8" />-->
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/questTextView"
@@ -98,7 +98,7 @@
                     android:textSize="22sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recyclerView_fragmentHome" />
+                    app:layout_constraintTop_toBottomOf="@+id/viewPager" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/serviceRequestRecyclerView_activityBuyersRequest"
