@@ -18,7 +18,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.crunchquest.android.R
 import com.crunchquest.android.data.model.ServiceRequest
@@ -85,7 +84,8 @@ class HomeFragment : Fragment() {
         // Initialize ViewModel with repository
         val apiService = ApiConfig.retrofit.create(ApiService::class.java)
         val repository = HomeRepository(apiService)
-        homeViewModel = ViewModelProvider(this, HomeViewModelFactory(repository)).get(HomeViewModel::class.java)
+        homeViewModel =
+            ViewModelProvider(this, HomeViewModelFactory(repository)).get(HomeViewModel::class.java)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         currentUserUid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
@@ -93,6 +93,7 @@ class HomeFragment : Fragment() {
         checkUserLocation()
         setupUI()
         observeViewModel()
+        checkUserActiveRequest()
 
         return view
     }
@@ -108,7 +109,7 @@ class HomeFragment : Fragment() {
 
         setupBanner()
         setupFab()
-        setupCategoryRecyclerView()
+//        setupCategoryRecyclerView()
 
         // Fetch data
         val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -129,17 +130,56 @@ class HomeFragment : Fragment() {
 
         homeViewModel.serviceRequests.observe(viewLifecycleOwner, Observer { serviceRequests ->
             updateRecyclerView(serviceRequests, emptyList(), emptyList())
+            checkIfUserHasActiveRequest(serviceRequests)
         })
     }
 
-    private fun updateRecyclerView(serviceRequests: List<ServiceRequest>, distances: List<Double>, similarity_scores: List<Int>) {
+    private fun checkUserActiveRequest() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            homeViewModel.fetchServiceRequests(userId)
+        } else {
+            Log.e("HomeFragment", "User ID is null. Unable to fetch service requests.")
+        }
+    }
+
+    private fun checkIfUserHasActiveRequest(serviceRequests: List<ServiceRequest>) {
+        val userHasActiveRequest = serviceRequests.any { it.userUid == currentUserUid && !it.reviewed!! }
+        Log.d("HomeFragment", "User has active request: $userHasActiveRequest")
+
+        binding.mainFab.isEnabled = true
+        binding.mainFab.setOnClickListener {
+            if (userHasActiveRequest) {
+                // If the user has an active request, show a toast message
+                Toast.makeText(requireContext(), "You must complete your current request first.", Toast.LENGTH_LONG).show()
+            } else {
+                // If the user does not have an active request, proceed with the intended action
+                setupFab()
+            }
+        }
+    }
+
+
+    private fun updateRecyclerView(
+        serviceRequests: List<ServiceRequest>,
+        distances: List<Double>,
+        similarity_scores: List<Int>
+    ) {
         adapterRequest.clear()
-        serviceRequests.forEachIndexed { index, serviceRequest ->
+        val filteredRequests = serviceRequests.filter { it.userUid != currentUserUid }
+        filteredRequests.forEachIndexed { index, serviceRequest ->
             val distance = distances.getOrNull(index) ?: Double.MAX_VALUE
             val similarity = similarity_scores.getOrNull(index) ?: 0
             Log.d("ServiceRequest", "Distance: $distance")
             Log.d("ServiceRequest", "Similarity: $similarity")
-            adapterRequest.add(ServiceRequestItem(serviceRequest, distance, similarity, requireContext()))
+            adapterRequest.add(
+                ServiceRequestItem(
+                    serviceRequest,
+                    distance,
+                    similarity,
+                    requireContext()
+                )
+            )
             Log.d("ServiceRequest", "ServiceRequest from fetchServiceRequest: $serviceRequest")
         }
         binding.serviceRequestRecyclerViewActivityBuyersRequest.adapter = adapterRequest
@@ -154,7 +194,10 @@ class HomeFragment : Fragment() {
             startActivityForResult(intent, REQUEST_CODE)
 
             // Add a log message
-            Log.d("ServiceRequest", "Clicked on service request: ${serviceRequestItem.serviceRequest}")
+            Log.d(
+                "ServiceRequest",
+                "Clicked on service request: ${serviceRequestItem.serviceRequest}"
+            )
         }
 
         // Add a method to add an OrderItem to the adapter
@@ -231,6 +274,11 @@ class HomeFragment : Fragment() {
             val intent = Intent(context, SendRequirementActivity::class.java)
             startActivity(intent)
         }
+
+    binding.subFab1.setOnClickListener {
+            val intent = Intent(context, SendRequirementActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 
@@ -244,13 +292,13 @@ class HomeFragment : Fragment() {
         isExpanded = false
     }
 
-    private fun setupCategoryRecyclerView() {
-        categoryRecyclerView = binding.recyclerViewFragmentHome
-        val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-        categoryRecyclerView.layoutManager = layoutManager
-        categoryRecyclerView.addItemDecoration(CustomItemDecoration(8))
-        fetchServiceCategory()
-    }
+//    private fun setupCategoryRecyclerView() {
+//        categoryRecyclerView = binding.recyclerViewFragmentHome
+//        val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+//        categoryRecyclerView.layoutManager = layoutManager
+//        categoryRecyclerView.addItemDecoration(CustomItemDecoration(8))
+//        fetchServiceCategory()
+//    }
 
     private fun fetchServiceCategory() {
         adapterCategory.clear()
@@ -365,6 +413,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         (activity as BuyerActivity?)?.supportActionBar?.hide()
         bottomNavigationBuyer.menu.findItem(R.id.homePage).isChecked = true
+        checkUserActiveRequest()
     }
 
     override fun onDestroyView() {

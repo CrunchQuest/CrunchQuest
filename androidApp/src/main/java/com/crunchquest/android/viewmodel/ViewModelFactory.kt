@@ -14,6 +14,10 @@ class ViewModelFactory(private val userRepository: UserRepository) : ViewModelPr
             @Suppress("UNCHECKED_CAST")
             return SignUpViewModel(userRepository) as T
         }
+        if (modelClass.isAssignableFrom(OrdersViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return OrdersViewModel(userRepository) as T
+        }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

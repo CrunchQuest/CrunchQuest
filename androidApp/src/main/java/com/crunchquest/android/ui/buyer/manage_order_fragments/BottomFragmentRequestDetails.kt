@@ -215,10 +215,11 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
         val bookedBy = orderClicked.bookedBy
         val bookedTo = orderClicked.bookedTo
         val orderUid = orderClicked.service_booked_uid
+        val assistConfirmation = orderClicked.assistConfirmation
 
-        if (bookedBy != null && bookedTo != null && orderUid != null) {
+        if (bookedBy != null && bookedTo != null && orderUid != null && assistConfirmation == "TRUE") {
             val ref = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$orderUid") // MARKS THISSSSSSSSSSSSS
-            val anotherRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedBy}")
+            val anotherRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$orderUid/${orderClicked.bookedTo}")
             ref.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val order = snapshot.getValue(Order::class.java)
@@ -259,7 +260,7 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
                     if (checkDate(orderClicked.date!!)) {
                         Toast.makeText(v.context, "The Current Date is less than the Booking Date. ", Toast.LENGTH_SHORT).show()
                     } else {
-                        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid/${orderClicked.bookedBy}")
+                        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$bookedBy/$bookingUid/${orderClicked.bookedTo}")
                         val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$bookedTo/$bookingUid")
                         bookedByRef.child("sellerConfirmation").setValue("CONFIRMED")
                         bookedToRef.child("sellerConfirmation").setValue("CONFIRMED")
@@ -284,20 +285,28 @@ class BottomFragmentRequestDetails(order: Order) : BottomSheetDialogFragment() {
     }
 
 
-    private fun checkDate(date: String): Boolean{
-        val values = date.split(" ").toTypedArray()
-        val month = convertMonth(values[0])
-        val day = values[1].substring(0,2)
-        val year = values[2]
-        val longDate = "$year$month$day".toLong()
-        val currentDate = convertLongToTime(System.currentTimeMillis()).toLong()
-        Log.d("INeedThisValue", "Month: ${values[0]}")
-        Log.d("INeedThisValue", "Day: ${values[1]}")
-        Log.d("INeedThisValue", "Year: ${values[2]}")
-        Log.d("INeedThisValue", "Date Needed: $longDate")
-        Log.d("INeedThisValue", "Current Date: $currentDate")
-        return currentDate < longDate
+    private fun checkDate(date: String): Boolean {
+        try {
+            val values = date.split(" ").toTypedArray()
+            val month = convertMonth(values[0])
+            val day = values[1].substring(0, 2).replace(",", "").trim()
+            val year = values[2].replace(",", "").trim()
+            val longDate = "$year$month$day".toLong()
+            val currentDate = convertLongToTime(System.currentTimeMillis()).toLong()
+
+            Log.d("INeedThisValue", "Month: ${values[0]}")
+            Log.d("INeedThisValue", "Day: ${values[1]}")
+            Log.d("INeedThisValue", "Year: ${values[2]}")
+            Log.d("INeedThisValue", "Date Needed: $longDate")
+            Log.d("INeedThisValue", "Current Date: $currentDate")
+
+            return currentDate < longDate
+        } catch (e: Exception) {
+            Log.e("checkDate", "Error parsing date: ${e.message}")
+            return false
+        }
     }
+
 
     fun convertLongToTime(time: Long): String {
         val date = Date(time)
