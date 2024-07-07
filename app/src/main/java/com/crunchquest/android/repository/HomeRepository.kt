@@ -28,4 +28,3 @@ class HomeRepository(private val apiService: ApiService) {
         })
     }
 }
-

@@ -1,3 +1,4 @@
+
 package com.crunchquest.android.viewmodel
 
 import android.util.Patterns
