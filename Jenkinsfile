@@ -9,6 +9,11 @@ pipeline {
                 credentialsId: 'cq-gitlab-jenkins-token'
             }
         }
+        stage('Set Permissions') {
+            steps {
+                sh 'chmod +x gradlew'
+            }
+        }
         stage('Build') {
             steps {
                 sh './gradlew assembleRelease' // Adjust as needed for your build type
@@ -16,7 +21,6 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'chmod +x gradlew'
                 sh './gradlew test' // Run unit tests
             }
         }
