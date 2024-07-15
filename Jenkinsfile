@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://gitlab.com/crunchquest/CrunchQuest.git', branch: 'R1.0.0'
+                git url: 'https://gitlab.com/crunchquest/CrunchQuest.git', branch: 'main', credentialsId: 'secret-auth'
             }
         }
         stage('Build') {
