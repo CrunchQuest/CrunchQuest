@@ -17,16 +17,17 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategories: Array<String>) {
-    private val fragment: Fragment = fragment
-    private val order: Order = order
+class ReviewDialog(
+    private val fragment: Fragment,
+    private val order: Order,
+    private val servicesCategories: Array<String>
+) {
     private var dialog: AlertDialog? = null
     private lateinit var ratingBar: RatingBar
     private lateinit var confirmButton: Button
     private lateinit var laterButton: Button
     private lateinit var editText: EditText
-    lateinit var v: View
-
+    private lateinit var v: View
 
     fun showReviewDialog() {
         val builder = AlertDialog.Builder(fragment.context)
@@ -48,10 +49,30 @@ class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategor
             submitReview()
         }
 
+        checkIfReviewExists()
 
         dialog = builder.create()
         dialog!!.show()
+    }
 
+    private fun checkIfReviewExists() {
+        val userBeingReviewed = order.bookedTo!!
+        val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+        val ref = FirebaseDatabase.getInstance().getReference("reviews/$userBeingReviewed")
+
+        ref.orderByChild("userUid").equalTo(currentUserUid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        confirmButton.isEnabled = false
+                        Toast.makeText(v.context, "You have already reviewed this order.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error if needed
+                }
+            })
     }
 
     private fun submitReview() {
@@ -60,22 +81,22 @@ class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategor
         val ref = FirebaseDatabase.getInstance().getReference("reviews/$userBeingReviewed")
         val id = ref.push().key!!
         val review = UserReview(
-                uid = id,
-                userUid = currentUserUid,
-                review = editText.text.toString(),
-                rating = ratingBar.rating.toInt(),
-                categoryId = servicesCategories.indexOf(order.category)
+            uid = id,
+            userUid = currentUserUid,
+            review = editText.text.toString(),
+            rating = ratingBar.rating.toInt(),
+            categoryId = servicesCategories.indexOf(order.category)
         )
         ref.child(id).setValue(review)
 
-        val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/${order.bookedBy}/${order.service_booked_uid}/${order.bookedBy}")
-        bookedByRef.child("/reviewed").setValue(true)
-
         val bookedToInByRef = FirebaseDatabase.getInstance().getReference("booked_by/${order.bookedBy}/${order.service_booked_uid}/${order.bookedTo}")
         bookedToInByRef.child("/reviewed").setValue(true)
-        
+
         val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/${order.bookedTo}/${order.service_booked_uid}")
         bookedToRef.child("/reviewed").setValue(true)
+
+        val serviceRequestRef = FirebaseDatabase.getInstance().getReference("service_requests/${order.service_booked_uid}")
+        serviceRequestRef.child("/reviewed").setValue(true)
 
         // Set buyer review
         val bookedTo = order.bookedTo
@@ -96,14 +117,11 @@ class ReviewDialog(fragment: Fragment, order: Order, private val servicesCategor
             override fun onCancelled(error: DatabaseError) {}
         })
 
-
         Toast.makeText(v.context, "Thank you for the review!", Toast.LENGTH_SHORT).show()
         dismissDialog()
-
     }
 
     fun dismissDialog() {
         dialog!!.dismiss()
     }
-
 }

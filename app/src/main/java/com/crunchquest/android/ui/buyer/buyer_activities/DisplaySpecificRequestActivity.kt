@@ -212,7 +212,7 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
 
             serviceToBeOrdered?.let { serviceRequest ->
                 val requestUserUid = serviceRequest.bookedBy
-                val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/${serviceRequest.userUid}")
+                val serviceRequestRef = FirebaseDatabase.getInstance().getReference("service_requests/${serviceRequest.uid}")
                 val userRef = FirebaseDatabase.getInstance().getReference("users/$currentUserUid")
 
                 userRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -244,6 +244,12 @@ class DisplaySpecificRequestActivity : AppCompatActivity(), OnMapReadyCallback {
                                 "/booked_by/${serviceRequest.bookedBy}/$serviceUid/$currentUserUid" to order,
                                 "/booked_to/$currentUserUid/$serviceUid" to order
                             )
+
+                            val updateAssist = hashMapOf<String, Any>(
+                                "assistConfirmation" to "TRUE"
+                            )
+
+                            serviceRequestRef.updateChildren(updateAssist)
 
                             FirebaseDatabase.getInstance().reference.updateChildren(updates).addOnCompleteListener { task ->
                                 if (task.isSuccessful) {

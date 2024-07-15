@@ -129,10 +129,14 @@ class HomeFragment : Fragment() {
         })
 
         homeViewModel.serviceRequests.observe(viewLifecycleOwner, Observer { serviceRequests ->
+            serviceRequests.forEach { serviceRequest ->
+                Log.d("HomeFragment", "ServiceRequest: ${serviceRequest.uid}, Reviewed: ${serviceRequest.reviewed}")
+            }
             updateRecyclerView(serviceRequests, emptyList(), emptyList())
             checkIfUserHasActiveRequest(serviceRequests)
         })
     }
+
 
     private fun checkUserActiveRequest() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -144,6 +148,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun checkIfUserHasActiveRequest(serviceRequests: List<ServiceRequest>) {
+        serviceRequests.forEach { serviceRequest ->
+            Log.d("HomeFragment", "ServiceRequest: ${serviceRequest.uid}, UserUID: ${serviceRequest.userUid}, Reviewed: ${serviceRequest.reviewed}")
+        }
+
         val userHasActiveRequest = serviceRequests.any { it.userUid == currentUserUid && !it.reviewed!! }
         Log.d("HomeFragment", "User has active request: $userHasActiveRequest")
 
@@ -160,47 +168,38 @@ class HomeFragment : Fragment() {
     }
 
 
+
     private fun updateRecyclerView(
         serviceRequests: List<ServiceRequest>,
         distances: List<Double>,
         similarity_scores: List<Int>
     ) {
         adapterRequest.clear()
-        val filteredRequests = serviceRequests.filter { it.userUid != currentUserUid }
+
+        // Filter out requests that have already been assisted
+        val filteredRequests = serviceRequests.filter {
+            it.userUid != currentUserUid && // Exclude requests created by the current user
+                    it.assistConfirmation != "TRUE" // Exclude requests that have already been assisted
+        }
+
         filteredRequests.forEachIndexed { index, serviceRequest ->
             val distance = distances.getOrNull(index) ?: Double.MAX_VALUE
             val similarity = similarity_scores.getOrNull(index) ?: 0
-            Log.d("ServiceRequest", "Distance: $distance")
-            Log.d("ServiceRequest", "Similarity: $similarity")
-            adapterRequest.add(
-                ServiceRequestItem(
-                    serviceRequest,
-                    distance,
-                    similarity,
-                    requireContext()
-                )
-            )
-            Log.d("ServiceRequest", "ServiceRequest from fetchServiceRequest: $serviceRequest")
+            adapterRequest.add(ServiceRequestItem(serviceRequest, distance, similarity, requireContext()))
         }
         binding.serviceRequestRecyclerViewActivityBuyersRequest.adapter = adapterRequest
 
-        // Modify the ServiceRequestItem click listener
         adapterRequest.setOnItemClickListener { item, view ->
-            // Handle item click as before
             val serviceRequestItem = item as ServiceRequestItem
             clickedServiceRequestItem = serviceRequestItem
             val intent = Intent(view.context, DisplaySpecificRequestActivity::class.java)
             intent.putExtra("ServiceRequest", serviceRequestItem.serviceRequest)
             startActivityForResult(intent, REQUEST_CODE)
 
-            // Add a log message
-            Log.d(
-                "ServiceRequest",
-                "Clicked on service request: ${serviceRequestItem.serviceRequest}"
-            )
+            Log.d("ServiceRequest", "Clicked on service request: ${serviceRequestItem.serviceRequest}")
         }
 
-        // Add a method to add an OrderItem to the adapter
+    // Add a method to add an OrderItem to the adapter
         fun addOrderItem(orderItem: OrderItem) {
             adapterRequest.add(orderItem)
         }

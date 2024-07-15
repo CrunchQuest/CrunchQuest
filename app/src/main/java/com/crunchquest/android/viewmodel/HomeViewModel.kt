@@ -17,14 +17,18 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     private val _userProfileImageUrl = MutableLiveData<String>()
     val userProfileImageUrl: LiveData<String> get() = _userProfileImageUrl
 
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> get() = _error
+
     fun fetchServiceRequests(userId: String) {
         viewModelScope.launch {
-            try {
-                val response = repository.getServiceRequests(userId)
-                val serviceRequests = response.map { convertToServiceRequest(it) }
-                _serviceRequests.postValue(serviceRequests)
-            } catch (e: Exception) {
-                Log.e("HomeViewModel", "Error fetching service requests: ${e.message}")
+            repository.getServiceRequests(userId).onSuccess { serviceRequests ->
+                val serviceRequestsList = serviceRequests.map { convertToServiceRequest(it) }
+                _serviceRequests.postValue(serviceRequestsList)
+                _error.postValue(null)  // Clear previous error
+            }.onFailure { exception ->
+                Log.e("HomeViewModel", "Error fetching service requests: ${exception.message}")
+                _error.postValue("Failed to fetch service requests. Please try again later.")
             }
         }
     }
@@ -51,7 +55,8 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
             price = serviceRequestResponse.request_data.price ?: 0,
             time = serviceRequestResponse.request_data.time,
             title = serviceRequestResponse.request_data.title,
-            userUid = serviceRequestResponse.request_data.userUid
+            userUid = serviceRequestResponse.request_data.userUid,
+            reviewed = serviceRequestResponse.request_data.reviewed
         )
     }
 }

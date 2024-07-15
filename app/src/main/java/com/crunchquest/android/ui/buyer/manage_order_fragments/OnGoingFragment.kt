@@ -59,6 +59,7 @@ class OnGoingFragment : Fragment() {
         recyclerViewAssist = v.findViewById(R.id.recyclerView_manage_assist)
         val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         recyclerViewAssist.layoutManager = layoutManager
+        recyclerViewAssist.adapter = adapterAssist
         recyclerViewAssist.addItemDecoration(CustomItemDecoration(8))
     }
 
@@ -66,6 +67,7 @@ class OnGoingFragment : Fragment() {
         recyclerViewRequest = v.findViewById(R.id.recyclerView_manage_request)
         val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         recyclerViewRequest.layoutManager = layoutManager
+        recyclerViewRequest.adapter = adapterRequest
         recyclerViewRequest.addItemDecoration(CustomItemDecoration(8))
     }
 
@@ -79,7 +81,7 @@ class OnGoingFragment : Fragment() {
     private fun fetchOrdersRequest() {
         val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
 
-        // Fetch orders where the current user is listed as an assister
+        // Fetch orders where the current user is listed as an requester
         val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
         Log.d("Fetch Assist", "bookedByRef: $bookedByRef")
         bookedByRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -92,40 +94,33 @@ class OnGoingFragment : Fragment() {
 
                         // Fetch orders for each service where the current user is an requester
                         val serviceOrdersRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid/$serviceUid")
-                        Log.d("Fetch Assist", "serviceOrdersRef: $serviceOrdersRef")
-                        fetchOrdersFromDatabase(serviceOrdersRef, "Assister", recyclerViewRequest, adapterRequest)
+                        fetchOrdersFromDatabase(serviceOrdersRef, "Requester", recyclerViewRequest, adapterRequest)
                     }
                 } else {
-                    Log.d("Fetch Assist", "No Fetch Assist User In Fetch Request Function ")
+                    Log.d("Fetch Request", "No Fetch Request User In Fetch Request Function ")
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle error
+                Log.e("Fetch Request", "Database error: $error")
             }
         })
     }
 
     private fun fetchOrdersAssist() {
         val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
-
-        // Fetch orders where the current user is the one who created the request (booked_by)
         val bookedToRef = FirebaseDatabase.getInstance().getReference("booked_to/$currentUserUid")
         bookedToRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists() && snapshot.children.any()) {
-                    // If there are orders where the current user is the one who created the request, fetch them
                     fetchOrdersFromDatabase(bookedToRef, "Assist User", recyclerViewAssist, adapterAssist)
                 } else {
-                    // If there are no orders where the current user is the one who created the request, fetch orders where the current user is the one who assists the request (booked_to)
-//                    val bookedByRef = FirebaseDatabase.getInstance().getReference("booked_by/$currentUserUid")
-//                    fetchOrdersFromDatabase(bookedToRef, "Request User")
                     Log.d("Fetch Assist", "No Fetch Request User In Fetch Assist Function ")
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle error
+                Log.e("Fetch Assist", "Database error: $error")
             }
         })
     }
@@ -133,45 +128,34 @@ class OnGoingFragment : Fragment() {
     private fun fetchOrdersFromDatabase(ref: DatabaseReference, userType: String, recyclerView: RecyclerView, adapter: GroupAdapter<ViewHolder>) {
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (isAdded) { // Check if the Fragment is currently added to its activity
+                if (isAdded) {
                     adapter.clear()
                     Log.d("OnGoingFragment", "$userType DataSnapshot: $snapshot") // Log the DataSnapshot
+                    val orders = mutableListOf<OrderItem>()
                     snapshot.children.forEach { orderSnapshot ->
                         val order = orderSnapshot.getValue(Order::class.java) ?: return
                         if (order.status == "ACCEPTED") {
                             val orderItem = OrderItem(order, requireContext())
-                            adapter.add(orderItem)
+                            orders.add(orderItem)
                             Log.d("OnGoingFragment", "$userType Added OrderItem: $orderItem") // Log the OrderItem
                         }
-                        // Retrieve tempUser from the Order object
-                        val tempUser = order.assistUser
-                        Log.d("OnGoingFragment", "$userType tempUser: $tempUser") // Log tempUser
                     }
-                    // Set item click listener outside the loop
+
+                    adapter.update(orders)
+
                     adapter.setOnItemClickListener { item, _ ->
                         val orderItem = item as OrderItem
                         val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
                         val tappedOrder = orderItem.order
                         orderClicked = tappedOrder
 
-                        // Log the Order Object
-                        Log.d("OnGoingFragment", "$userType Tapped Order: $tappedOrder")
-                        Log.d("OnGoingFragment", "Current User ID: $currentUserId")
-                        Log.d("OnGoingFragment", "Booked By: ${tappedOrder.bookedBy}")
-                        Log.d("OnGoingFragment", "tappedOrder.userUid: ${tappedOrder.userUid}")
                         if (currentUserId == tappedOrder.bookedBy) {
-
-                            Log.d("OnGoingFragment", "REQUESTER ONLY")
-                            // REQUESTER
                             if (tappedOrder.assistConfirmation == "TRUE") {
-                                Log.d("OnGoingFragment", "REQUESTER AND ASSISTED")
                                 val bundle = Bundle()
                                 bundle.putString("requestUser", tappedOrder.assistUser)
-                                val requestDetailsFragment = BottomFragmentRequestDetails(
-                                    orderClicked!!) // ACCEPT DECLINE
+                                val requestDetailsFragment = BottomFragmentRequestDetails(orderClicked!!) // ACCEPT DECLINE
                                 requestDetailsFragment.arguments = bundle
-                                requestDetailsFragment.show(parentFragmentManager, TAG
-                                )
+                                requestDetailsFragment.show(parentFragmentManager, TAG)
                             } else {
                                 Log.d("OnGoingFragment", "REQUESTER NOT ASSISTED")
                                 val orderDetailsFragment = BottomFragmentOrderDetails(orderClicked!!) // CANCEL AND MESSAGE
@@ -185,18 +169,17 @@ class OnGoingFragment : Fragment() {
                             orderDetailsFragment.show(parentFragmentManager, TAG)
                         }
                     }
+
                     recyclerView.adapter = adapter
-                    Log.d("OnGoingFragment", "$userType Adapter Item Count: ${adapter.itemCount}") // Log the adapter item count
+                    Log.d("OnGoingFragment", "$userType Adapter Item Count: ${adapter.itemCount}")
                 } else {
-                    Log.d("OnGoingFragment", "$userType Has no orders") // Log that there are no orders for the current user
+                    Log.d("OnGoingFragment", "$userType Has no orders")
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle error
+                Log.e("OnGoingFragment", "Database error: $error")
             }
         })
     }
-
-
 }

@@ -197,12 +197,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_buttons"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_button_accept_inverted"
         android:text="Finish Request"
         android:fontFamily="@font/montserrat_medium"
-        android:textColor="#FDFDFD"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        android:textColor="@color/cool_green"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/declineButton_fragmentBottomBookingDetailsSeller" />
+        app:layout_constraintTop_toBottomOf="@+id/date_fragmentBottomBookingDetailsSeller" />
 </androidx.constraintlayout.widget.ConstraintLayout>

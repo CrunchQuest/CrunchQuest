@@ -49,8 +49,8 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
     override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
 
     companion object {
-        const val CONFIRM_TEXT = "CONFIRM BOOKING"
-        const val ADD_REVIEW_TEXT = "ADD A REVIEW"
+        const val CONFIRM_TEXT = "Finish Request"
+        const val ADD_REVIEW_TEXT = "Add a Review"
 
     }
 
@@ -98,13 +98,13 @@ class BottomFragmentOrderDetails(orderPassed: Order) : BottomSheetDialogFragment
         cancelButton= v.findViewById(R.id.cancelButton_orderDetails)
 
 
-        date.text = "${order.date}"
+        date.text = "Scheduled Date: ${order.date}"
         time.text = "${order.time}"
         price.text = "${order.price.toString()}"
         category.text = "${order.category}"
         title.text = "${order.title}"
         description.text = "${order.description}"
-        dateOrdered.text = "${convertLongToDate(order.dateOrdered)}"
+        dateOrdered.text = "Current Date: ${convertLongToDate(order.dateOrdered)}"
         address.text = "${order.address}"
         mode.text = "Mode of Payment: ${order.modeOfPayment}"
 
