@@ -6,15 +6,26 @@ on:
       - main  # Change to your default branch
 
 jobs:
-  sync:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Sync to GitLab
-        env:
-          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+      - name: Set up Git
         run: |
-          git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/crunchquest/CrunchQuest.git
-          git push gitlab main  # Change to your target branch
+          git config --global user.name "Satria Gucci"
+          git config --global user.email "fngevnthppv@gmail.com"
+
+      - name: Add GitLab remote
+        run: |
+          git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/crunchquest/CrunchQuest.git
+
+      - name: Pull latest changes from GitLab
+        run: |
+          git pull gitlab main --rebase || true  # Add || true to prevent the job from failing if no changes
+
+      - name: Push to GitLab
+        run: |
+          git push gitlab main
+
