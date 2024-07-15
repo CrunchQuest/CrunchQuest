@@ -3,7 +3,7 @@ name: Sync to GitLab
 on:
   push:
     branches:
-      - main  # Change to your default branch
+      - main  # This will trigger the workflow on pushes to the 'main' branch
 
 jobs:
   build:
@@ -19,20 +19,20 @@ jobs:
 
       - name: Add GitLab remote
         run: |
-          git remote add gitlab https://oauth2:glpat-EsAHKM6bwZFzhP7kwmj3@gitlab.com/crunchquest/CrunchQuest.git
+          git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/crunchquest/CrunchQuest.git
 
-      - name: Pull latest changes from GitLab
+      - name: Fetch and merge changes from GitLab
         run: |
           git fetch gitlab main
           git checkout main
-          # Attempt rebase and resolve conflicts automatically by keeping our changes
+          # Attempt to rebase, if conflict happens, use ours strategy
           git rebase gitlab/main || {
-          git rebase --abort
-          git merge -s ours gitlab/main
+            git rebase --abort
+            git merge -s ours --allow-unrelated-histories gitlab/main
+            git add .github/workflows/sync_to_gitlab.yml
+            git commit -m "Resolve merge conflict by keeping local changes"
           }
 
       - name: Push to GitLab
         run: |
-          git push gitlab main --force-with-lease  # Use --force-with-lease to avoid overwriting remote changes unexpectedly
-
-
+          git push gitlab main --force-with-lease
