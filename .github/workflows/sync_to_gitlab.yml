@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Ensure the full history is fetched
 
       - name: Set up Git
         run: |
@@ -21,11 +23,12 @@ jobs:
         run: |
           git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/crunchquest/CrunchQuest.git
 
-      - name: Fetch and merge changes from GitLab
+      - name: Pull latest changes from GitLab
         run: |
-          git fetch gitlab main
-          git checkout main
-          git pull --rebase gitlab main
+          git pull --rebase gitlab main || {
+            echo "Rebase failed; attempting to merge."
+            git merge --strategy-option theirs gitlab/main -m "Merge GitLab changes into main, favoring remote changes"
+          }
 
       - name: Push to GitLab
         run: |
