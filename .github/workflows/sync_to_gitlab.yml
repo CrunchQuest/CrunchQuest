@@ -19,7 +19,6 @@ jobs:
 
       - name: Add GitLab remote
         run: |
-          git remote set-url gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/crunchquest/CrunchQuest.git
           git remote add gitlab https://oauth2:glpat-EsAHKM6bwZFzhP7kwmj3@gitlab.com/crunchquest/CrunchQuest.git
 
       - name: Pull latest changes from GitLab
