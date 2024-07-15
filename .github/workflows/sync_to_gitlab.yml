@@ -23,9 +23,12 @@ jobs:
 
       - name: Pull latest changes from GitLab
         run: |
-          git pull gitlab main --rebase || true  # Add || true to prevent the job from failing if no changes
+          git fetch gitlab main
+          git checkout main
+          git rebase gitlab/main || git rebase --abort  # Rebase or abort if it fails
 
       - name: Push to GitLab
         run: |
-          git push gitlab main
+          git push gitlab main --force-with-lease  # Use --force-with-lease to avoid overwriting remote changes unexpectedly
+
 
