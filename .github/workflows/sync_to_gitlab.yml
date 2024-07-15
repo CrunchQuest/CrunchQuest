@@ -25,11 +25,14 @@ jobs:
         run: |
           git fetch gitlab main
           git checkout main
-          git rebase gitlab/main || git rebase --abort  # Rebase or abort if it fails
+          # Attempt rebase and resolve conflicts automatically by keeping our changes
+          git rebase gitlab/main || {
+          git rebase --abort
+          git merge -s ours gitlab/main
+          }
 
       - name: Push to GitLab
         run: |
-          git pull gitlab main --rebase  # Pull latest changes from GitLab
           git push gitlab main --force-with-lease  # Use --force-with-lease to avoid overwriting remote changes unexpectedly
 
 
