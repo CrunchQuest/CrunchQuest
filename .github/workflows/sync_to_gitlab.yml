@@ -16,5 +16,5 @@ jobs:
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
-          git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/Satriagucci/crunchquest/CrunchQuest.git
+          git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/crunchquest/CrunchQuest.git
           git push gitlab main  # Change to your target branch
