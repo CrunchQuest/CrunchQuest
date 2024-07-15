@@ -25,14 +25,8 @@ jobs:
         run: |
           git fetch gitlab main
           git checkout main
-          # Attempt to rebase, if conflict happens, use ours strategy
-          git rebase gitlab/main || {
-            git rebase --abort
-            git merge -s ours --allow-unrelated-histories gitlab/main
-            git add .github/workflows/sync_to_gitlab.yml
-            git commit -m "Resolve merge conflict by keeping local changes"
-          }
+          git pull --rebase
 
       - name: Push to GitLab
         run: |
-          git push gitlab main --force-with-lease
+          git push gitlab main
