@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://gitlab.com/crunchquest/CrunchQuest.git', branch: 'main', credentialsId: 'secret-auth'
+                git url: 'https://gitlab.com/crunchquest/CrunchQuest.git', 
+                branch: 'main', 
+                credentialsId: 'cq-gitlab-jenkins-token'
             }
         }
         stage('Build') {
