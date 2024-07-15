@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.CrunchQuest"
+    tools:context=".ui.buyer.buyer_activities.RequestActivity">
+
+    <TextView
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:fillViewport="true"
+        android:paddingBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_requestActivity"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/title_activityRequest"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/rounded_edit_text"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:hint="@string/enter_a_request_name"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:selectAllOnFocus="true"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+
+                <EditText
+                    android:id="@+id/category_activityRequest"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/rounded_edit_text"
+                    android:drawableLeft="@drawable/ic_category"
+                    android:enabled="false"
+                    android:textSize="14sp"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:hint="@string/choose_category"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:selectAllOnFocus="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnDate"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_button_inverted"
+                    android:text="Pick date"
+                    android:textColor="@color/dark_cq_purple"
+                    app:layout_constraintStart_toStartOf="@+id/textView32"
+                    app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+                <TimePicker
+                    android:id="@+id/timePicker"
+                    android:layout_width="0dp"
+                    android:layout_height="102dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="50dp"
+                    android:timePickerMode="spinner"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.494"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView33" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="0dp"
+                    android:layout_height="49dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/rounded_edit_text"
+                    android:enabled="false"
+                    android:padding="15dp"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/btnDate"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btnDate"
+                    app:layout_constraintTop_toTopOf="@+id/btnDate" />
+
+                <!-- Bound -->
+
+                <TextView
+                    android:id="@+id/textView32"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="16dp"
+                    android:drawableLeft="@drawable/ic_calendar"
+                    android:text="@string/date"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/category_activityRequest" />
+
+                <TextView
+                    android:id="@+id/textView33"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:drawableLeft="@drawable/ic_time"
+                    android:text="@string/time"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/textView32"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
+                <TextView
+                    android:id="@+id/textView34"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:drawableLeft="@drawable/ic_address"
+                    android:text="@string/address"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/timePicker"
+                    app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+
+                <TextView
+                    android:id="@+id/textView27"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:drawableLeft="@drawable/ic_mode"
+                    android:text="@string/payment"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/etAddress"
+                    app:layout_constraintTop_toBottomOf="@+id/etAddress" />
+
+                <EditText
+                    android:id="@+id/etAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_edit_text"
+                    android:hint="@string/street_name"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
+                    android:padding="15dp"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="@+id/timePicker"
+                    app:layout_constraintStart_toStartOf="@+id/textView34"
+                    app:layout_constraintTop_toBottomOf="@+id/textView34" />
+
+                <EditText
+                    android:id="@+id/etModePayment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/rounded_edit_text"
+                    android:enabled="false"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:hint="Choose method (e.g., Cash)"
+                    android:padding="15dp"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/timePicker"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/textView27"
+                    app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
+                <EditText
+                    android:id="@+id/price_activityRequest"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/rounded_edit_text"
+                    android:hint="@string/price_body"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:inputType="number"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:selectAllOnFocus="true"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+                <EditText
+                    android:id="@+id/description_activityRequest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/rounded_edit_text"
+                    android:gravity="clip_horizontal"
+                    android:hint="@string/request_description_body"
+                    android:inputType="textMultiLine"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:lines="4"
+                    android:textColor="@color/coolBlack"
+                    android:textColorHint="@color/gray_hint"
+                    android:padding="15dp"
+                    android:scrollHorizontally="true"
+                    android:selectAllOnFocus="true"
+                    android:singleLine="false"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolBar_activityRequest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="2dp"
+                    android:minHeight="?attr/actionBarSize"
+                    android:theme="?attr/actionBarTheme"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:navigationIcon="@drawable/ic_back_alt"
+                    app:title="Post a Request" />
+
+                <TextView
+                    android:id="@+id/textView17"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/request_description"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/title_activityRequest" />
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/request_name"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/toolBar_activityRequest" />
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/price"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/description_activityRequest" />
+
+                <TextView
+                    android:id="@+id/counter_activityRequest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="0/300"
+                    android:textColor="#EA0000"
+                    app:layout_constraintBottom_toBottomOf="@+id/description_activityRequest"
+                    app:layout_constraintEnd_toEndOf="@+id/description_activityRequest" />
+
+                <Spinner
+                    android:id="@+id/spinnerCategory_activityRequest"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintEnd_toEndOf="@+id/category_activityRequest"
+                    app:layout_constraintTop_toTopOf="@+id/category_activityRequest" />
+
+                <Spinner
+                    android:id="@+id/spinnerModeOfPayment_activityRequest"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:padding="15dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/etModePayment"
+                    app:layout_constraintEnd_toEndOf="@+id/etModePayment"
+                    app:layout_constraintTop_toTopOf="@+id/etModePayment" />
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/request_category"
+                    android:textColor="@color/coolBlack"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/price_activityRequest" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_requestActivity"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_buttons"
+        android:text="Submit Request"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

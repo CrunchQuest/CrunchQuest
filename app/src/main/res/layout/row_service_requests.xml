@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_service"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardMaxElevation="8dp"
+    android:layout_margin="8dp">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageView_serviceRowRequest"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:civ_circle_background_color="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+
+    <TextView
+        android:id="@+id/title_serviceRowRequest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:maxLines="2"
+        android:text="Help me move to a new room please anyone"
+        android:textColor="@color/dark_blue"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_serviceRowRequest"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/descriptionTextView_serviceRowRequest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:maxHeight="60dp"
+        android:maxLines="2"
+        android:text="I need help to move my things to a new place, help me"
+        android:textColor="@color/cool_black"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_serviceRowRequest"
+        app:layout_constraintStart_toStartOf="@+id/title_serviceRowRequest"
+        app:layout_constraintTop_toBottomOf="@+id/title_serviceRowRequest" />
+
+
+    <TextView
+        android:id="@+id/priceTextView_serviceRowRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Rp17.000"
+        android:textColor="#0C7A1E"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/descriptionTextView_serviceRowRequest"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionTextView_serviceRowRequest" />
+
+    <ImageView
+        android:id="@+id/categoryImageView_serviceRowRequests"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/services_computer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/priceTextView_serviceRowRequest" />
+
+    <TextView
+        android:id="@+id/location_tv_serviceRowRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginTop="16dp"
+        android:drawableTint="@color/coolBlack"
+        android:drawableStart="@drawable/ic_location"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="Very Near"
+        android:textColor="@color/cool_black"
+        app:layout_constraintStart_toStartOf="@+id/priceTextView_serviceRowRequest"
+        app:layout_constraintTop_toBottomOf="@+id/priceTextView_serviceRowRequest" />
+
+    <TextView
+        android:id="@+id/similarity_tv_serviceRowRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginStart="36dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textColor="@color/cool_black"
+        android:text="Compatible"
+        app:layout_constraintEnd_toStartOf="@+id/categoryImageView_serviceRowRequests"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/location_tv_serviceRowRequest" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>

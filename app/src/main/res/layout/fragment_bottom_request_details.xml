@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:layout_marginHorizontal="4dp"
+    android:theme="@style/Theme.CrunchQuest"
+    tools:context=".ui.serviceprovider.sellermanage_order_fragments.BottomFragmentSellerOrderDetails">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textColor="@color/coolBlack"
+        android:text="Details"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view15"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/whiter_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_fragmentBottomBookingDetailsSeller" />
+
+    <TextView
+        android:id="@+id/date_fragmentBottomBookingDetailsSeller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_calendar"
+        android:gravity="center|left"
+        android:text="Date"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/address_fragmentBottomBookingDetailsSeller" />
+
+    <TextView
+        android:id="@+id/time_fragmentBottomBookingDetailsSeller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_time"
+        android:gravity="center|left"
+        android:text="Time"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/address_fragmentBottomBookingDetailsSeller" />
+
+    <com.codesgood.views.JustifiedTextView
+        android:id="@+id/address_fragmentBottomBookingDetailsSeller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center|left"
+        android:text="Jalan Bekasi"
+        fontFamily="@font/montserrat_medium"
+        android:textColor="@color/coolBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_fragmentBottomBookingDetailsSeller" />
+
+    <TextView
+        android:id="@+id/price_fragmentBottomBookingDetailsSelle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center|left"
+        android:text="Rp40.000"
+        android:textStyle="bold"
+        android:textColor="@color/coolBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description_fragmentBottomBookingDetailsSeller" />
+
+    <com.codesgood.views.JustifiedTextView
+        android:id="@+id/name_fragmentBottomBookingDetailsSeller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:drawableLeft="@drawable/ic_id"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/coolBlack"
+        android:gravity="center|left"
+        android:text="Mahesa Danuarta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/category_fragmentBottomBookingDetailsSeller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center|left"
+        android:text="Computer Repair"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price_fragmentBottomBookingDetailsSelle" />
+
+
+    <com.codesgood.views.JustifiedTextView
+        android:id="@+id/title_fragmentBottomBookingDetailsSeller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center|left"
+        android:text="Please help me move!"
+        android:textColor="@color/coolBlack"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view15" />
+
+    <com.codesgood.views.JustifiedTextView
+        android:id="@+id/description_fragmentBottomBookingDetailsSeller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center|left"
+        android:text="I need help to move to a new place"
+        android:textColor="@color/coolBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_fragmentBottomBookingDetailsSeller" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_fragmentBottomBookingDetailsSeller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_button_message_inverted"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="Message"
+        android:textAllCaps="false"
+        android:textColor="@color/dark_washed_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_fragmentBottomBookingDetailsSeller" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/marButton_fragmentBottomBookingDetailsSeller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_button_accept_inverted"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="ACCEPT"
+        android:textColor="@color/cool_green"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_fragmentBottomBookingDetailsSeller" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/declineButton_fragmentBottomBookingDetailsSeller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/rounded_button_decline_inverted"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="Decline"
+        android:textColor="@color/cool_red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/marButton_fragmentBottomBookingDetailsSeller" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/complete_fragmentBottomBookingDetailsSeller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_button_accept_inverted"
+        android:text="Finish Request"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/cool_green"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_fragmentBottomBookingDetailsSeller" />
+</androidx.constraintlayout.widget.ConstraintLayout>

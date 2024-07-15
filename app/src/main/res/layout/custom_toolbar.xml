@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@drawable/toolbar_background"
+    android:elevation="16dp"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--            com.crunchquest.android:id="@+id/searchBtn"-->
+<!--            com.crunchquest.android:layout_width="0dp"-->
+<!--            com.crunchquest.android:layout_height="42dp"-->
+<!--            com.crunchquest.android:layout_marginStart="2dp"-->
+<!--            com.crunchquest.android:layout_marginTop="8dp"-->
+<!--            com.crunchquest.android:layout_marginEnd="16dp"-->
+<!--            com.crunchquest.android:layout_weight="1"-->
+<!--            com.crunchquest.android:background="@drawable/rounded_button"-->
+<!--            com.crunchquest.android:drawableLeft="@drawable/ic_black_search"-->
+<!--            com.crunchquest.android:gravity="center|fill"-->
+<!--            com.crunchquest.android:paddingLeft="10dp"-->
+<!--            com.crunchquest.android:text="What are you looking for?"-->
+<!--            com.crunchquest.android:textAllCaps="false"-->
+<!--            com.crunchquest.android:textColor="@color/dark_grey"-->
+<!--            com.crunchquest.android:textSize="14sp" />-->
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="2"
+            app:srcCompat="@drawable/logo_text" />
+
+        <ImageView
+            android:id="@+id/message_iv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="12dp"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/message_ic"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circleImageView"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_vertical"
+            app:civ_border_color="@color/main_cq_purple"
+            app:civ_border_width="2dp"
+            app:civ_circle_background_color="@color/white"
+            tools:srcCompat="@tools:sample/avatars" />
+
+
+
+    </LinearLayout>
+
+</androidx.appcompat.widget.Toolbar>

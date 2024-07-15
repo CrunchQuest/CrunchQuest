@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="backGroundShadow">#f7f7f7</color>
+    <color name="lightBlue">#63E5C5</color>
+    <color name="darkBlue">#14366F</color>
+    <color name ="anotherLightBlue">#38A2D6</color>
+    <color name ="anotherDarkBlue">#551138</color>
+    <color name="black_alpha_40">#66000000</color>
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <!-- Custom Colors -->
+    <color name="dark_blue">#0D0140</color>
+    <color name="blue">#130160</color>
+    <color name="blue_magenta">#524B6B</color>
+    <color name="orange">#FCA34D</color>
+    <color name="kimberly">#6A6388</color>
+    <color name="grey">#AAA6B9</color>
+    <color name="dark_grey">#9e9e9e</color>
+    <color name="lavender">#D6CDFE</color>
+    <color name="light_lavender">#E6E1FF</color>
+    <color name="off_white">#F9F9F9</color>
+    <color name="light_blue">#FF96CFFA</color>
+    <color name="light_orange">#FFBE7E</color>
+    <color name="baby_blue">#EAF5FE</color>
+    <color name="dark_purple">#514B6B</color>
+
+    <!--//Status cof the service colors -->
+    <color name="pause">#e5989b</color>
+    <color name="active">#006d77</color>
+    <color name="pending">#a5a58d</color>
+
+    <!--//Status of the orders -->
+    <color name="new_order">#00BCD4</color>
+    <color name="on_going_order">#FF9800</color>
+    <color name="complete_order">#4CAF50</color>FF8BC34A
+
+    <color name="done">#FF8BC34A</color>
+
+    <!-- Component Colors -->
+    <color name="text_color">@color/dark_blue</color>
+    <color name="subheading_color">@color/blue_magenta</color>
+    <color name="button_color">@color/dark_blue</color>
+    <color name="box_stroke_color">@color/gray_hint</color>
+    <color name="button_text_color">@color/off_white</color>
+    <color name="on_boarding_span_text_color">@color/orange</color>
+
+    <!-- Outscoped Colors -->
+    <color name="splash_screen_background">@color/dark_blue</color>
+    <color name="background_color">@color/off_white</color>
+    <color name="on_boarding_text_color">@color/black</color>
+    <color name="on_boarding_sub_heading_text_color">@color/blue_magenta</color>
+    <color name="status_bar_color">@color/white</color>
+    <color name="button_tint_color">@color/off_white</color>
+    <color name="button_tint_text_color">@color/dark_blue</color>
+    <color name="button_tint_border_color">@color/dark_blue</color>
+    <color name="power_spinner_arrow_tint">@color/dark_blue</color>
+    <color name="power_spinner_border_active">@color/dark_blue</color>
+    <color name="power_spinner_border_in_active">@color/dark_grey</color>
+    <color name="icon_tint">@color/dark_blue</color>
+
+    <color name="bottom_sheet_background_color">@color/dark_blue</color>
+    <color name="bottom_sheet_view_color">@color/white</color>
+    <color name="bottom_sheet_text_color">@color/white</color>
+    <color name="bottom_sheet_sub_text">@color/grey</color>
+    <color name="bottom_sheet_button_text_color">@color/dark_blue</color>
+
+    <color name="loading_dialog_background_color">@color/dark_blue</color>
+    <color name="loading_dialog_text_color">@color/white</color>
+
+    <color name="bottom_nav_icon_tint">@color/dark_grey</color>
+    <color name="bottom_nav_icon_tint_active">@color/dark_blue</color>
+    <color name="bottom_nav_background_color">@color/off_white</color>
+    <color name="bottom_nav_indicator_color">@color/light_lavender</color>
+
+    <color name="company_card_background">@color/light_blue</color>
+    <color name="job_applied_card_background">@color/light_orange</color>
+
+    <color name="card_background">@color/off_white</color>
+
+    <color name="chip_text_color">@color/dark_purple</color>
+    <color name="chip_background_color">@color/baby_blue</color>
+    <color name="job_chip_background_color">@color/baby_blue</color>
+
+    <color name="correct_ans_border">@color/blue</color>
+    <color name="main_cq_purple">#7E0792</color>
+    <color name="dark_cq_purple">#3B0051</color>
+
+    <color name="cool_white">#F3F4F6</color>
+    <color name="cool_black">#3A3839</color>
+
+    <color name="coolBlack">#2B2B2B</color>
+    <color name="alternate_cq_purple">#5B067B</color>
+
+
+    <color name="cool_gold">#feb625</color>
+    <color name="orange_gold">#E29700</color>
+
+    <color name="whiter_gray">#F1F1F1</color>
+
+    <color name="washed_green">#DCF6ED</color>
+    <color name="dark_green">#445F56</color>
+
+    <color name="cool_green">#0AB111</color>
+    <color name="cool_red">#C24545</color>
+    <color name="cool_orange">#FF7400</color>
+
+    <color name="washed_orange">#f9ecd7</color>
+    <color name="dark_orange">#EC9141</color>
+
+    <color name="washed_blue">#edf2fd</color>
+    <color name="dark_washed_blue">#0040E4</color>
+
+
+    <color name="gray_hint">#C0C0C0</color>
+    <color name="gray_stroke">#E0E0E0</color>
+    <color name="gray_guide">#E2E2E2</color>
+
+    <color name="cq_purple_light">#faecfd</color>
+    <color name="message_background">#F4F6FA</color>
+
+
+
+
+
+</resources>
