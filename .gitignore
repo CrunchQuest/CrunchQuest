@@ -13,10 +13,10 @@
 .externalNativeBuild
 .cxx
 local.properties
-gradle.xml
+/.idea/gradle.xml
 gradlew
-misc.xml
-other.xml
-vcs.xml
-deploymentTargetSelector.xml
-material_theme_project_new.xml
+/.idea/misc.xml
+/.idea/other.xml
+/.idea/vcs.xml
+/.idea/deploymentTargetSelector.xml
+/.idea/material_theme_project_new.xml
