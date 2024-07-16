@@ -1,19 +1,16 @@
 pipeline {
     agent any
-
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-
         stage('Set Permissions') {
             steps {
                 sh 'chmod +x gradlew'
             }
         }
-
         stage('Build') {
             environment {
                 JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
@@ -23,7 +20,6 @@ pipeline {
                 sh './gradlew clean assembleRelease'
             }
         }
-
         stage('Test') {
             environment {
                 JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
@@ -32,29 +28,17 @@ pipeline {
             steps {
                 sh './gradlew test'
             }
-            post {
-                always {
-                    junit '**/app/build/test-results/testDebugUnitTest/*.xml'
-                }
-            }
-        }
-
-        stage('Archive APK') {
-            steps {
-                archiveArtifacts artifacts: 'app/build/outputs/apk/release/*.apk', fingerprint: true
-            }
         }
     }
-
     post {
         success {
             echo 'Build completed successfully!'
         }
-
         failure {
             echo 'Build failed!'
         }
         always {
+            archiveArtifacts artifacts: 'app/build/outputs/apk/release/*.apk', fingerprint: true
             junit 'build/test-results/**/*.xml' // Adjust path as necessary
             mail to: 'fngevnthppv@gmail.com',
                  subject: "Build ${currentBuild.fullDisplayName} - ${currentBuild.currentResult}",
