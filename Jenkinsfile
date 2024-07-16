@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://gitlab.com/yourusername/yourrepo.git'
+                checkout scm
             }
         }
 
@@ -47,6 +47,13 @@ pipeline {
     }
 
     post {
+        success {
+            echo 'Build completed successfully!'
+        }
+
+        failure {
+            echo 'Build failed!'
+        }
         always {
             junit 'build/test-results/**/*.xml' // Adjust path as necessary
             mail to: 'fngevnthppv@gmail.com',
