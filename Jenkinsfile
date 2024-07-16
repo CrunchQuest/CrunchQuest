@@ -45,9 +45,6 @@ pipeline {
         always {
             archiveArtifacts artifacts: 'app/build/outputs/apk/release/*.apk', fingerprint: true
             junit '**/app/build/test-results/testDebugUnitTest/*.xml' // Adjust path as necessary
-            mail to: 'fngevnthppv@gmail.com',
-                 subject: "Build ${currentBuild.fullDisplayName} - ${currentBuild.currentResult}",
-                 body: "Check console output at ${env.BUILD_URL} to view the results."
         }
     }
 }
