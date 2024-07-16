@@ -28,6 +28,21 @@ pipeline {
             steps {
                 sh './gradlew test'
             }
+            post {
+                    success {
+                        echo 'Build completed successfully!'
+                    }
+                    failure {
+                        echo 'Build failed!'
+                    }
+                    always {
+                        archiveArtifacts artifacts: 'app/build/outputs/apk/release/*.apk', fingerprint: true
+                        junit 'build/test-results/**/*.xml' // Adjust path as necessary
+                        mail to: 'fngevnthppv@gmail.com',
+                             subject: "Build ${currentBuild.fullDisplayName} - ${currentBuild.currentResult}",
+                             body: "Check console output at ${env.BUILD_URL} to view the results."
+                    }
+                }
         }
     }
     post {
