@@ -23,12 +23,17 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh './gradlew test' // Run unit tests
+                sh './gradlew test'
+            }
+            post {
+                always {
+                    junit '**/build/test-results/test/*.xml'
+                }
             }
         }
         stage('Archive APK') {
             steps {
-                archiveArtifacts artifacts: '**/*.apk', allowEmptyArchive: true
+                archiveArtifacts artifacts: '**/app/build/outputs/apk/release/*.apk', fingerprint: true
             }
         }
     }
