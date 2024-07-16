@@ -1,39 +1,47 @@
 pipeline {
-    agent any 
-    environment {
-        ANDROID_HOME = '/home/satriagucci/Android/Sdk'
-    }
+    agent any
+
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://gitlab.com/crunchquest/CrunchQuest.git', 
-                branch: 'main', 
-                credentialsId: 'cq-gitlab-jenkins-token'
+                git 'https://gitlab.com/yourusername/yourrepo.git'
             }
         }
+
         stage('Set Permissions') {
             steps {
                 sh 'chmod +x gradlew'
             }
         }
+
         stage('Build') {
+            environment {
+                JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
+                PATH = "${JAVA_HOME}/bin:${PATH}"
+            }
             steps {
-                sh './gradlew assembleRelease' // Adjust as needed for your build type
+                sh './gradlew clean assembleRelease'
             }
         }
+
         stage('Test') {
+            environment {
+                JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
+                PATH = "${JAVA_HOME}/bin:${PATH}"
+            }
             steps {
                 sh './gradlew test'
             }
             post {
                 always {
-                    junit '**/build/test-results/test/*.xml'
+                    junit '**/app/build/test-results/testDebugUnitTest/*.xml'
                 }
             }
         }
+
         stage('Archive APK') {
             steps {
-                archiveArtifacts artifacts: '**/app/build/outputs/apk/release/*.apk', fingerprint: true
+                archiveArtifacts artifacts: 'app/build/outputs/apk/release/*.apk', fingerprint: true
             }
         }
     }
