@@ -3,12 +3,16 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                script {
+                    checkout scm
+                }
             }
         }
         stage('Set Permissions') {
             steps {
-                sh 'chmod +x gradlew'
+                script {
+                    sh 'chmod +x gradlew'
+                }
             }
         }
         stage('Build') {
@@ -17,7 +21,9 @@ pipeline {
                 PATH = "${JAVA_HOME}/bin:${PATH}"
             }
             steps {
-                sh './gradlew clean assembleRelease'
+                script {
+                    sh './gradlew clean assembleRelease'
+                }
             }
         }
         stage('Test') {
@@ -26,11 +32,15 @@ pipeline {
                 PATH = "${JAVA_HOME}/bin:${PATH}"
             }
             steps {
-                sh './gradlew test'
+                script {
+                    sh './gradlew test'
+                }
             }
             post {
                 always {
-                    junit '**/app/build/test-results/testDebugUnitTest/*.xml'
+                    script {
+                        junit '**/app/build/test-results/testDebugUnitTest/*.xml'
+                    }
                 }
             }
         }
@@ -43,8 +53,10 @@ pipeline {
             echo 'Build failed!'
         }
         always {
-            archiveArtifacts artifacts: 'app/build/outputs/apk/release/*.apk', fingerprint: true
-            junit '**/app/build/test-results/testDebugUnitTest/*.xml' // Adjust path as necessary
+            script {
+                archiveArtifacts artifacts: 'app/build/outputs/apk/release/*.apk', fingerprint: true
+                junit '**/app/build/test-results/testDebugUnitTest/*.xml' // Adjust path as necessary
+            }
         }
     }
 }
