@@ -3,44 +3,39 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                script {
-                    checkout scm
-                }
+                echo 'Checking out the code...'
+                checkout scm
             }
         }
         stage('Set Permissions') {
             steps {
-                script {
-                    sh 'chmod +x gradlew'
-                }
+                echo 'Setting permissions for gradlew...'
+                sh 'chmod +x gradlew'
             }
         }
         stage('Build') {
             environment {
                 JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
-                PATH = "${JAVA_HOME}/bin:${PATH}"
+                PATH = "${JAVA_HOME}/bin:${env.PATH}"
             }
             steps {
-                script {
-                    sh './gradlew clean assembleRelease'
-                }
+                echo 'Building the project...'
+                sh './gradlew clean assembleRelease'
             }
         }
         stage('Test') {
             environment {
                 JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
-                PATH = "${JAVA_HOME}/bin:${PATH}"
+                PATH = "${JAVA_HOME}/bin:${env.PATH}"
             }
             steps {
-                script {
-                    sh './gradlew test'
-                }
+                echo 'Running tests...'
+                sh './gradlew test'
             }
             post {
                 always {
-                    script {
-                        junit '**/app/build/test-results/testDebugUnitTest/*.xml'
-                    }
+                    echo 'Collecting test results...'
+                    junit '**/app/build/test-results/testDebugUnitTest/*.xml'
                 }
             }
         }
@@ -53,10 +48,9 @@ pipeline {
             echo 'Build failed!'
         }
         always {
-            script {
-                archiveArtifacts artifacts: 'app/build/outputs/apk/release/*.apk', fingerprint: true
-                junit '**/app/build/test-results/testDebugUnitTest/*.xml' // Adjust path as necessary
-            }
+            echo 'Archiving artifacts and test results...'
+            archiveArtifacts artifacts: 'app/build/outputs/apk/release/*.apk', fingerprint: true
+            junit '**/app/build/test-results/testDebugUnitTest/*.xml' // Adjust path as necessary
         }
     }
 }
