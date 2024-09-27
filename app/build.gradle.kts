@@ -1,9 +1,13 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -31,7 +35,15 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Debug-specific configurations
+            buildConfigField("String", "API_KEY", "\"https://crunchquest-api-e8fa3c3bab7e.herokuapp.com/\"")
+            // Enable debugging, logging, etc.
+            isDebuggable = true
+        }
         release {
+            // Release-specific configurations
+            buildConfigField("String", "API_KEY", "your_release_api_key")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -39,16 +51,38 @@ android {
             )
         }
     }
+
+    flavorDimensions("env")
+    productFlavors {
+        create("development") {
+            dimension = "env"
+//            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            buildConfigField("String", "BASE_URL", "\"https://dev.example.com/\"")
+        }
+        create("staging") {
+            dimension = "env"
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
+            buildConfigField("String", "BASE_URL", "\"https://staging.example.com/\"")
+        }
+        create("production") {
+            dimension = "env"
+            buildConfigField("String", "BASE_URL", "\"https://api.example.com/\"")
+        }
+    }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -64,43 +98,67 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared"))
+    implementation(project(":presentation"))
+
+    // Kotlin
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.7.2")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material")
-    implementation("androidx.compose.material3:material3:1.2.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.activity:activity:1.8.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("com.google.android.gms:play-services-location:21.2.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation("androidx.annotation:annotation:1.1.0")
+
+    // Compose
+    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("io.coil-kt:coil-compose:2.2.0")
 
-    implementation("androidx.annotation:annotation:1.1.0")
+    // For Unit Testing
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:4.8.0")
+    testImplementation("org.mockito:mockito-inline:4.8.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
 
+    // For Instrumented Testing
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("org.mockito:mockito-core:4.8.0")
+    androidTestImplementation("org.mockito:mockito-inline:4.8.0")
+
+    // For testing
+    testImplementation("com.google.dagger:hilt-android-testing:2.44")
+    kaptTest("com.google.dagger:hilt-android-compiler:2.44")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
+
+    //Navigation
     implementation("androidx.navigation:navigation-compose:2.7.3")
-    implementation("com.github.Gurupreet:FontAwesomeCompose:1.0.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
+    //Material icons
     implementation("androidx.compose.material:material-icons-core:1.5.4")
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
+    implementation("com.github.Gurupreet:FontAwesomeCompose:1.0.0")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material")
+    implementation("androidx.compose.material3:material3:1.2.1")
 
+    //Lottie
     implementation("com.airbnb.android:lottie-compose:4.2.0")
     implementation("com.airbnb.android:lottie:5.2.0")
 
+    //Firebase
     implementation("com.google.firebase:firebase-analytics:21.5.1")
     implementation("com.google.firebase:firebase-crashlytics:18.2.4")
     implementation("com.google.firebase:firebase-messaging:23.0.0")
@@ -109,6 +167,10 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("com.google.firebase:firebase-database:20.3.0")
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+
+    //ViewModel and LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 
     //notification builder
     implementation("io.karn:notify:1.3.0")
@@ -122,47 +184,45 @@ dependencies {
 
     // Maps SDK for Android
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
 
     //Google pay api
     implementation("com.google.android.gms:play-services-wallet:19.2.1")
 
-    //Circle image view
+    //Image
     implementation("de.hdodenhof:circleimageview:2.2.0")
-
-    //Glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
-
-    //image cropper
-//    implementation("com.theartofdev.edmodo:android-image-cropper:2.8.0")
     implementation("com.theartofdev.edmodo:android-image-cropper:2.8.0")
-
-    //image slider
     implementation("com.github.denzcoskun:ImageSlideshow:0.1.0")
-
-    //Simple image popup. Used together with the slider
     implementation("com.github.chathuralakmal:AndroidImagePopup:1.2.2")
+    implementation("com.github.hsmnzaydn:imagezoom:1.3.0")
 
     //justify
     implementation("com.codesgood:justifiedtextview:1.1.0")
 
-    //Dependencies for Image View. If an image view is clicked, it will show the image
-    implementation("com.github.hsmnzaydn:imagezoom:1.3.0")
-
-    // Navigation Dependency
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-
     // Viewpage
     implementation("androidx.viewpager2:viewpager2:1.0.0")
-
-    // Maps
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     // Firebase App Check
     implementation("com.google.firebase:firebase-appcheck:16.0.0-beta02")
     implementation("com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta02")
 
-    // Network
+    // Room for local database
+    implementation("androidx.room:room-runtime:2.5.0")
+    kapt("androidx.room:room-compiler:2.5.0")
+    implementation("androidx.room:room-ktx:2.5.0")
+
+    // Hilt for dependency injection
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
+    kapt("com.google.dagger:hilt-compiler:2.44")
+
+    // Coroutines for asynchronous operations
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    // Retrofit Network
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")

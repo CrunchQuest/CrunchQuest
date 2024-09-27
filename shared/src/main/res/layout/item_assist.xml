@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <!-- Title of the assistant item -->
+        <TextView
+            android:id="@+id/assistTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Assistant Title"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Status of the assistant -->
+        <TextView
+            android:id="@+id/assistStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Status: Pending"
+            app:layout_constraintTop_toBottomOf="@id/assistTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Proposed rewards for the assistant -->
+        <TextView
+            android:id="@+id/assistRewards"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Proposed Rewards: $100"
+            app:layout_constraintTop_toBottomOf="@id/assistStatus"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

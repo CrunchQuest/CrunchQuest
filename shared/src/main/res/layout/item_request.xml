@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Request Title -->
+        <TextView
+            android:id="@+id/requestTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request Title"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
+
+        <!-- Request Description -->
+        <TextView
+            android:id="@+id/requestDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request Description"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_marginTop="4dp" />
+
+        <!-- Additional Info: Rewards, Date, etc. -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <!-- Reward Chip -->
+            <TextView
+                android:id="@+id/rewardChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rp 100,000"
+                android:background="@drawable/chip_background"
+                android:padding="4dp"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <!-- Date Chip -->
+            <TextView
+                android:id="@+id/dateChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18 August, 14:47"
+                android:background="@drawable/chip_background"
+                android:padding="4dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_marginStart="8dp" />
+
+            <!-- Location Indicator Chip -->
+            <TextView
+                android:id="@+id/locationChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Near"
+                android:background="@drawable/chip_background"
+                android:padding="4dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_marginStart="8dp" />
+
+            <TextView
+                android:id="@+id/statusChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pending"
+                android:background="@drawable/chip_background"
+                android:padding="4dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_marginStart="8dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

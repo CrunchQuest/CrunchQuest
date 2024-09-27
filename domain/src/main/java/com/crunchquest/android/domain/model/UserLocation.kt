@@ -1,0 +1,10 @@
+package com.crunchquest.android.domain.model
+
+import com.google.firebase.database.IgnoreExtraProperties
+
+@IgnoreExtraProperties
+class UserLocation(
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0,
+    var timestamp: Long = 0
+)

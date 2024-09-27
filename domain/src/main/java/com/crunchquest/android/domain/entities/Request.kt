@@ -1,0 +1,26 @@
+package com.crunchquest.android.domain.entities
+
+data class Request(
+    val requestId: String,
+    val requesterId: String,
+    val assistantUserId: String?,
+    val title: String,
+    val description: String,
+    val categoryId: String,
+    val status: String,
+    val latitude: Double?,
+    val longitude: Double?,
+    val address: String?,
+    val taskSchedule: String,
+    val createdAt: String,
+    val updatedAt: String,
+    val rewards: Double?,
+    val notes: String?,
+    val paymentStatus: String,
+    val paymentMethod: String?,
+    val requesterConfirmed: Boolean,
+    val assistantConfirmed: Boolean,
+    val reviewed: Boolean,
+    val captureResult: String?,
+    val captureResultTimestamp: String?,
+)

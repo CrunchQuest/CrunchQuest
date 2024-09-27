@@ -17,4 +17,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "CrunchQuest"
 include(":app")
-
+include(":domain")
+include(":data")
+include(":presentation")
+include(":shared")

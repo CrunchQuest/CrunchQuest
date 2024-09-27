@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<FrameLayout xmlns:com.crunchquest.android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    com.crunchquest.android:layout_width="match_parent"-->
+<!--    com.crunchquest.android:layout_height="match_parent"-->
+<!--    com.crunchquest.android:stateListAnimator="@anim/nav_default_enter_anim">-->
+<!--&lt;!&ndash;    tools:context=".ui.general.ProfileSettingActivity">&ndash;&gt;-->
+
+<!--    &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
+
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        com.crunchquest.android:layout_width="match_parent"-->
+<!--        com.crunchquest.android:layout_height="match_parent"-->
+<!--        com.crunchquest.android:background="@color/backGroundShadow">-->
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            com.crunchquest.android:id="@+id/UpperPart"-->
+<!--            com.crunchquest.android:layout_width="match_parent"-->
+<!--            com.crunchquest.android:layout_height="220dp"-->
+<!--            com.crunchquest.android:background="@drawable/rounded_bot_leftright_seller"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/toolbar">-->
+
+
+<!--            <de.hdodenhof.circleimageview.CircleImageView-->
+<!--                com.crunchquest.android:id="@+id/profileImage_fragmentSellerProfile"-->
+<!--                com.crunchquest.android:layout_width="140dp"-->
+<!--                com.crunchquest.android:layout_height="140dp"-->
+<!--                com.crunchquest.android:layout_marginTop="12dp"-->
+<!--                com.crunchquest.android:scaleType="centerCrop"-->
+<!--                app:civ_circle_background_color="@color/white"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/userName_fragmentSellerProfile"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.5"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                tools:srcCompat="@tools:sample/avatars" />-->
+
+
+<!--            <TextView-->
+<!--                com.crunchquest.android:id="@+id/userName_fragmentSellerProfile"-->
+<!--                com.crunchquest.android:layout_width="wrap_content"-->
+<!--                com.crunchquest.android:layout_height="wrap_content"-->
+<!--                com.crunchquest.android:text="User Name"-->
+<!--                com.crunchquest.android:textSize="24sp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.498"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/profileImage_fragmentSellerProfile" />-->
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            com.crunchquest.android:id="@+id/constraintLayout2"-->
+<!--            com.crunchquest.android:layout_width="match_parent"-->
+<!--            com.crunchquest.android:layout_height="50dp"-->
+<!--            com.crunchquest.android:layout_marginStart="40dp"-->
+<!--            com.crunchquest.android:layout_marginEnd="40dp"-->
+<!--            com.crunchquest.android:background="@drawable/rounded_edit_text"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/UpperPart"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/UpperPart"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/UpperPart">-->
+
+<!--            <TextView-->
+<!--                com.crunchquest.android:id="@+id/textView14"-->
+<!--                com.crunchquest.android:layout_width="wrap_content"-->
+<!--                com.crunchquest.android:layout_height="wrap_content"-->
+<!--                com.crunchquest.android:text="SERVICE PROVIDER MODE"-->
+<!--                com.crunchquest.android:textSize="18sp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            com.crunchquest.android:id="@+id/seller_myServicesCardView"-->
+<!--            com.crunchquest.android:layout_width="0dp"-->
+<!--            com.crunchquest.android:layout_height="0dp"-->
+<!--            com.crunchquest.android:layout_marginEnd="15dp"-->
+<!--            com.crunchquest.android:clickable="true"-->
+<!--            com.crunchquest.android:elevation="2dp"-->
+<!--            app:cardBackgroundColor="@color/white"-->
+<!--            app:cardCornerRadius="7dp"-->
+<!--            app:cardElevation="2dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/seller_aboutMeCardView"-->
+<!--            app:layout_constraintDimensionRatio="1:1"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/seller_aboutMeCardView"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/seller_aboutMeCardView">-->
+
+<!--            <ImageView-->
+<!--                com.crunchquest.android:layout_width="match_parent"-->
+<!--                com.crunchquest.android:layout_height="match_parent"-->
+<!--                com.crunchquest.android:layout_gravity="center"-->
+<!--                com.crunchquest.android:padding="30dp"-->
+<!--                com.crunchquest.android:src="@drawable/ic_services" />-->
+
+<!--            <TextView-->
+<!--                com.crunchquest.android:layout_width="wrap_content"-->
+<!--                com.crunchquest.android:layout_height="wrap_content"-->
+<!--                com.crunchquest.android:layout_gravity="bottom|center"-->
+<!--                com.crunchquest.android:padding="10dp"-->
+<!--                com.crunchquest.android:text="My Services" />-->
+<!--        </androidx.cardview.widget.CardView>-->
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            com.crunchquest.android:id="@+id/seller_aboutMeCardView"-->
+<!--            com.crunchquest.android:layout_width="0dp"-->
+<!--            com.crunchquest.android:layout_height="0dp"-->
+<!--            com.crunchquest.android:layout_marginStart="15dp"-->
+<!--            com.crunchquest.android:layout_marginTop="15dp"-->
+<!--            com.crunchquest.android:layout_marginEnd="15dp"-->
+<!--            com.crunchquest.android:layout_marginBottom="15dp"-->
+<!--            com.crunchquest.android:background="#FFFFFF"-->
+<!--            com.crunchquest.android:clickable="true"-->
+<!--            com.crunchquest.android:elevation="2dp"-->
+<!--            app:cardBackgroundColor="@color/white"-->
+<!--            app:cardCornerRadius="7dp"-->
+<!--            app:cardElevation="2dp"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/buyersRequestCardView_fragmentSellerProfile"-->
+<!--            app:layout_constraintDimensionRatio="w,1:1"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/seller_myServicesCardView"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">-->
+
+<!--            <ImageView-->
+<!--                com.crunchquest.android:layout_width="match_parent"-->
+<!--                com.crunchquest.android:layout_height="match_parent"-->
+<!--                com.crunchquest.android:layout_gravity="center"-->
+<!--                com.crunchquest.android:padding="30dp"-->
+<!--                com.crunchquest.android:src="@drawable/ic_about_me" />-->
+
+<!--            <TextView-->
+<!--                com.crunchquest.android:layout_width="wrap_content"-->
+<!--                com.crunchquest.android:layout_height="wrap_content"-->
+<!--                com.crunchquest.android:layout_gravity="bottom|center"-->
+<!--                com.crunchquest.android:padding="10dp"-->
+<!--                com.crunchquest.android:text="About Me" />-->
+<!--        </androidx.cardview.widget.CardView>-->
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            com.crunchquest.android:id="@+id/buyersRequestCardView_fragmentSellerProfile"-->
+<!--            com.crunchquest.android:layout_width="0dp"-->
+<!--            com.crunchquest.android:layout_height="0dp"-->
+<!--            com.crunchquest.android:layout_marginBottom="15dp"-->
+<!--            com.crunchquest.android:clickable="true"-->
+<!--            com.crunchquest.android:elevation="2dp"-->
+<!--            app:cardBackgroundColor="@color/white"-->
+<!--            app:cardCornerRadius="7dp"-->
+<!--            app:cardElevation="2dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintDimensionRatio="1:1"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/seller_aboutMeCardView"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/seller_aboutMeCardView"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/seller_aboutMeCardView">-->
+
+<!--            <ImageView-->
+<!--                com.crunchquest.android:layout_width="match_parent"-->
+<!--                com.crunchquest.android:layout_height="match_parent"-->
+<!--                com.crunchquest.android:layout_gravity="center"-->
+<!--                com.crunchquest.android:padding="30dp"-->
+<!--                com.crunchquest.android:src="@drawable/ic_buyers_request" />-->
+
+<!--            <TextView-->
+<!--                com.crunchquest.android:layout_width="wrap_content"-->
+<!--                com.crunchquest.android:layout_height="wrap_content"-->
+<!--                com.crunchquest.android:layout_gravity="bottom|clip_horizontal|center|clip_vertical"-->
+<!--                com.crunchquest.android:padding="10dp"-->
+<!--                com.crunchquest.android:text="Client Request"-->
+<!--                com.crunchquest.android:textAlignment="center" />-->
+<!--        </androidx.cardview.widget.CardView>-->
+
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            com.crunchquest.android:id="@+id/toolbar"-->
+<!--            com.crunchquest.android:layout_width="match_parent"-->
+<!--            com.crunchquest.android:layout_height="?attr/actionBarSize"-->
+<!--            com.crunchquest.android:background="?attr/colorPrimary"-->
+<!--            com.crunchquest.android:minHeight="?attr/actionBarSize"-->
+<!--            com.crunchquest.android:theme="?attr/actionBarTheme"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--</FrameLayout>-->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="100dp"
+    android:stateListAnimator="@anim/nav_default_enter_anim"
+    android:background="@color/background_color"
+    tools:context=".ui.buyer.buyer_fragments.ProfileFragment">
+
+    <LinearLayout
+        android:id="@+id/llUserSellerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/sellerProfileImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            app:civ_circle_background_color="@color/white"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvSellerUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:textStyle="bold"
+            android:paddingVertical="@dimen/small_padding"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="John Doe" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llSellerOperationContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llUserSellerContainer">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvMyServices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llSellerOperationContainer">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/medium_padding">
+
+                <ImageView
+                    android:id="@+id/ivMyServices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_services"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvMyServices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    android:textStyle="bold"
+                    android:text="My Service"
+                    android:textColor="@color/text_color"
+                    android:textSize="16sp"
+                    app:layout_constraintLeft_toRightOf="@id/ivMyServices"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/ivArrowMyServices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_right_arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvAboutMe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llSellerOperationContainer">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/medium_padding">
+
+                <ImageView
+                    android:id="@+id/ivAboutMe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_about_me"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvAboutMe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    android:textStyle="bold"
+                    android:text="About Me"
+                    android:textColor="@color/text_color"
+                    android:textSize="16sp"
+                    app:layout_constraintLeft_toRightOf="@id/ivAboutMe"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/ivArrowAboutMe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_right_arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvClientRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llSellerOperationContainer">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/medium_padding">
+
+                <ImageView
+                    android:id="@+id/ivClientRequest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_buyers_request"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvClientRequest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    android:textStyle="bold"
+                    android:text="Client Request"
+                    android:textColor="@color/text_color"
+                    android:textSize="16sp"
+                    app:layout_constraintLeft_toRightOf="@id/ivClientRequest"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/ivArrowClientRequest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_right_arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <!--    <androidx.appcompat.widget.Toolbar-->
+    <!--        com.crunchquest.android:id="@+id/toolbar"-->
+    <!--        com.crunchquest.android:layout_width="match_parent"-->
+    <!--        com.crunchquest.android:layout_height="?attr/actionBarSize"-->
+    <!--        com.crunchquest.android:background="?attr/colorPrimary"-->
+    <!--        com.crunchquest.android:minHeight="?attr/actionBarSize"-->
+    <!--        com.crunchquest.android:theme="?attr/actionBarTheme"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

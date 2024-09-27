@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- NestedScrollView wrapping the content to enable scrolling -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- ConstraintLayout inside NestedScrollView -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Top Bar -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:background="?attr/colorPrimary"
+                app:titleTextAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:title=""
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back"
+                    android:contentDescription="Back"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_gravity="start" />
+
+                <TextView
+                    android:id="@+id/toolbarTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="Request Details"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="start" />
+
+                <ImageButton
+                    android:id="@+id/btnShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_right_arrow"
+                    android:contentDescription="Share"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_gravity="end"/>
+
+                <ImageButton
+                    android:id="@+id/btnReport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_addd"
+                    android:contentDescription="Report"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_gravity="end"/>
+            </androidx.appcompat.widget.Toolbar>
+
+            <!-- Request Info Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardRequestInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/textRequestTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Request Title"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+
+                        <View
+                            android:id="@+id/statusIndicator"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:background="@drawable/ic_person" />
+
+                        <TextView
+                            android:id="@+id/textRequestStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Open"
+                            android:layout_marginStart="8dp"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <!-- Collapsible Description View -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:cardElevation="2dp"
+                        app:cardCornerRadius="8dp">
+
+                        <LinearLayout
+                            android:id="@+id/descriptionLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+
+                            <TextView
+                                android:id="@+id/textDescription"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Description of the request"
+                                android:textSize="14sp" />
+
+                            <!-- Toggle button for expand/collapse -->
+                            <ImageButton
+                                android:id="@+id/btnToggleDescription"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_right_arrow"
+                                android:contentDescription="Toggle Description"
+                                android:layout_gravity="end"
+                                android:background="?attr/selectableItemBackgroundBorderless" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Request Details Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardRequestDetails"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/cardRequestInfo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:id="@+id/detailsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Category Chip -->
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Category" />
+
+                    <TextView
+                        android:id="@+id/textCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Electrical"
+                        android:layout_marginTop="8dp" />
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_stroke"
+                        android:layout_marginVertical="8dp" />
+
+                    <!-- Rewards Chip -->
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipRewards"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Reward" />
+
+                    <TextView
+                        android:id="@+id/textRewards"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100,000"
+                        android:layout_marginTop="8dp" />
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_stroke"
+                        android:layout_marginVertical="8dp" />
+
+                    <!-- Payment Status Chip -->
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipPaymentStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Payment Status" />
+
+                    <TextView
+                        android:id="@+id/textPaymentStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pending"
+                        android:layout_marginTop="8dp" />
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_stroke"
+                        android:layout_marginVertical="8dp" />
+
+                    <!-- Date and Time Chip -->
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date and Time" />
+
+                    <TextView
+                        android:id="@+id/textDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="22/09/2024 10:00"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Select Assistance Section -->
+            <TextView
+                android:id="@+id/textSelectAssistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Assistance"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/cardRequestDetails"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewAssistance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/textSelectAssistance"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
+
+            <!-- Add this TextView below your RecyclerView in the layout -->
+            <TextView
+                android:id="@+id/emptyStateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No users are assisting yet."
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/gray_hint"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/recyclerViewAssistance"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
+
+
+            <!-- Bottom Buttons -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/recyclerViewAssistance"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/cool_red" />
+
+                <Button
+                    android:id="@+id/btnConfirmAssistance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Waiting Assistance"
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/main_cq_purple" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

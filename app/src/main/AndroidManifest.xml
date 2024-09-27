@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.crunchquest.android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -19,6 +20,7 @@
         android:value="true" />
 
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -31,13 +33,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.buyer.buyer_activities.OrderDetailsActivity"
+            android:name=".presentation.ui.buyer.buyer_activities.OrderDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.PaymentActivity"
+            android:name=".presentation.ui.PaymentActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.general.PersonalizationActivity"
+            android:name=".presentation.ui.general.PersonalizationActivity"
             android:exported="false" />
 
         <meta-data
@@ -45,7 +47,7 @@
             android:value="AIzaSyDO3d_bNLZahYtiKTEiAV6jQcCOci4NloI" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.CrunchQuest">
 
@@ -57,25 +59,34 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".ui.messages.MessagesRequestForSP"
+            android:name=".presentation.ui.messages.MessagesRequestForSP"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.messages.RequestChatLogActivity"
+            android:name="com.crunchquest.android.presentation.ui.request.CreateRequestActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.messages.RequestMessagesActivity"
+            android:name=".presentation.ui.messages.RequestChatLogActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.general.ChooseActivity"
+            android:name=".presentation.ui.messages.RequestMessagesActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.general.SendRequirementActivity"
+            android:name=".presentation.ui.register.RegisterActivity"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+        <activity
+            android:name="com.crunchquest.android.presentation.ui.request.RequestDetailActivity"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+        <activity
+            android:name=".presentation.ui.general.ChooseActivity"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+        <activity
+            android:name=".presentation.ui.general.SendRequirementActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
-            android:name=".ui.general.SplashScreenActivity"
+            android:name=".presentation.ui.general.SplashScreenActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
             <intent-filter>
@@ -85,60 +96,61 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.messages.ChatLogActivity"
+            android:name=".presentation.ui.messages.ChatLogActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.messages.CreateNewMessageActivity"
+            android:name=".presentation.ui.messages.CreateNewMessageActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.messages.MessagesActivity"
+            android:name=".presentation.ui.messages.MessagesActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.general.DisplayReviewsActivity"
+            android:name=".presentation.ui.general.DisplayReviewsActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.buyer.buyer_activities.DisplaySpecificServiceActivity"
+            android:name=".presentation.ui.buyer.buyer_activities.DisplaySpecificServiceActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.serviceprovider.seller_activities.AboutMeAsSellerActivity"
+            android:name=".presentation.ui.serviceprovider.seller_activities.AboutMeAsSellerActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.buyer.buyer_activities.ServiceCategoryActivity"
-            android:parentActivityName=".ui.buyer.BuyerActivity"
+            android:name=".presentation.ui.buyer.buyer_activities.ServiceCategoryActivity"
+            android:parentActivityName=".presentation.ui.MainActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.serviceprovider.seller_activities.BuyersRequestActivity"
+            android:name=".presentation.ui.serviceprovider.seller_activities.BuyersRequestActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.buyer.buyer_activities.ManageRequestActivity"
+            android:name=".presentation.ui.buyer.buyer_activities.ManageRequestActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.buyer.buyer_activities.RequestActivity"
+            android:name=".presentation.ui.request.RequestActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.buyer.buyer_activities.DisplaySpecificRequestActivity"
+            android:name=".presentation.ui.buyer.buyer_activities.DisplaySpecificRequestActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.serviceprovider.seller_activities.CreateServicesActivity"
+            android:name=".presentation.ui.serviceprovider.seller_activities.CreateServicesActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.general.ProfileSettingsActivity"
+            android:name=".presentation.ui.general.ProfileSettingActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.crunchquest.android.ui.serviceprovider.SellerActivity" />
+                android:value=".presentation.ui.serviceprovider.SellerActivity" />
         </activity>
         <activity
-            android:name=".ui.serviceprovider.SellerActivity"
+            android:name=".presentation.ui.serviceprovider.SellerActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.buyer.BuyerActivity"
+            android:name="com.crunchquest.android.presentation.ui.verification.VerificationActivity"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"/>
+        <activity
+            android:name=".presentation.ui.register.SignUpActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ui.general.SignUpActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
-        <activity
-            android:name=".ui.general.LoginActivity"
+            android:name=".presentation.ui.login.LoginActivity"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
 
@@ -151,6 +163,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
     </application>
 
 </manifest>

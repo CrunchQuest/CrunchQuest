@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">192.168.1.105</domain> <!-- IP Home -->
+        <domain includeSubdomains="true">192.168.100.42</domain> <!-- IP BB -->
+        <domain includeSubdomains="true">10.10.61.230</domain> <!-- IP Campuss -->
+    </domain-config>
+</network-security-config>
