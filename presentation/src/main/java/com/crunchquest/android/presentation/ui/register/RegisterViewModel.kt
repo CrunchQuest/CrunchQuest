@@ -1,9 +1,9 @@
 package com.crunchquest.android.presentation.ui.register
 
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.util.Log
-import android.util.Patterns
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +15,7 @@ import com.crunchquest.android.presentation.utility.PasswordValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.crunchquest.android.domain.utility.Result
 import kotlinx.coroutines.launch
+import java.io.File
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.inject.Inject
@@ -49,7 +50,7 @@ class RegisterViewModel @Inject constructor(
     private var userId: String? = null // Store the userId after registration
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun registerUser() {
+    fun registerUser(context: Context) {
         if (!validateInputs()) {
             _registrationResult.value = Result.Error(Exception("Please fill all the required fields and upload images"))
             return
@@ -82,27 +83,55 @@ class RegisterViewModel @Inject constructor(
         val password = password.value!!
 
         viewModelScope.launch {
-            val result = registerUserUseCase(user, password, idImageUri, selfieImageUri)
-            when (result) {
-                is Result.Success -> {
-                    userId = result.data
-                    Log.d("RegisterViewModel", "Registration successful, userId: $userId")
-                    _registrationResult.value = Result.Success(result.data)
+            try {
+                // Convert Uri to File using the method and the provided context
+                val idImageFile = convertUriToFile(idImageUri, context)
+                val selfieImageFile = convertUriToFile(selfieImageUri, context)
+
+                // Ensure you handle the case when file conversion fails
+                if (idImageFile == null || selfieImageFile == null) {
+                    _registrationResult.value = Result.Error(Exception("Failed to access image files"))
+                    return@launch
                 }
-                is Result.Error -> {
-                    Log.e("RegisterViewModel", "Registration failed with error: ${result.exception.message}")
-                    _registrationResult.value = Result.Error(result.exception)
+
+                // Call your use case with the converted files
+                val result = registerUserUseCase(user, password, idImageFile, selfieImageFile)
+                when (result) {
+                    is Result.Success -> {
+                        userId = result.data
+                        Log.d("RegisterViewModel", "Registration successful, userId: $userId")
+                        _registrationResult.value = Result.Success(result.data)
+                    }
+                    is Result.Error -> {
+                        Log.e("RegisterViewModel", "Registration failed with error: ${result.exception.message}")
+                        _registrationResult.value = Result.Error(result.exception)
+                    }
+                    Result.Loading -> {
+                        // Optionally handle loading state if needed
+                    }
                 }
-                Result.Loading -> {
-                    // Optionally handle loading state if needed
-                }
+            } catch (e: Exception) {
+                Log.e("RegisterViewModel", "Error registering user: ${e.message}")
+                _registrationResult.value = Result.Error(e)
             }
         }
     }
 
-    // Provide a method to get the registered userId
-    fun getUserId(): String? {
-        return userId
+    private fun convertUriToFile(uri: Uri, context: Context): File? {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val file = File.createTempFile("image", null, context.cacheDir)
+
+            inputStream?.use { input ->
+                file.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            file
+        } catch (e: Exception) {
+            Log.e("RegisterViewModel", "Error converting Uri to File: ${e.message}")
+            null
+        }
     }
 
     // Call this function whenever fields in Step One change

@@ -2,11 +2,14 @@ package com.crunchquest.android.presentation.ui.register
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,14 +34,6 @@ class RegisterStepThreeFragment : Fragment(R.layout.fragment_register_step_three
 
     enum class ImageType {
         ID, SELFIE
-    }
-
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-        if (isGranted) {
-            pickImage()
-        } else {
-            Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onCreateView(
@@ -71,9 +66,29 @@ class RegisterStepThreeFragment : Fragment(R.layout.fragment_register_step_three
         observeViewModel()
     }
 
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            when (currentImageType) {
+                ImageType.ID -> {
+                    viewModel.idImageUri.value = it
+                    binding.imageViewID.setImageURI(it)
+                }
+                ImageType.SELFIE -> {
+                    viewModel.selfieImageUri.value = it
+                    binding.imageViewSelfie.setImageURI(it)
+                }
+            }
+            viewModel.validateStepThree()
+        } ?: run {
+            // Optionally handle case where no image was selected
+            Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
+            Log.e("RegisterStepThreeFragment", "No image selected:")
+        }
+    }
+
+
     private fun pickImage() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, pickImageRequestCode)
+        pickImageLauncher.launch("image/*")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -130,10 +145,34 @@ class RegisterStepThreeFragment : Fragment(R.layout.fragment_register_step_three
                 Toast.makeText(requireContext(), "Permission is needed to pick an image", Toast.LENGTH_SHORT).show()
             }
             else -> {
-                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                // User has denied the permission permanently, show dialog to navigate to settings
+                showPermissionDeniedDialog()
             }
         }
     }
+
+    private fun showPermissionDeniedDialog() {
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+        dialogBuilder.setTitle("Permission Required")
+            .setMessage("Storage access is required to pick an image. Please allow it in the app settings.")
+            .setPositiveButton("Go to Settings") { dialog, _ ->
+                dialog.dismiss()
+                openAppSettings()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+        val alertDialog = dialogBuilder.create()
+        alertDialog.show()
+    }
+
+    private fun openAppSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", requireActivity().packageName, null)
+        }
+        startActivity(intent)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

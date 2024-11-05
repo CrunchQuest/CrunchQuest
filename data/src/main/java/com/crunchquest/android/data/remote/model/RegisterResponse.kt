@@ -9,6 +9,8 @@ data class RegisterResponse(
         val lastName: String,
         val email: String,
         val password: String,
+        val profilePicture: String?,
+        val idCard: String?,
         val verificationToken: String,
         val emailVerified: Boolean,
         val updatedAt: String,

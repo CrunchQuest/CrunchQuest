@@ -83,7 +83,7 @@ class RegisterActivity : AppCompatActivity() {
                 binding.viewPager.currentItem += 1
             } else {
                 if (binding.checkboxTerms.isChecked) {
-                    viewModel.registerUser()
+                    viewModel.registerUser(context = this)
                 } else {
                     Toast.makeText(this, "Please accept the terms and conditions", Toast.LENGTH_SHORT).show()
                 }
