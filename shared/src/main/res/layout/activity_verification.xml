@@ -39,15 +39,13 @@
     <!-- Code Input Container -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/codeInputContainer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tvDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         android:layout_marginTop="32dp">
 
-        <!-- Individual Code Boxes -->
         <!-- Repeat the EditText for each of the 6 digits -->
         <EditText
             android:id="@+id/etCode1"

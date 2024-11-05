@@ -2,6 +2,8 @@ package com.crunchquest.android.presentation.ui.verification
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -36,6 +38,7 @@ class VerificationActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        // Set up click listener for the Verify button
         binding.btnVerify.setOnClickListener {
             val code = getCodeFromInput()
             if (code.isNotEmpty()) {
@@ -44,6 +47,34 @@ class VerificationActivity : AppCompatActivity() {
             } else {
                 showError("Please enter the verification code.")
             }
+        }
+
+        // Set up TextWatchers to automatically move focus to the next EditText
+        setupCodeInputFocus()
+    }
+
+    private fun setupCodeInputFocus() {
+        val editTexts = listOf(
+            binding.etCode1, binding.etCode2, binding.etCode3,
+            binding.etCode4, binding.etCode5, binding.etCode6
+        )
+
+        for (i in editTexts.indices) {
+            editTexts[i].addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    if (s?.length == 1 && i < editTexts.size - 1) {
+                        // Move to the next EditText
+                        editTexts[i + 1].requestFocus()
+                    } else if (s?.length == 0 && i > 0) {
+                        // If the user deletes the character, move back to the previous EditText
+                        editTexts[i - 1].requestFocus()
+                    }
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            })
         }
     }
 
